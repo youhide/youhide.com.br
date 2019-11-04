@@ -20,3 +20,12 @@ jobs:
 
     - name: Build
       run: hugo --minify
+
+    - name: Deploy FTP
+      uses: sebastianpopp/ftp-action@master
+      with:
+        host: "youhide.com.br"
+        user: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        localDir: "public"
+        remoteDir: "/"
