@@ -24,7 +24,7 @@ disqusShortname = "yourdiscussshortname"
     favicon_32 = "/img/favicon-32x32.png"
     favicon_16 = "/img/favicon-16x16.png"
 
-    footercontent = "YouHide"
+    # footercontent = "youhide"
 
     hidecredits = true
     hidecopyright = false
@@ -62,6 +62,6 @@ disqusShortname = "yourdiscussshortname"
 #     weight = 1
 #     url  = "/posts/"
 [[menu.main]]
-    name = "About"
+    name = "about"
     weight = 2
     url = "/about/"
