@@ -19,12 +19,12 @@ disqusShortname = "yourdiscussshortname"
     info = "DevOps"
     description = "Youri's personal website"
     keywords = "blog,developer,personal"
-    avatarurl = "images/avatar.jpg"
+    avatarurl = "images/avatar.png"
 
     favicon_32 = "/img/favicon-32x32.png"
     favicon_16 = "/img/favicon-16x16.png"
 
-    footercontent = "YOUHIDE"
+    footercontent = "YouHide"
 
     hidecredits = true
     hidecopyright = false
@@ -57,10 +57,10 @@ disqusShortname = "yourdiscussshortname"
     url = "https://twitter.com/_hideout/"
 
 # Menu links
-[[menu.main]]
-    name = "Blog"
-    weight = 1
-    url  = "/posts/"
+# [[menu.main]]
+#     name = "Blog"
+#     weight = 1
+#     url  = "/posts/"
 [[menu.main]]
     name = "About"
     weight = 2
