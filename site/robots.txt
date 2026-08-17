@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://youhide.com.br/sitemap.xml

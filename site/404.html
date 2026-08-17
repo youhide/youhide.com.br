@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>404 — youHide</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#282a36">
+
+<!-- Root-absolute paths on purpose: GitHub Pages serves this file AT the
+     requested URL, so relative paths would resolve against that URL's
+     directory and 404 alongside it, leaving an unstyled error page. -->
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="stylesheet" href="/css/style.css">
+<script src="/js/main.js"></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__brand" href="/"><span>~</span>/youhide</a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="/">./home</a>
+      <a href="/about/">./about</a>
+      <a href="/projects/">./projects</a>
+    </nav>
+    <button class="lang" id="lang-toggle" type="button" aria-label="Mudar para português">
+      <span class="lang__opt" data-lang-opt="en">EN</span>
+      <span class="lang__sep">|</span>
+      <span class="lang__opt" data-lang-opt="pt-BR">PT</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+    <section class="term">
+      <div class="term__bar">
+        <span class="dot dot--red"></span>
+        <span class="dot dot--yellow"></span>
+        <span class="dot dot--green"></span>
+        <span class="term__path">youhide@homelab: ~</span>
+      </div>
+      <div class="term__body">
+        <div class="term__main notfound">
+          <p class="prompt"><span class="prompt__sign">$</span>cd <span class="muted">$_</span></p>
+          <p class="notfound__code">404<span class="cursor" aria-hidden="true">█</span></p>
+          <p class="hero__role">
+            <span lang="en">no such file or directory</span>
+            <span lang="pt-BR">arquivo ou diretório não encontrado</span>
+          </p>
+          <p class="more">
+            <a href="/" lang="en">→ back to home</a>
+            <a href="/" lang="pt-BR">→ voltar para o início</a>
+          </p>
+        </div>
+      </div>
+      <div class="term__accent"></div>
+    </section>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__card">
+      <div class="footer__accent"></div>
+      <div class="footer__body">
+        <p class="footer__exit"><span class="prompt__sign">$</span>exit<span class="cursor" aria-hidden="true">█</span></p>
+        <p class="footer__note">
+          <span lang="en">Connection to youhide closed. Always learning, always shipping.</span>
+          <span lang="pt-BR">Conexão com youhide encerrada. Sempre aprendendo, sempre entregando.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

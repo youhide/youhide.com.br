@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>youHide — Youri Mattar</title>
+<meta name="description" content="Youri Mattar — DevOps, Platform Engineer, Infrastructure Necromancer. Clusters at scale, GitOps workflows and infrastructure as code. Londrina, Brazil.">
+<meta name="author" content="Youri T. K. K. Mattar">
+<meta name="theme-color" content="#282a36">
+<link rel="canonical" href="https://youhide.com.br/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="youHide — Youri Mattar">
+<meta property="og:description" content="DevOps · Platform Engineer · Infrastructure Necromancer. Homelabbing since 2007.">
+<meta property="og:url" content="https://youhide.com.br/">
+<meta property="og:image" content="https://youhide.com.br/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@_hideout">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="stylesheet" href="css/style.css">
+<script src="js/main.js"></script>
+</head>
+<body>
+
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="pt-BR">Pular para o conteúdo</span></a>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__brand" href="./"><span>~</span>/youhide</a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="./" aria-current="page">./home</a>
+      <a href="about/">./about</a>
+      <a href="projects/">./projects</a>
+    </nav>
+    <button class="lang" id="lang-toggle" type="button" aria-label="Mudar para português">
+      <span class="lang__opt" data-lang-opt="en">EN</span>
+      <span class="lang__sep">|</span>
+      <span class="lang__opt" data-lang-opt="pt-BR">PT</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <!-- hero: header.svg rebuilt as live HTML -->
+    <section class="term" aria-labelledby="hero-name">
+      <div class="term__bar">
+        <span class="dot dot--red"></span>
+        <span class="dot dot--yellow"></span>
+        <span class="dot dot--green"></span>
+        <span class="term__path">youhide@homelab: ~</span>
+      </div>
+      <div class="term__body">
+        <div class="term__main">
+          <p class="prompt"><span class="prompt__sign">$</span>whoami</p>
+          <h1 class="hero__name" id="hero-name">youHide<span class="cursor" aria-hidden="true">█</span></h1>
+          <p class="hero__role">DevOps · Platform Engineer · Infrastructure Necromancer</p>
+          <p class="hero__note">
+            <span lang="en"># aka hideOut · homelabbing since 2007 — if it survives my homelab, it survives anywhere</span>
+            <span lang="pt-BR"># aka hideOut · homelab desde 2007 — se sobrevive ao meu homelab, sobrevive em qualquer lugar</span>
+          </p>
+        </div>
+        <div class="rack" aria-hidden="true">
+          <div class="rack__unit">
+            <span class="led led--green led--b1"></span><span class="led led--cyan"></span>
+            <span class="rack__bars"><i></i><i></i><i></i></span>
+          </div>
+          <div class="rack__unit">
+            <span class="led led--green led--b2"></span><span class="led led--purple"></span>
+            <span class="rack__bars"><i></i><i></i><i></i></span>
+          </div>
+          <div class="rack__unit">
+            <span class="led led--orange led--b3"></span><span class="led led--cyan"></span>
+            <span class="rack__bars"><i></i><i></i><i></i></span>
+          </div>
+          <div class="rack__unit">
+            <span class="led led--green led--b4"></span><span class="led led--pink"></span>
+            <span class="rack__bars"><i></i><i></i><i></i></span>
+          </div>
+        </div>
+      </div>
+      <div class="term__accent"></div>
+    </section>
+
+    <!-- intro -->
+    <section class="section">
+      <h2 class="section__title"><span class="sig">$</span>cat intro.txt</h2>
+      <div class="prose">
+        <p lang="en">I build and run cloud infrastructure at scale — clusters, GitOps workflows and
+          infrastructure as code by day; tools in Go and Rust that fix my own problems by night.
+          Based in Londrina, Brazil, with a homelab that has been breaking and teaching me things
+          since 2007.</p>
+        <p lang="pt-BR">Construo e opero infraestrutura em nuvem em escala — clusters, workflows GitOps
+          e infraestrutura como código de dia; ferramentas em Go e Rust que resolvem meus próprios
+          problemas de noite. De Londrina, Brasil, com um homelab que quebra e me ensina coisas
+          desde 2007.</p>
+      </div>
+    </section>
+
+    <hr class="rule">
+
+    <!-- featured projects -->
+    <section class="section">
+      <h2 class="section__title"><span class="sig">$</span>ls ~/projects --featured</h2>
+      <div class="grid">
+
+        <a class="card" href="https://postrite.app">
+          <div class="card__top">
+            <span class="card__name">PostRite</span>
+            <span class="card__lang card__lang--ts">Product</span>
+          </div>
+          <p class="card__desc" lang="en">Social publishing in one workspace — 12+ networks, campaign calendar, approval workflows and an MCP server for AI assistants.</p>
+          <p class="card__desc" lang="pt-BR">Publicação social em um só lugar — 12+ redes, calendário de campanhas, fluxos de aprovação e um servidor MCP para assistentes de IA.</p>
+        </a>
+
+        <a class="card" href="https://github.com/youhide/OpenShard">
+          <div class="card__top">
+            <span class="card__name">OpenShard</span>
+            <span class="card__lang card__lang--rust">Rust</span>
+          </div>
+          <p class="card__desc" lang="en">Modern open-source MMORPG server engine, compatible with classic Ultima Online clients.</p>
+          <p class="card__desc" lang="pt-BR">Engine de servidor de MMORPG moderna e open-source, compatível com clientes clássicos de Ultima Online.</p>
+        </a>
+
+        <a class="card" href="https://github.com/youhide/oxinit">
+          <div class="card__top">
+            <span class="card__name">oxinit</span>
+            <span class="card__lang card__lang--rust">Rust</span>
+          </div>
+          <p class="card__desc" lang="en">A service manager and PID 1 for Linux — TOML units, no panic, no async runtime.</p>
+          <p class="card__desc" lang="pt-BR">Gerenciador de serviços e PID 1 para Linux — units em TOML, sem panic, sem runtime async.</p>
+          <span class="tag">pre-alpha</span>
+        </a>
+
+        <a class="card" href="https://github.com/youhide/hideDot">
+          <div class="card__top">
+            <span class="card__name">hideDot</span>
+            <span class="card__lang card__lang--go">Go</span>
+          </div>
+          <p class="card__desc" lang="en">Blazing fast dotfiles manager — symlinks, git repo cloning and shell hooks from one YAML.</p>
+          <p class="card__desc" lang="pt-BR">Gerenciador de dotfiles absurdamente rápido — symlinks, clone de repositórios e shell hooks a partir de um YAML.</p>
+        </a>
+
+        <a class="card" href="https://github.com/youhide/hideTop">
+          <div class="card__top">
+            <span class="card__name">hideTop</span>
+            <span class="card__lang card__lang--go">Go</span>
+          </div>
+          <p class="card__desc" lang="en">Terminal system monitor: CPU, memory, Apple Silicon GPU metrics and energy impact.</p>
+          <p class="card__desc" lang="pt-BR">Monitor de sistema no terminal: CPU, memória, métricas de GPU Apple Silicon e impacto energético.</p>
+        </a>
+
+        <a class="card" href="https://github.com/youhide/hideGit">
+          <div class="card__top">
+            <span class="card__name">hideGit</span>
+            <span class="card__lang card__lang--rust">Rust</span>
+          </div>
+          <p class="card__desc" lang="en">Cross-platform desktop Git client with pull request alerts built in.</p>
+          <p class="card__desc" lang="pt-BR">Cliente Git desktop multiplataforma com alertas de pull request embutidos.</p>
+          <span class="tag">pre-alpha</span>
+        </a>
+
+        <a class="card" href="https://github.com/youhide/vagas.tec.br">
+          <div class="card__top">
+            <span class="card__name">vagas.tec.br</span>
+            <span class="card__lang card__lang--ts">TypeScript</span>
+          </div>
+          <p class="card__desc" lang="en">Tech job board focused on the Brazilian market.</p>
+          <p class="card__desc" lang="pt-BR">Mural de vagas em tecnologia focado no mercado brasileiro.</p>
+        </a>
+
+      </div>
+      <p class="more">
+        <a href="projects/" lang="en">→ all projects</a>
+        <a href="projects/" lang="pt-BR">→ todos os projetos</a>
+      </p>
+    </section>
+
+    <hr class="rule">
+
+    <!-- stack -->
+    <section class="section">
+      <h2 class="section__title"><span class="sig">$</span>cat stack.yaml</h2>
+
+      <div class="stack">
+        <span class="stack__label" lang="en">Languages</span>
+        <span class="stack__label" lang="pt-BR">Linguagens</span>
+        <ul class="chips">
+          <li>Go</li><li>Rust</li><li>TypeScript</li><li>Node.js</li>
+          <li>C++</li><li>Bash</li><li>HCL</li>
+        </ul>
+      </div>
+
+      <div class="stack">
+        <span class="stack__label" lang="en">Cloud &amp; Infrastructure</span>
+        <span class="stack__label" lang="pt-BR">Cloud &amp; Infraestrutura</span>
+        <ul class="chips">
+          <li>AWS</li><li>Google Cloud</li><li>DigitalOcean</li><li>Cloudflare</li>
+        </ul>
+      </div>
+
+      <div class="stack">
+        <span class="stack__label" lang="en">Containers &amp; Orchestration</span>
+        <span class="stack__label" lang="pt-BR">Containers &amp; Orquestração</span>
+        <ul class="chips">
+          <li>Kubernetes</li><li>Docker</li><li>Podman</li><li>Helm</li>
+        </ul>
+      </div>
+
+      <div class="stack">
+        <span class="stack__label" lang="en">IaC &amp; Automation</span>
+        <span class="stack__label" lang="pt-BR">IaC &amp; Automação</span>
+        <ul class="chips">
+          <li>OpenTofu</li><li>Terraform</li><li>Terragrunt</li>
+          <li>Ansible</li><li>GitHub Actions</li>
+        </ul>
+      </div>
+
+      <div class="stack">
+        <span class="stack__label" lang="en">Systems</span>
+        <span class="stack__label" lang="pt-BR">Sistemas</span>
+        <ul class="chips">
+          <li>Red Hat</li><li>Fedora</li><li>Ubuntu</li>
+          <li>FreeBSD</li><li>GhostBSD</li><li>macOS</li>
+        </ul>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__card">
+      <div class="footer__accent"></div>
+      <div class="footer__body">
+        <ul class="social">
+          <li><a href="https://github.com/youhide" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></li>
+          <li><a href="https://gitlab.com/youri" aria-label="GitLab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m23.6 9.6-.03-.086L20.3.9a.851.851 0 0 0-.336-.405.876.876 0 0 0-1 .054.876.876 0 0 0-.29.44l-2.207 6.752H7.535L5.327.99a.858.858 0 0 0-.29-.441.876.876 0 0 0-1-.054.859.859 0 0 0-.336.405L.427 9.51l-.031.085a6.055 6.055 0 0 0 2.008 6.997l.01.009.03.022 4.964 3.72 2.456 1.86 1.496 1.13a1.01 1.01 0 0 0 1.22 0l1.496-1.13 2.456-1.86 4.994-3.742.013-.01a6.057 6.057 0 0 0 2.06-6.99Z"/></svg></a></li>
+          <li><a href="https://linkedin.com/in/yourimattar" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+          <li><a href="https://x.com/_hideout" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a></li>
+          <li><a href="https://twitch.tv/youhide" aria-label="Twitch"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg></a></li>
+          <li><a href="https://postrite.app" aria-label="PostRite"><svg class="icon--stroke" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><ellipse cx="12" cy="12" rx="4" ry="9.5"/><path d="M2.5 12h19"/></svg></a></li>
+        </ul>
+
+        <p class="footer__exit"><span class="prompt__sign">$</span>exit<span class="cursor" aria-hidden="true">█</span></p>
+        <p class="footer__note">
+          <span lang="en">Connection to youhide closed. Always learning, always shipping.</span>
+          <span lang="pt-BR">Conexão com youhide encerrada. Sempre aprendendo, sempre entregando.</span>
+        </p>
+        <p class="footer__meta">Youri T. K. K. Mattar · Londrina, Brasil</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

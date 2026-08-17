@@ -1,0 +1,14 @@
+{
+  "name": "youHide",
+  "short_name": "youHide",
+  "description": "Youri Mattar — DevOps, Platform Engineer, Infrastructure Necromancer.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#282a36",
+  "theme_color": "#282a36",
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" },
+    { "src": "/favicon-32x32.png", "type": "image/png", "sizes": "32x32" },
+    { "src": "/apple-touch-icon.png", "type": "image/png", "sizes": "180x180" }
+  ]
+}
