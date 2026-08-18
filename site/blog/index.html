@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>blog — youHide</title>
+<meta name="description" content="Notes from the homelab and from production — infrastructure, Go and Rust, and the things that broke on the way. Youri Mattar.">
+<meta name="author" content="Youri T. K. K. Mattar">
+<meta name="theme-color" content="#282a36">
+<link rel="canonical" href="https://youhide.com.br/blog/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="blog — youHide">
+<meta property="og:description" content="Notes from the homelab and from production. Infrastructure, Go and Rust.">
+<meta property="og:url" content="https://youhide.com.br/blog/">
+<meta property="og:image" content="https://youhide.com.br/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@_hideout">
+
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="manifest" href="../site.webmanifest">
+<link rel="alternate" type="application/rss+xml" title="youHide — blog" href="../feed.xml">
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/main.js"></script>
+</head>
+<body>
+
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="pt-BR">Pular para o conteúdo</span></a>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__brand" href="../"><span>~</span>/youhide</a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="../">./home</a>
+      <a href="../about/">./about</a>
+      <a href="../projects/">./projects</a>
+      <a href="./" aria-current="page">./blog</a>
+    </nav>
+    <button class="lang" id="lang-toggle" type="button" aria-label="Mudar para português">
+      <span class="lang__opt" data-lang-opt="en">EN</span>
+      <span class="lang__sep">|</span>
+      <span class="lang__opt" data-lang-opt="pt-BR">PT</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <section class="term" aria-labelledby="page-title">
+      <div class="term__bar">
+        <span class="dot dot--red"></span>
+        <span class="dot dot--yellow"></span>
+        <span class="dot dot--green"></span>
+        <span class="term__path">youhide@homelab: ~/blog</span>
+      </div>
+      <div class="term__body">
+        <div class="term__main">
+          <p class="prompt"><span class="prompt__sign">$</span>ls -lt ~/blog</p>
+          <h1 class="page__title" id="page-title">blog</h1>
+          <p class="hero__note">
+            <span lang="en"># notes from the homelab and from production — mostly what broke first</span>
+            <span lang="pt-BR"># anotações do homelab e da produção — quase sempre o que quebrou primeiro</span>
+          </p>
+        </div>
+      </div>
+      <div class="term__accent"></div>
+    </section>
+
+    <section class="section">
+      <h2 class="section__title"><span class="sig">$</span>grep -l "#tag" *.md</h2>
+
+      <div class="filters" hidden>
+        <button class="filter" type="button" data-filter="*" aria-pressed="true">all</button>
+        <button class="filter" type="button" data-filter="meta" aria-pressed="false">meta</button>
+        <button class="filter" type="button" data-filter="homelab" aria-pressed="false">homelab</button>
+        <button class="filter" type="button" data-filter="rust" aria-pressed="false">rust</button>
+        <button class="filter" type="button" data-filter="go" aria-pressed="false">go</button>
+        <button class="filter" type="button" data-filter="gamedev" aria-pressed="false">gamedev</button>
+        <button class="filter" type="button" data-filter="design" aria-pressed="false">design</button>
+        <button class="filter" type="button" data-filter="kubernetes" aria-pressed="false">kubernetes</button>
+      </div>
+
+      <ul class="posts">
+
+        <li data-tags="rust gamedev design">
+          <a class="post-item" href="greenvale/">
+            <div class="post-item__top">
+              <time class="post-date" datetime="2026-08-18">2026-08-18</time>
+              <ul class="post-tags">
+                <li>rust</li><li>gamedev</li><li>design</li>
+              </ul>
+            </div>
+            <h3 class="post-item__title" lang="en">Nothing decays in secret: building Greenvale</h3>
+            <h3 class="post-item__title" lang="pt-BR">Nada apodrece em segredo: construindo o Greenvale</h3>
+            <p class="post-item__excerpt" lang="en">A farming simulation in Rust where soil depletes, metal
+              rusts and pests evolve — and every loss is traceable to a cause. What happens when you design
+              a game with the instincts of a platform engineer: overlays as dashboards, the harvest report
+              as a postmortem, and determinism as test infrastructure.</p>
+            <p class="post-item__excerpt" lang="pt-BR">Um simulador de fazenda em Rust onde o solo se esgota,
+              o metal enferruja e as pragas evoluem — e toda perda é rastreável até uma causa. O que acontece
+              quando você projeta um jogo com os instintos de um platform engineer: overlays como dashboards,
+              o relatório de colheita como postmortem, e determinismo como infraestrutura de teste.</p>
+          </a>
+        </li>
+
+        <li data-tags="meta html github-actions">
+          <a class="post-item" href="rebuilding-this-site/">
+            <div class="post-item__top">
+              <time class="post-date" datetime="2026-08-17">2026-08-17</time>
+              <ul class="post-tags">
+                <li>meta</li><li>html</li><li>github-actions</li>
+              </ul>
+            </div>
+            <h3 class="post-item__title" lang="en">Deleting the build step: this site is hand-written HTML again</h3>
+            <h3 class="post-item__title" lang="pt-BR">Apagando o build: este site voltou a ser HTML escrito à mão</h3>
+            <p class="post-item__excerpt" lang="en">Two pages of content were being served by a static site
+              generator, a vendored theme pinned to a 2019 commit and an FTP deploy action pinned to
+              <code>@master</code>. Here is what came out, what went in, and why zero dependencies is a
+              feature.</p>
+            <p class="post-item__excerpt" lang="pt-BR">Duas páginas de conteúdo eram servidas por um gerador de
+              site estático, um tema vendorizado travado num commit de 2019 e um deploy FTP travado em
+              <code>@master</code>. O que saiu, o que entrou, e por que zero dependências é uma feature.</p>
+          </a>
+        </li>
+
+        <li class="posts__empty" id="posts-empty" hidden>
+          <span lang="en"># no posts with that tag — yet</span>
+          <span lang="pt-BR"># nenhum post com essa tag — ainda</span>
+        </li>
+
+      </ul>
+
+      <p class="more">
+        <a href="../feed.xml" lang="en">→ RSS feed</a>
+        <a href="../feed.xml" lang="pt-BR">→ feed RSS</a>
+      </p>
+    </section>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__card">
+      <div class="footer__accent"></div>
+      <div class="footer__body">
+        <ul class="social">
+          <li><a href="https://github.com/youhide" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></li>
+          <li><a href="https://gitlab.com/youri" aria-label="GitLab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m23.6 9.6-.03-.086L20.3.9a.851.851 0 0 0-.336-.405.876.876 0 0 0-1 .054.876.876 0 0 0-.29.44l-2.207 6.752H7.535L5.327.99a.858.858 0 0 0-.29-.441.876.876 0 0 0-1-.054.859.859 0 0 0-.336.405L.427 9.51l-.031.085a6.055 6.055 0 0 0 2.008 6.997l.01.009.03.022 4.964 3.72 2.456 1.86 1.496 1.13a1.01 1.01 0 0 0 1.22 0l1.496-1.13 2.456-1.86 4.994-3.742.013-.01a6.057 6.057 0 0 0 2.06-6.99Z"/></svg></a></li>
+          <li><a href="https://linkedin.com/in/yourimattar" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+          <li><a href="https://x.com/_hideout" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a></li>
+          <li><a href="https://twitch.tv/youhide" aria-label="Twitch"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg></a></li>
+          <li><a href="https://postrite.app" aria-label="PostRite"><svg class="icon--stroke" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><ellipse cx="12" cy="12" rx="4" ry="9.5"/><path d="M2.5 12h19"/></svg></a></li>
+        </ul>
+
+        <p class="footer__exit"><span class="prompt__sign">$</span>exit<span class="cursor" aria-hidden="true">█</span></p>
+        <p class="footer__note">
+          <span lang="en">Connection to youhide closed. Always learning, always shipping.</span>
+          <span lang="pt-BR">Conexão com youhide encerrada. Sempre aprendendo, sempre entregando.</span>
+        </p>
+        <p class="footer__meta">Youri T. K. K. Mattar · Londrina, Brasil</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

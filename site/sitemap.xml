@@ -12,4 +12,18 @@
     <loc>https://youhide.com.br/projects/</loc>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://youhide.com.br/blog/</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://youhide.com.br/blog/greenvale/</loc>
+    <lastmod>2026-08-18</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://youhide.com.br/blog/rebuilding-this-site/</loc>
+    <lastmod>2026-08-17</lastmod>
+    <priority>0.6</priority>
+  </url>
 </urlset>

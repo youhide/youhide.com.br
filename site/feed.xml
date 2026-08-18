@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>youHide — blog</title>
+    <link>https://youhide.com.br/blog/</link>
+    <atom:link href="https://youhide.com.br/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>Notes from the homelab and from production — infrastructure, Go and Rust, and the things that broke on the way. Posts are bilingual EN / PT-BR; feed summaries are in English.</description>
+    <language>en</language>
+    <managingEditor>youri@youhide.com.br (Youri T. K. K. Mattar)</managingEditor>
+    <webMaster>youri@youhide.com.br (Youri T. K. K. Mattar)</webMaster>
+
+    <item>
+      <title>Nothing decays in secret: building Greenvale</title>
+      <link>https://youhide.com.br/blog/greenvale/</link>
+      <guid isPermaLink="true">https://youhide.com.br/blog/greenvale/</guid>
+      <pubDate>Tue, 18 Aug 2026 09:30:00 -0300</pubDate>
+      <category>rust</category>
+      <category>gamedev</category>
+      <category>design</category>
+      <description>Greenvale is a real-time farming simulation in Rust where soil depletes, metal rusts and pests evolve — and every loss is traceable to a cause. What happens when a platform engineer designs a game: map overlays as dashboards, the post-harvest report as a postmortem, and determinism as test infrastructure.</description>
+    </item>
+
+    <item>
+      <title>Deleting the build step: this site is hand-written HTML again</title>
+      <link>https://youhide.com.br/blog/rebuilding-this-site/</link>
+      <guid isPermaLink="true">https://youhide.com.br/blog/rebuilding-this-site/</guid>
+      <pubDate>Mon, 17 Aug 2026 19:50:51 -0300</pubDate>
+      <category>meta</category>
+      <category>html</category>
+      <category>github-actions</category>
+      <description>Two pages of content were being served by a static site generator, a vendored theme pinned to a 2019 commit and an FTP deploy action pinned to @master. What came out, what went in, and why zero external requests is worth keeping.</description>
+    </item>
+
+  </channel>
+</rss>

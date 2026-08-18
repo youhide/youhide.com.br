@@ -21,6 +21,7 @@
 <link rel="icon" href="favicon-32x32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
+<link rel="alternate" type="application/rss+xml" title="youHide — blog" href="feed.xml">
 <link rel="stylesheet" href="css/style.css">
 <script src="js/main.js"></script>
 </head>
@@ -35,6 +36,7 @@
       <a href="./" aria-current="page">./home</a>
       <a href="about/">./about</a>
       <a href="projects/">./projects</a>
+      <a href="blog/">./blog</a>
     </nav>
     <button class="lang" id="lang-toggle" type="button" aria-label="Mudar para português">
       <span class="lang__opt" data-lang-opt="en">EN</span>
@@ -106,10 +108,73 @@
 
     <hr class="rule">
 
+    <!-- latest posts -->
+    <section class="section">
+      <h2 class="section__title"><span class="sig">$</span>tail -n 3 ~/blog</h2>
+      <ul class="posts">
+
+        <li data-tags="rust gamedev design">
+          <a class="post-item" href="blog/greenvale/">
+            <div class="post-item__top">
+              <time class="post-date" datetime="2026-08-18">2026-08-18</time>
+              <ul class="post-tags">
+                <li>rust</li><li>gamedev</li>
+              </ul>
+            </div>
+            <h3 class="post-item__title" lang="en">Nothing decays in secret: building Greenvale</h3>
+            <h3 class="post-item__title" lang="pt-BR">Nada apodrece em segredo: construindo o Greenvale</h3>
+            <p class="post-item__excerpt" lang="en">A farming simulation in Rust where every loss is traceable
+              to a cause — overlays as dashboards, the harvest report as a postmortem, determinism as test
+              infrastructure.</p>
+            <p class="post-item__excerpt" lang="pt-BR">Um simulador de fazenda em Rust onde toda perda é
+              rastreável até uma causa — overlays como dashboards, o relatório de colheita como postmortem,
+              determinismo como infraestrutura de teste.</p>
+          </a>
+        </li>
+
+        <li data-tags="meta html github-actions">
+          <a class="post-item" href="blog/rebuilding-this-site/">
+            <div class="post-item__top">
+              <time class="post-date" datetime="2026-08-17">2026-08-17</time>
+              <ul class="post-tags">
+                <li>meta</li><li>html</li>
+              </ul>
+            </div>
+            <h3 class="post-item__title" lang="en">Deleting the build step: this site is hand-written HTML again</h3>
+            <h3 class="post-item__title" lang="pt-BR">Apagando o build: este site voltou a ser HTML escrito à mão</h3>
+            <p class="post-item__excerpt" lang="en">A static site generator, a theme pinned to a 2019
+              commit and an FTP deploy — for two pages of content. What came out, what went in, and why
+              zero dependencies is a feature.</p>
+            <p class="post-item__excerpt" lang="pt-BR">Um gerador de site estático, um tema travado num
+              commit de 2019 e um deploy FTP — para duas páginas de conteúdo. O que saiu, o que entrou e
+              por que zero dependências é uma feature.</p>
+          </a>
+        </li>
+
+      </ul>
+      <p class="more">
+        <a href="blog/" lang="en">→ all posts</a>
+        <a href="blog/" lang="pt-BR">→ todos os posts</a>
+      </p>
+    </section>
+
+    <hr class="rule">
+
     <!-- featured projects -->
     <section class="section">
       <h2 class="section__title"><span class="sig">$</span>ls ~/projects --featured</h2>
       <div class="grid">
+
+        <a class="card" href="blog/greenvale/">
+          <div class="card__top">
+            <span class="card__name">Greenvale</span>
+            <span class="card__lang card__lang--rust">Rust</span>
+          </div>
+          <p class="card__desc" lang="en">Real-time farming simulation where soil depletes, metal rusts and pests evolve — and every loss is traceable to a cause.</p>
+          <p class="card__desc" lang="pt-BR">Simulador de fazenda em tempo real onde o solo se esgota, o metal enferruja e as pragas evoluem — e toda perda é rastreável até uma causa.</p>
+          <span class="tag" lang="en">in development</span>
+          <span class="tag" lang="pt-BR">em desenvolvimento</span>
+        </a>
 
         <a class="card" href="https://postrite.app">
           <div class="card__top">

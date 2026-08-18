@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nothing decays in secret — youHide</title>
+<meta name="description" content="Greenvale is a farming simulation in Rust where soil depletes, metal rusts and pests evolve — and every loss is traceable to a cause. Building a game with the instincts of a platform engineer.">
+<meta name="author" content="Youri T. K. K. Mattar">
+<meta name="theme-color" content="#282a36">
+<link rel="canonical" href="https://youhide.com.br/blog/greenvale/">
+
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2026-08-18">
+<meta property="og:title" content="Nothing decays in secret: Greenvale">
+<meta property="og:description" content="A farming simulation in Rust where every loss is traceable to a cause. Observability, deferred maintenance and determinism — applied to soil.">
+<meta property="og:url" content="https://youhide.com.br/blog/greenvale/">
+<meta property="og:image" content="https://youhide.com.br/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@_hideout">
+
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="alternate" type="application/rss+xml" title="youHide — blog" href="../../feed.xml">
+<link rel="stylesheet" href="../../css/style.css">
+<script src="../../js/main.js"></script>
+</head>
+<body>
+
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="pt-BR">Pular para o conteúdo</span></a>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__brand" href="../../"><span>~</span>/youhide</a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="../../">./home</a>
+      <a href="../../about/">./about</a>
+      <a href="../../projects/">./projects</a>
+      <a href="../" aria-current="true">./blog</a>
+    </nav>
+    <button class="lang" id="lang-toggle" type="button" aria-label="Mudar para português">
+      <span class="lang__opt" data-lang-opt="en">EN</span>
+      <span class="lang__sep">|</span>
+      <span class="lang__opt" data-lang-opt="pt-BR">PT</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <section class="term" aria-labelledby="page-title">
+      <div class="term__bar">
+        <span class="dot dot--red"></span>
+        <span class="dot dot--yellow"></span>
+        <span class="dot dot--green"></span>
+        <span class="term__path">youhide@homelab: ~/blog</span>
+      </div>
+      <div class="term__body">
+        <div class="term__main">
+          <p class="prompt"><span class="prompt__sign">$</span>cat greenvale.md</p>
+          <h1 class="page__title" id="page-title" lang="en">Nothing decays in secret</h1>
+          <h1 class="page__title" lang="pt-BR">Nada apodrece em segredo</h1>
+          <div class="post__meta">
+            <time class="post-date" datetime="2026-08-18">2026-08-18</time>
+            <ul class="post-tags">
+              <li>rust</li><li>gamedev</li><li>design</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="term__accent"></div>
+    </section>
+
+    <article class="section post prose">
+
+      <blockquote lang="en">A farm is a system that wants to return to chaos. Your job is to delay that.</blockquote>
+      <blockquote lang="pt-BR">Uma fazenda é um sistema que quer voltar ao caos. Seu trabalho é adiar isso.</blockquote>
+
+      <p lang="en">I am building a game. It is called <strong>Greenvale</strong>, it is written in Rust, and
+        it is a real-time farming simulation — a reinterpretation of <em>SimFarm</em> (Maxis, 1993) with
+        the systemic depth of RimWorld and Dwarf Fortress. Soil depletes, metal rusts, pests evolve,
+        markets betray you, and people wear out. You do not build a perfect farm. You negotiate with
+        decay.</p>
+      <p lang="pt-BR">Estou construindo um jogo. Ele se chama <strong>Greenvale</strong>, é escrito em
+        Rust, e é um simulador de fazenda em tempo real — uma releitura de <em>SimFarm</em> (Maxis, 1993)
+        com a profundidade sistêmica de RimWorld e Dwarf Fortress. O solo se esgota, o metal enferruja,
+        as pragas evoluem, o mercado te trai e as pessoas se desgastam. Você não constrói uma fazenda
+        perfeita. Você negocia com a decadência.</p>
+
+      <p lang="en">What I did not expect is how much of it turned out to be my day job wearing a hat.</p>
+      <p lang="pt-BR">O que eu não esperava é o quanto disso acabou sendo o meu trabalho de todo dia
+        usando um chapéu.</p>
+
+      <h2 lang="en">The rule that shaped everything</h2>
+      <h2 lang="pt-BR">A regra que moldou tudo</h2>
+
+      <p lang="en">The first design pillar is <strong>legible entropy</strong>: everything decays,
+        nothing decays in secret. If the yield drops 18%, the player has to be able to trace it —
+        nitrogen below threshold at flowering, compaction from a tractor that entered a wet field, a
+        pest population that grew because they planted the same crop three years running. Difficulty
+        comes from managing decline, never from hiding information.</p>
+      <p lang="pt-BR">O primeiro pilar de design é <strong>entropia legível</strong>: tudo se degrada,
+        nada se degrada em segredo. Se a colheita cai 18%, o jogador precisa conseguir rastrear o
+        porquê — nitrogênio abaixo do limite na floração, compactação de um trator que entrou em campo
+        molhado, uma população de pragas que cresceu porque ele plantou a mesma cultura três anos
+        seguidos. A dificuldade vem de administrar o declínio, nunca de esconder informação.</p>
+
+      <p lang="en">That pillar has a hard consequence written next to it in the design doc:</p>
+      <p lang="pt-BR">Esse pilar tem uma consequência dura escrita ao lado dele no documento de design:</p>
+
+      <blockquote lang="en">Every simulation system has a map overlay and a line in the post-harvest
+        report. If a system can't be visualized, it doesn't ship.</blockquote>
+      <blockquote lang="pt-BR">Todo sistema de simulação tem um overlay no mapa e uma linha no
+        relatório pós-colheita. Se um sistema não pode ser visualizado, ele não entra.</blockquote>
+
+      <p lang="en">I spend my days making infrastructure explain itself. An outage you cannot attribute
+        is worse than one you can, because the second one ends. So when I sat down to design difficulty,
+        the instinct was already there: a game that hides why the harvest failed is not hard, it is
+        unobservable. The overlays are dashboards. The post-harvest report is a postmortem. The player
+        is on call.</p>
+      <p lang="pt-BR">Eu passo meus dias fazendo infraestrutura se explicar. Uma indisponibilidade que
+        você não consegue atribuir é pior do que uma que você consegue, porque a segunda termina. Então
+        quando sentei pra desenhar a dificuldade, o instinto já estava lá: um jogo que esconde por que a
+        colheita falhou não é difícil, ele é inobservável. Os overlays são dashboards. O relatório
+        pós-colheita é um postmortem. O jogador está de plantão.</p>
+
+      <h2 lang="en">Deferred maintenance, as a mechanic</h2>
+      <h2 lang="pt-BR">Manutenção adiada, como mecânica</h2>
+
+      <p lang="en">The second pillar is <strong>delayed consequence</strong>: today's decision pays out
+        two or three seasons from now. Tilling releases nitrogen now and burns organic matter for the
+        next decade. Pesticide saves this crop and kills the natural predators that would have saved the
+        next one. Deferring maintenance saves money until the day it doesn't.</p>
+      <p lang="pt-BR">O segundo pilar é <strong>consequência adiada</strong>: a decisão de hoje paga
+        daqui a duas ou três safras. Arar libera nitrogênio agora e queima matéria orgânica pela próxima
+        década. O agrotóxico salva esta safra e mata os predadores naturais que teriam salvado a próxima.
+        Adiar manutenção economiza dinheiro até o dia em que não economiza.</p>
+
+      <p lang="en">Nobody who has run production infrastructure needs that explained. The rule I wrote
+        for myself is that no significant system may resolve within the same season — if it resolves
+        that fast, it is noise, not a decision. Which is another way of saying that the interesting part
+        of any system is the part with a lag.</p>
+      <p lang="pt-BR">Ninguém que já operou infraestrutura em produção precisa que isso seja explicado.
+        A regra que escrevi pra mim mesmo é que nenhum sistema relevante pode se resolver dentro da mesma
+        estação — se resolve tão rápido, é ruído, não é decisão. O que é outro jeito de dizer que a parte
+        interessante de qualquer sistema é a parte que tem atraso.</p>
+
+      <h2 lang="en">Determinism is test infrastructure</h2>
+      <h2 lang="pt-BR">Determinismo é infraestrutura de teste</h2>
+
+      <p lang="en">The simulation is <strong>deterministic given (seed, command log)</strong>. That is an
+        architecture decision with its own ADR, and it exists to solve three problems that a
+        nondeterministic build cannot:</p>
+      <p lang="pt-BR">A simulação é <strong>determinística dados (seed, log de comandos)</strong>. Essa é
+        uma decisão de arquitetura com ADR próprio, e ela existe pra resolver três problemas que um build
+        não determinístico não resolve:</p>
+
+      <ul lang="en">
+        <li><strong>Balancing.</strong> Hundreds of seeds compared across builds. If a change to the pest
+          model also shifts the weather sequence, the comparison is meaningless.</li>
+        <li><strong>Regression testing.</strong> The only practical way to test a simulation this coupled
+          is <em>same seed, same commands → same state hash</em>.</li>
+        <li><strong>Bug reports.</strong> "My farm collapsed in year 7 and I don't know why" is
+          untestable. A seed plus a command log is a reproducible test case.</li>
+      </ul>
+      <ul lang="pt-BR">
+        <li><strong>Balanceamento.</strong> Centenas de seeds comparadas entre builds. Se uma mudança no
+          modelo de pragas também desloca a sequência do clima, a comparação não significa nada.</li>
+        <li><strong>Teste de regressão.</strong> O único jeito prático de testar uma simulação tão
+          acoplada é <em>mesma seed, mesmos comandos → mesmo hash de estado</em>.</li>
+        <li><strong>Relatos de bug.</strong> "Minha fazenda colapsou no ano 7 e eu não sei por quê" não é
+          testável. Uma seed mais um log de comandos é um caso de teste reproduzível.</li>
+      </ul>
+
+      <p lang="en">Getting there costs discipline. Per-domain RNG streams, so adding a roll to the pest
+        model does not shift the weather. No <code>HashMap</code> iteration may influence state — enforced
+        by an invariant test, not by good intentions. The RNG state lives in the save file, so
+        save → quit → load produces the same future as never quitting. And every mutation goes through a
+        command, which means the command log <em>is</em> the replay.</p>
+      <p lang="pt-BR">Chegar lá custa disciplina. Streams de RNG por domínio, pra que adicionar um sorteio
+        no modelo de pragas não desloque o clima. Nenhuma iteração de <code>HashMap</code> pode influenciar
+        o estado — garantido por um teste de invariante, não por boa intenção. O estado do RNG mora no save,
+        então salvar → sair → carregar produz o mesmo futuro que nunca ter saído. E toda mutação passa por
+        um comando, o que significa que o log de comandos <em>é</em> o replay.</p>
+
+      <p lang="en">The explicit non-goal is bit-identical replay across platforms. Floating point across
+        operating systems and compiler versions is not identical without soft-float or fixed-point
+        everywhere, and Greenvale is single-player with no leaderboards and no lockstep networking. The
+        cost buys nothing. Same build, same platform, same result — that is enough for balance runs, CI
+        and reproducing a player's bug.</p>
+      <p lang="pt-BR">O não-objetivo explícito é replay bit a bit idêntico entre plataformas. Ponto
+        flutuante entre sistemas operacionais e versões de compilador não é idêntico sem soft-float ou
+        ponto fixo em tudo, e Greenvale é single-player, sem placar e sem rede em lockstep. O custo não
+        compra nada. Mesmo build, mesma plataforma, mesmo resultado — isso basta pra rodadas de
+        balanceamento, CI e reproduzir o bug de um jogador.</p>
+
+      <h2 lang="en">The renderer is a detail</h2>
+      <h2 lang="pt-BR">O renderizador é um detalhe</h2>
+
+      <p lang="en">The simulation never depends on the renderer. It is its own crate, it depends only on
+        an ECS library, and it runs headless. That boundary is not architectural vanity — it is what makes
+        a balance sweep possible: a hundred seeds, thirty simulated years, one strategy, straight to a CSV,
+        with no GPU and no window anywhere in the process.</p>
+      <p lang="pt-BR">A simulação nunca depende do renderizador. Ela é um crate próprio, depende só de uma
+        biblioteca de ECS, e roda headless. Essa fronteira não é vaidade arquitetural — é o que torna
+        possível uma varredura de balanceamento: cem seeds, trinta anos simulados, uma estratégia, direto
+        pra um CSV, sem GPU e sem janela em lugar nenhum do processo.</p>
+
+      <h2 lang="en">Where it is now</h2>
+      <h2 lang="pt-BR">Onde está agora</h2>
+
+      <p lang="en">The first vertical slice is feature-complete and waiting at its decision gate. The farm
+        runs end to end: order work, wait for the soil to carry a tractor — or force it and pay in
+        compaction — grow, harvest, sell, and read a report that says <em>why</em> the yield was what it
+        was. Tests pass, lints are clean, headless sweeps are deterministic, and a committed replay corpus
+        guards against semantic drift.</p>
+      <p lang="pt-BR">A primeira fatia vertical está completa e esperando no seu portão de decisão. A
+        fazenda roda de ponta a ponta: ordenar o trabalho, esperar o solo aguentar um trator — ou forçar e
+        pagar em compactação — crescer, colher, vender, e ler um relatório que diz <em>por que</em> a
+        colheita foi o que foi. Os testes passam, os lints estão limpos, as varreduras headless são
+        determinísticas, e um corpus de replay commitado protege contra desvio semântico.</p>
+
+      <p lang="en">What remains is not a task. It is a judgement, and it belongs to a human sitting in
+        front of the game: play eight game years on one farm and decide whether the decline is interesting
+        or merely tiring. I do not know the answer yet. That is the honest status.</p>
+      <p lang="pt-BR">O que falta não é uma tarefa. É um julgamento, e ele pertence a um humano sentado na
+        frente do jogo: jogar oito anos de jogo em uma fazenda e decidir se o declínio é interessante ou só
+        cansativo. Eu ainda não sei a resposta. Esse é o status honesto.</p>
+
+      <p lang="en">The repository is private for now. When there is something worth showing, it shows up
+        here first — and probably on <a href="https://twitch.tv/youhide">Twitch</a> while it is still
+        broken.</p>
+      <p lang="pt-BR">O repositório está privado por enquanto. Quando tiver alguma coisa que valha a pena
+        mostrar, aparece aqui primeiro — e provavelmente na <a href="https://twitch.tv/youhide">Twitch</a>
+        enquanto ainda estiver quebrado.</p>
+
+    </article>
+
+    <nav class="post-nav" aria-label="Post navigation">
+      <a href="../" lang="en">← all posts</a>
+      <a href="../" lang="pt-BR">← todos os posts</a>
+      <a href="../../feed.xml" lang="en">RSS feed →</a>
+      <a href="../../feed.xml" lang="pt-BR">feed RSS →</a>
+    </nav>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__card">
+      <div class="footer__accent"></div>
+      <div class="footer__body">
+        <ul class="social">
+          <li><a href="https://github.com/youhide" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></li>
+          <li><a href="https://gitlab.com/youri" aria-label="GitLab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m23.6 9.6-.03-.086L20.3.9a.851.851 0 0 0-.336-.405.876.876 0 0 0-1 .054.876.876 0 0 0-.29.44l-2.207 6.752H7.535L5.327.99a.858.858 0 0 0-.29-.441.876.876 0 0 0-1-.054.859.859 0 0 0-.336.405L.427 9.51l-.031.085a6.055 6.055 0 0 0 2.008 6.997l.01.009.03.022 4.964 3.72 2.456 1.86 1.496 1.13a1.01 1.01 0 0 0 1.22 0l1.496-1.13 2.456-1.86 4.994-3.742.013-.01a6.057 6.057 0 0 0 2.06-6.99Z"/></svg></a></li>
+          <li><a href="https://linkedin.com/in/yourimattar" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+          <li><a href="https://x.com/_hideout" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a></li>
+          <li><a href="https://twitch.tv/youhide" aria-label="Twitch"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg></a></li>
+          <li><a href="https://postrite.app" aria-label="PostRite"><svg class="icon--stroke" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><ellipse cx="12" cy="12" rx="4" ry="9.5"/><path d="M2.5 12h19"/></svg></a></li>
+        </ul>
+
+        <p class="footer__exit"><span class="prompt__sign">$</span>exit<span class="cursor" aria-hidden="true">█</span></p>
+        <p class="footer__note">
+          <span lang="en">Connection to youhide closed. Always learning, always shipping.</span>
+          <span lang="pt-BR">Conexão com youhide encerrada. Sempre aprendendo, sempre entregando.</span>
+        </p>
+        <p class="footer__meta">Youri T. K. K. Mattar · Londrina, Brasil</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
