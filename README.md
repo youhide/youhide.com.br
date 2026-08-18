@@ -19,7 +19,11 @@ site/          everything that gets published
   404.html
   css/style.css
   js/main.js   language toggle and blog tag filter, the only script
-assets/        source files, NOT published
+assets/        sources and tooling, NOT published
+  check-site.py       validation, also run by CI
+  render-assets.sh    regenerate favicons/og/avatar (macOS)
+CLAUDE.md      conventions for Claude Code and anyone else working here
+.claude/skills/new-blog-post/
 ```
 
 ## Preview
@@ -30,13 +34,29 @@ python3 -m http.server 8000 --directory site
 
 Then open <http://localhost:8000>. The URL structure is identical to production.
 
+## Checks
+
+```bash
+python3 assets/check-site.py
+```
+
+Standard library only, no dependencies. It verifies tag nesting, that every
+relative path resolves, that no subresource points off-origin, that EN/PT-BR
+strings are paired on every page, that `feed.xml` and `sitemap.xml` are
+well-formed, that every post on disk is listed in the blog index, the feed and
+the sitemap, that the duplicated footer has not drifted, and that nothing
+unpublishable sits under `site/`.
+
+The same script runs in CI before the Pages upload, so a failure blocks the
+deploy instead of shipping. Run it before every commit.
+
 ## Adding a post
 
 There is no build step, so a new post touches five files. In order:
 
-1. `site/blog/<slug>/index.html` — copy the closest existing post and replace the
-   `<title>`, the meta/OG block, the canonical URL, the `<h1>` pair, the date and
-   the tags. Asset paths are `../../`.
+1. `site/blog/<slug>/index.html` — copy the most recent post and replace the
+   `<title>`, the meta/OG block, the canonical URL, the `<h1>` pair, the date
+   (twice: attribute and text) and the tags. Asset paths are `../../`.
 2. `site/blog/index.html` — add an `<li data-tags="...">` at the top of `.posts`.
    The tags in `data-tags` are what the filter buttons match; add a new button to
    `.filters` if the tag is new.
@@ -48,6 +68,10 @@ There is no build step, so a new post touches five files. In order:
 Posts are bilingual like the rest of the site: every block element is written
 twice, tagged `lang="en"` and `lang="pt-BR"`. The RSS feed carries the English
 summary only.
+
+`check-site.py` catches steps 2, 4 and 5 being skipped. Full procedure, with the
+exact snippets, in [`.claude/skills/new-blog-post/SKILL.md`](.claude/skills/new-blog-post/SKILL.md);
+site-wide conventions in [`CLAUDE.md`](CLAUDE.md).
 
 ## Notes
 
