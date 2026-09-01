@@ -10,6 +10,18 @@
     <webMaster>youri@youhide.com.br (Youri T. K. K. Mattar)</webMaster>
 
     <item>
+      <title>The engine was not a choice: eight years in the games industry</title>
+      <link>https://youhide.com.br/blog/escaping-the-engine/</link>
+      <guid isPermaLink="true">https://youhide.com.br/blog/escaping-the-engine/</guid>
+      <pubDate>Tue, 01 Sep 2026 09:30:00 -0300</pubDate>
+      <category>gamedev</category>
+      <category>design</category>
+      <category>meta</category>
+      <category>rust</category>
+      <description>Eight years in the games industry, 2017 to 2025, spent on the infrastructure side of studios where the engine was Unity and nobody in the room had chosen it. The version nobody upgrades, logic that cannot be tested outside the editor, an iteration loop set by the tool, and a licence that was never mine to control — and what I ask of a tool now.</description>
+    </item>
+
+    <item>
       <title>Nothing decays in secret: building Greenvale</title>
       <link>https://youhide.com.br/blog/greenvale/</link>
       <guid isPermaLink="true">https://youhide.com.br/blog/greenvale/</guid>

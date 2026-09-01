@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The engine was not a choice — youHide</title>
+<meta name="description" content="Eight years in the games industry, 2017 to 2025, on the infrastructure side of studios locked into Unity — and why every tool I pick now is picked against that.">
+<meta name="author" content="Youri T. K. K. Mattar">
+<meta name="theme-color" content="#282a36">
+<link rel="canonical" href="https://youhide.com.br/blog/escaping-the-engine/">
+
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2026-09-01">
+<meta property="og:title" content="The engine was not a choice: eight years in the games industry">
+<meta property="og:description" content="Not a review of Unity. The four ways an engine reaches the infrastructure side of a studio: the version pin, logic that cannot leave the editor, the iteration loop, and a licence you do not control.">
+<meta property="og:url" content="https://youhide.com.br/blog/escaping-the-engine/">
+<meta property="og:image" content="https://youhide.com.br/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@_hideout">
+
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="alternate" type="application/rss+xml" title="youHide — blog" href="../../feed.xml">
+<link rel="stylesheet" href="../../css/style.css">
+<script src="../../js/main.js"></script>
+</head>
+<body>
+
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="pt-BR">Pular para o conteúdo</span></a>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__brand" href="../../"><span>~</span>/youhide</a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="../../">./home</a>
+      <a href="../../about/">./about</a>
+      <a href="../../projects/">./projects</a>
+      <a href="../" aria-current="page">./blog</a>
+    </nav>
+    <button class="lang" id="lang-toggle" type="button" aria-label="Mudar para português">
+      <span class="lang__opt" data-lang-opt="en">EN</span>
+      <span class="lang__sep">|</span>
+      <span class="lang__opt" data-lang-opt="pt-BR">PT</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <section class="term" aria-labelledby="page-title">
+      <div class="term__bar">
+        <span class="dot dot--red"></span>
+        <span class="dot dot--yellow"></span>
+        <span class="dot dot--green"></span>
+        <span class="term__path">youhide@homelab: ~/blog</span>
+      </div>
+      <div class="term__body">
+        <div class="term__main">
+          <p class="prompt"><span class="prompt__sign">$</span>cat escaping-the-engine.md</p>
+          <h1 class="page__title" id="page-title" lang="en">The engine was not a choice</h1>
+          <h1 class="page__title" lang="pt-BR">A engine não era uma escolha</h1>
+          <div class="post__meta">
+            <time class="post-date" datetime="2026-09-01">2026-09-01</time>
+            <ul class="post-tags">
+              <li>gamedev</li><li>design</li><li>meta</li><li>rust</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="term__accent"></div>
+    </section>
+
+    <article class="section post prose">
+
+      <p lang="en">I spent eight years in the games industry, from 2017 to 2025. Not writing gameplay
+        — I was on the other side of the wall: infrastructure, build pipelines, CI, and the technical
+        decisions a team then lives with for years. In every studio I worked at, the engine was Unity.
+        In none of them was that a decision anyone in the room had made.</p>
+      <p lang="pt-BR">Passei oito anos na indústria de games, de 2017 a 2025. Não escrevendo gameplay
+        — eu estava do outro lado do muro: infraestrutura, pipeline de build, CI, e as decisões
+        técnicas com as quais um time depois convive por anos. Em todos os estúdios onde trabalhei, a
+        engine era Unity. Em nenhum deles isso tinha sido uma decisão tomada por alguém na sala.</p>
+
+      <p lang="en">That distinction matters more than it sounds. A choice can be revisited. An
+        inherited condition just gets paid for, month after month, by whoever sits closest to the
+        machine. That was usually me.</p>
+      <p lang="pt-BR">Essa distinção importa mais do que parece. Uma escolha pode ser revista. Uma
+        condição herdada só é paga, mês após mês, por quem está sentado mais perto da máquina.
+        Normalmente eu.</p>
+
+      <p lang="en">So this is not a review of Unity. I am the wrong person to ask about its editor or
+        its asset workflow — I barely touched them. It is a list of the four ways an engine arrived on
+        my side of the wall, and why every tool I have picked since is picked against them.</p>
+      <p lang="pt-BR">Então isto não é uma review do Unity. Sou a pessoa errada pra perguntar sobre o
+        editor dele ou o fluxo de assets — eu mal encostava neles. É uma lista das quatro maneiras
+        pelas quais uma engine chegava do meu lado do muro, e por que toda ferramenta que escolhi
+        desde então é escolhida contra elas.</p>
+
+      <h2 lang="en">The version nobody upgrades</h2>
+      <h2 lang="pt-BR">A versão que ninguém atualiza</h2>
+
+      <p lang="en">Every project I touched was pinned to an engine version chosen years earlier, and
+        every project had the same reason: the upgrade broke things. Not catastrophically — just
+        enough that someone would have to spend a sprint on it, and the sprint was never available.
+        So the pin stayed. Then a plugin needed a newer engine. Then a platform SDK needed a newer
+        plugin. Then a store deadline needed the platform SDK.</p>
+      <p lang="pt-BR">Todo projeto que eu peguei estava travado numa versão de engine escolhida anos
+        antes, e todo projeto tinha o mesmo motivo: o upgrade quebrava coisas. Não catastroficamente
+        — só o suficiente pra alguém ter que gastar uma sprint nisso, e a sprint nunca estava
+        disponível. Então a trava ficava. Aí um plugin precisava de uma engine mais nova. Aí um SDK de
+        plataforma precisava de um plugin mais novo. Aí um prazo de loja precisava do SDK de
+        plataforma.</p>
+
+      <p lang="en">It is the oldest shape in operations: deferring maintenance saves money until
+        the day it doesn't. The version pin is the cleanest example of it I know. The debt is
+        invisible for three years, and then it is the only thing on the board.</p>
+      <p lang="pt-BR">É o formato mais velho da operação: adiar manutenção economiza dinheiro até o
+        dia em que não economiza. A trava de versão é o exemplo mais limpo disso que eu conheço. A
+        dívida fica invisível por três anos, e aí ela é a única coisa no quadro.</p>
+
+      <h2 lang="en">If it doesn't run without the editor, it doesn't run in CI</h2>
+      <h2 lang="pt-BR">Se não roda sem o editor, não roda em CI</h2>
+
+      <p lang="en">This is the one that cost me the most hours. When the rules of the game live in
+        scenes, prefabs and components, there is no seam to test against. You cannot load the logic,
+        run it, and assert on the result. You can only start the whole engine and look.</p>
+      <p lang="pt-BR">Essa é a que mais me custou horas. Quando as regras do jogo moram em cenas,
+        prefabs e componentes, não existe costura pra testar. Você não consegue carregar a lógica,
+        rodar e verificar o resultado. Você só consegue subir a engine inteira e olhar.</p>
+
+      <p lang="en">A pipeline built on top of that is not a pipeline, it is a ritual: a machine that
+        needs a licence and a GPU, an editor process that takes minutes to reach the point where it
+        could tell you anything, and a failure mode where the build is red because a runner filled its
+        disk, not because the code is wrong. Feedback that slow stops changing behaviour. People
+        stop reading it.</p>
+      <p lang="pt-BR">Um pipeline construído em cima disso não é um pipeline, é um ritual: uma máquina
+        que precisa de licença e de GPU, um processo de editor que leva minutos pra chegar no ponto em
+        que poderia te dizer alguma coisa, e um modo de falha em que o build fica vermelho porque um
+        runner encheu o disco, não porque o código está errado. Feedback tão lento deixa de mudar
+        comportamento. As pessoas param de ler.</p>
+
+      <blockquote lang="en">A test that needs a GPU is not a test. It is a rehearsal.</blockquote>
+      <blockquote lang="pt-BR">Um teste que precisa de GPU não é um teste. É um ensaio.</blockquote>
+
+      <p lang="en">That contrast is why everything I write now starts at the same boundary: the
+        rules go in a plain Rust library that depends on no renderer and runs headless, so a batch of
+        runs can go straight into a CSV with no GPU and no window anywhere in the process. I did not
+        reach that boundary from theory. I reached it from eight years of wanting it and not having
+        it.</p>
+      <p lang="pt-BR">Esse contraste é a razão de tudo que eu escrevo hoje começar na mesma fronteira:
+        as regras vão numa biblioteca Rust comum, que não depende de renderizador nenhum e roda
+        headless, então uma leva de execuções vai direto pra um CSV, sem GPU e sem janela em lugar
+        nenhum do processo. Eu não cheguei nessa fronteira pela teoria. Cheguei nela por oito anos de
+        querer e não ter.</p>
+
+      <h2 lang="en">The iteration loop belongs to the tool, not to you</h2>
+      <h2 lang="pt-BR">O loop de iteração é da ferramenta, não seu</h2>
+
+      <p lang="en">Compile, wait, enter play mode, wait, navigate back to the state you were testing,
+        look, change one number, repeat. Each wait is small enough to defend in a meeting and large
+        enough to decide how people work. Teams adapt to it: bigger changes, batched less often,
+        checked later — because when the cost of checking is high, checking becomes something you
+        schedule instead of something you do.</p>
+      <p lang="pt-BR">Compilar, esperar, entrar em play mode, esperar, navegar de volta até o estado
+        que você estava testando, olhar, mudar um número, repetir. Cada espera é pequena o suficiente
+        pra ser defendida numa reunião e grande o suficiente pra decidir como as pessoas trabalham. Os
+        times se adaptam: mudanças maiores, agrupadas com menos frequência, conferidas mais tarde —
+        porque quando o custo de conferir é alto, conferir vira algo que você agenda em vez de algo
+        que você faz.</p>
+
+      <p lang="en">That is a design decision about your team, and the tool made it. Across eight years
+        I watched it grow the same habits in studios that had nothing else in common.</p>
+      <p lang="pt-BR">Isso é uma decisão de design sobre o seu time, e quem tomou foi a ferramenta. Ao
+        longo de oito anos eu vi isso criar os mesmos hábitos em estúdios que não tinham mais nada em
+        comum.</p>
+
+      <h2 lang="en">The variable that isn't yours</h2>
+      <h2 lang="pt-BR">A variável que não é sua</h2>
+
+      <p lang="en">The last one is not technical, and it is the one that changed how I choose tools.
+        The terms under which the engine could be used were always somebody else's to change —
+        licensing, price, what counts as a seat, what the runtime is allowed to do. When those terms
+        moved, the studio held a meeting that was not about the game, and the outcome of that meeting
+        was not ours to write.</p>
+      <p lang="pt-BR">A última não é técnica, e é a que mudou o jeito como eu escolho ferramentas. Os
+        termos sob os quais a engine podia ser usada sempre estiveram na mão de outra pessoa —
+        licenciamento, preço, o que conta como um assento, o que o runtime pode fazer. Quando esses
+        termos se mexiam, o estúdio fazia uma reunião que não era sobre o jogo, e o resultado dessa
+        reunião não era nosso pra escrever.</p>
+
+      <p lang="en">I run infrastructure for a living, so I have a name for that: a single point of
+        failure with a sales department. You can engineer around a service that goes down. You cannot
+        engineer around a licence.</p>
+      <p lang="pt-BR">Eu opero infraestrutura pra viver, então eu tenho um nome pra isso: um ponto
+        único de falha com departamento comercial. Dá pra contornar um serviço que cai. Não dá pra
+        contornar uma licença.</p>
+
+      <h2 lang="en">What I ask of a tool now</h2>
+      <h2 lang="pt-BR">O que eu exijo de uma ferramenta hoje</h2>
+
+      <p lang="en">I did not leave looking for a better engine. I left looking for tools that fail in
+        ways I can do something about. There are three I actually use, and the reason is the same in
+        all three:</p>
+      <p lang="pt-BR">Eu não saí procurando uma engine melhor. Saí procurando ferramentas que falham
+        de um jeito sobre o qual eu consigo fazer alguma coisa. São três que eu realmente uso, e o
+        motivo é o mesmo nas três:</p>
+
+      <ul lang="en">
+        <li><strong>Rust, from scratch.</strong> No engine underneath at all. The simulation is a
+          library, the renderer is a detail, and there is nothing in the build I cannot read.</li>
+        <li><strong>Rust with Bevy.</strong> An engine, but one whose source sits on my disk and whose
+          licence cannot be renegotiated at me. When it is in the way, that is a pull request, not a
+          support ticket.</li>
+        <li><strong>Godot.</strong> The same argument with a different trade: I give up writing the
+          tooling myself and get an editor back, and the exit stays open because the project does not
+          belong to a company that needs me to keep paying.</li>
+      </ul>
+      <ul lang="pt-BR">
+        <li><strong>Rust, do zero.</strong> Nenhuma engine embaixo. A simulação é uma biblioteca, o
+          renderizador é um detalhe, e não existe nada no build que eu não consiga ler.</li>
+        <li><strong>Rust com Bevy.</strong> Uma engine, mas uma cujo código está no meu disco e cuja
+          licença não pode ser renegociada contra mim. Quando ela atrapalha, isso é um pull request,
+          não um chamado de suporte.</li>
+        <li><strong>Godot.</strong> O mesmo argumento com uma troca diferente: eu abro mão de escrever
+          a ferramenta e ganho um editor de volta, e a saída continua aberta porque o projeto não
+          pertence a uma empresa que precisa que eu continue pagando.</li>
+      </ul>
+
+      <p lang="en">The list is short and the criteria are shorter: it runs headless, it tests in CI,
+        the source is auditable, and nobody can change the terms underneath me. None of that is about
+        graphics, and none of it is taste. It is the difference between a tool I operate and a tool
+        that operates me.</p>
+      <p lang="pt-BR">A lista é curta e os critérios são mais curtos ainda: roda headless, testa em
+        CI, o código é auditável, e ninguém muda os termos debaixo de mim. Nada disso é sobre
+        gráficos, e nada disso é gosto. É a diferença entre uma ferramenta que eu opero e uma
+        ferramenta que me opera.</p>
+
+      <p lang="en">Eight years is long enough to learn the shape of a constraint. It is also long
+        enough to notice that most of the constraint was never technical. It was about who got to
+        decide, and how far away they were sitting.</p>
+      <p lang="pt-BR">Oito anos é tempo suficiente pra aprender o formato de uma restrição. Também é
+        tempo suficiente pra perceber que a maior parte da restrição nunca foi técnica. Era sobre quem
+        podia decidir, e a que distância essa pessoa estava sentada.</p>
+
+    </article>
+
+    <nav class="post-nav" aria-label="Post navigation">
+      <a href="../" lang="en">← all posts</a>
+      <a href="../" lang="pt-BR">← todos os posts</a>
+      <a href="../../feed.xml" lang="en">RSS feed →</a>
+      <a href="../../feed.xml" lang="pt-BR">feed RSS →</a>
+    </nav>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__card">
+      <div class="footer__accent"></div>
+      <div class="footer__body">
+        <ul class="social">
+          <li><a href="https://github.com/youhide" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></li>
+          <li><a href="https://gitlab.com/youri" aria-label="GitLab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m23.6 9.6-.03-.086L20.3.9a.851.851 0 0 0-.336-.405.876.876 0 0 0-1 .054.876.876 0 0 0-.29.44l-2.207 6.752H7.535L5.327.99a.858.858 0 0 0-.29-.441.876.876 0 0 0-1-.054.859.859 0 0 0-.336.405L.427 9.51l-.031.085a6.055 6.055 0 0 0 2.008 6.997l.01.009.03.022 4.964 3.72 2.456 1.86 1.496 1.13a1.01 1.01 0 0 0 1.22 0l1.496-1.13 2.456-1.86 4.994-3.742.013-.01a6.057 6.057 0 0 0 2.06-6.99Z"/></svg></a></li>
+          <li><a href="https://linkedin.com/in/yourimattar" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+          <li><a href="https://x.com/_hideout" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a></li>
+          <li><a href="https://twitch.tv/youhide" aria-label="Twitch"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg></a></li>
+          <li><a href="https://postrite.app" aria-label="PostRite"><svg class="icon--stroke" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><ellipse cx="12" cy="12" rx="4" ry="9.5"/><path d="M2.5 12h19"/></svg></a></li>
+        </ul>
+
+        <p class="footer__exit"><span class="prompt__sign">$</span>exit<span class="cursor" aria-hidden="true">█</span></p>
+        <p class="footer__note">
+          <span lang="en">Connection to youhide closed. Always learning, always shipping.</span>
+          <span lang="pt-BR">Conexão com youhide encerrada. Sempre aprendendo, sempre entregando.</span>
+        </p>
+        <p class="footer__meta">Youri T. K. K. Mattar · Londrina, Brasil</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
