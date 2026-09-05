@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nothing above it to restart it — youHide</title>
+<meta name="description" content="oxinit is a service manager and PID 1 for Linux written in Rust: no panic, unsafe quarantined in one file, one epoll loop on one thread, and TOML units that say what they mean.">
+<meta name="author" content="Youri T. K. K. Mattar">
+<meta name="theme-color" content="#282a36">
+<link rel="canonical" href="https://youhide.com.br/blog/writing-an-init/">
+
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2026-09-04">
+<meta property="og:title" content="Nothing above it to restart it: writing an init for Linux in Rust">
+<meta property="og:description" content="PID 1 is the one process with no supervisor above it. oxinit is a service manager and PID 1 for Linux in Rust — what it refuses to do, and why the compiler is the one enforcing it.">
+<meta property="og:url" content="https://youhide.com.br/blog/writing-an-init/">
+<meta property="og:image" content="https://youhide.com.br/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@_hideout">
+
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="alternate" type="application/rss+xml" title="youHide — blog" href="../../feed.xml">
+<link rel="stylesheet" href="../../css/style.css">
+<script src="../../js/main.js"></script>
+</head>
+<body>
+
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="pt-BR">Pular para o conteúdo</span></a>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__brand" href="../../"><span>~</span>/youhide</a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="../../">./home</a>
+      <a href="../../about/">./about</a>
+      <a href="../../projects/">./projects</a>
+      <a href="../" aria-current="page">./blog</a>
+    </nav>
+    <button class="lang" id="lang-toggle" type="button" aria-label="Mudar para português">
+      <span class="lang__opt" data-lang-opt="en">EN</span>
+      <span class="lang__sep">|</span>
+      <span class="lang__opt" data-lang-opt="pt-BR">PT</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <section class="term" aria-labelledby="page-title">
+      <div class="term__bar">
+        <span class="dot dot--red"></span>
+        <span class="dot dot--yellow"></span>
+        <span class="dot dot--green"></span>
+        <span class="term__path">youhide@homelab: ~/blog</span>
+      </div>
+      <div class="term__body">
+        <div class="term__main">
+          <p class="prompt"><span class="prompt__sign">$</span>cat writing-an-init.md</p>
+          <h1 class="page__title" id="page-title" lang="en">Nothing above it to restart it</h1>
+          <h1 class="page__title" lang="pt-BR">Não existe nada acima dele pra reiniciar</h1>
+          <div class="post__meta">
+            <time class="post-date" datetime="2026-09-04">2026-09-04</time>
+            <ul class="post-tags">
+              <li>rust</li><li>linux</li><li>design</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="term__accent"></div>
+    </section>
+
+    <article class="section post prose">
+
+      <p lang="en">This one started as an itch. I wanted to build something for Linux — not for a
+        cluster, not for work, just for Linux — so I went looking for the smallest piece of the system
+        I did not understand all the way down. I ended up writing an init.</p>
+      <p lang="pt-BR">Este aqui começou como uma coceira. Eu queria construir alguma coisa pro Linux —
+        não pra um cluster, não pro trabalho, só pro Linux — então fui procurar a menor peça do sistema
+        que eu não entendia até o fundo. Acabei escrevendo um init.</p>
+
+      <p lang="en">It is called <strong>oxinit</strong>: a service manager and PID 1, written in Rust,
+        dual-licensed MIT or Apache-2.0, and honestly labelled pre-alpha. First commit on 8 August
+        2026, <code>v0.1.0</code> tagged on the 11th. Four days — which is not a boast about speed. An
+        init is a small program with an enormous blast radius, and most of those four days went into
+        deciding what it would refuse to do.</p>
+      <p lang="pt-BR">Ele se chama <strong>oxinit</strong>: um gerenciador de serviços e PID 1, escrito
+        em Rust, com licença dupla MIT ou Apache-2.0, e honestamente marcado como pre-alpha. Primeiro
+        commit em 8 de agosto de 2026, <code>v0.1.0</code> marcado no dia 11. Quatro dias — o que não é
+        vaidade de velocidade. Um init é um programa pequeno com um raio de dano enorme, e a maior
+        parte desses quatro dias foi decidir o que ele ia se recusar a fazer.</p>
+
+      <h2 lang="en">The process that cannot fail</h2>
+      <h2 lang="pt-BR">O processo que não pode falhar</h2>
+
+      <p lang="en">An init system is the first program the kernel starts. It is process number 1, it is
+        the parent of every other process on the machine, and it has one property nothing else on the
+        system has: if it exits, the kernel panics. There is no supervisor above it. Nothing restarts
+        it.</p>
+      <p lang="pt-BR">Um init é o primeiro programa que o kernel inicia. É o processo número 1, é o pai
+        de todos os outros processos da máquina, e tem uma propriedade que nada mais no sistema tem: se
+        ele sai, o kernel entra em panic. Não existe supervisor acima dele. Nada o reinicia.</p>
+
+      <p lang="en">I spend my working hours on infrastructure, so that shape is familiar in an
+        uncomfortable way. Every runbook I have ever written assumes something above the failing thing
+        is still alive to notice it failed. Here, nothing is. That single fact is the entire design
+        brief.</p>
+      <p lang="pt-BR">Eu passo minhas horas de trabalho em infraestrutura, então esse formato é
+        familiar de um jeito desconfortável. Todo runbook que eu já escrevi assume que alguma coisa
+        acima do que falhou continua viva pra perceber que falhou. Aqui, não tem nada. Esse fato
+        sozinho é o briefing inteiro do projeto.</p>
+
+      <blockquote lang="en">Every other process on a Linux box has a parent that outlives its
+        mistakes. PID 1 does not.</blockquote>
+      <blockquote lang="pt-BR">Todo outro processo numa máquina Linux tem um pai que sobrevive aos
+        erros dele. O PID 1 não tem.</blockquote>
+
+      <h2 lang="en">No panic, and the compiler enforces it</h2>
+      <h2 lang="pt-BR">Sem panic, e quem garante é o compilador</h2>
+
+      <p lang="en">The first rule is that PID 1 does not panic. Saying it is easy; it needed actual
+        machinery. The binary is built with <code>panic = "unwind"</code> and never <code>abort</code>,
+        because an abort in PID 1 <em>is</em> a kernel panic. Every handler in the event loop runs
+        inside <code>catch_unwind</code>. The <code>oxinit</code> crate denies <code>unwrap</code>,
+        <code>expect</code>, <code>panic</code> and slice indexing outright — the compiler refuses the
+        shortcut rather than trusting me not to take it at 2am.</p>
+      <p lang="pt-BR">A primeira regra é que o PID 1 não dá panic. Dizer é fácil; precisou de
+        maquinário de verdade. O binário é compilado com <code>panic = "unwind"</code> e nunca
+        <code>abort</code>, porque um abort no PID 1 <em>é</em> um kernel panic. Todo handler do event
+        loop roda dentro de <code>catch_unwind</code>. O crate <code>oxinit</code> proíbe
+        <code>unwrap</code>, <code>expect</code>, <code>panic</code> e indexação de slice — o
+        compilador recusa o atalho em vez de confiar que eu não vou tomá-lo às 2 da manhã.</p>
+
+      <p lang="en">And when the loop genuinely cannot continue, it still does not exit. It spawns
+        <code>/bin/sh</code> on the console, because a machine with a shell on it is recoverable and a
+        machine whose PID 1 is gone is not.</p>
+      <p lang="pt-BR">E quando o loop realmente não consegue continuar, ele ainda assim não sai. Ele
+        lança <code>/bin/sh</code> no console, porque uma máquina com um shell nela é recuperável e uma
+        máquina cujo PID 1 sumiu não é.</p>
+
+      <h2 lang="en">The unsafe lives in one file</h2>
+      <h2 lang="pt-BR">O unsafe mora em um arquivo só</h2>
+
+      <p lang="en">Syscalls go through <code>rustix</code>, and whatever <code>unsafe</code> remains is
+        quarantined in a single module with a <code>// SAFETY:</code> comment per block stating the
+        invariant. That is not a convention I promised in a document and then policed by hand: the
+        crate denies <code>unsafe_code</code>, exactly one module relaxes it, and every crate that
+        should contain none carries <code>forbid</code>. It is a property of the build, so it cannot
+        quietly stop being true.</p>
+      <p lang="pt-BR">As syscalls passam por <code>rustix</code>, e o <code>unsafe</code> que sobra
+        está isolado num único módulo, com um comentário <code>// SAFETY:</code> por bloco declarando a
+        invariante. Isso não é uma convenção que eu prometi num documento e depois fiscalizei na mão: o
+        crate proíbe <code>unsafe_code</code>, exatamente um módulo relaxa isso, e todo crate que não
+        deveria ter nenhum carrega <code>forbid</code>. É uma propriedade do build, então não tem como
+        deixar de ser verdade em silêncio.</p>
+
+      <p lang="en">It paid off somewhere I could measure. oxinit compiled and ran on aarch64 unchanged,
+        and <code>cargo xtask test-boot --arch all</code> boots both architectures and runs the same
+        twenty-six checks on each.</p>
+      <p lang="pt-BR">Isso rendeu num lugar onde deu pra medir. O oxinit compilou e rodou em aarch64
+        sem alterar nada, e <code>cargo xtask test-boot --arch all</code> boota as duas arquiteturas e
+        roda as mesmas vinte e seis verificações em cada uma.</p>
+
+      <h2 lang="en">One loop, one thread, no async runtime</h2>
+      <h2 lang="pt-BR">Um loop, uma thread, sem runtime async</h2>
+
+      <p lang="en">There is no async runtime in PID 1. One <code>epoll</code> loop on one thread
+        multiplexes everything: the <code>signalfd</code>, the <code>timerfd</code>, the notify socket,
+        the control socket, every socket unit's listening descriptor, and every service cgroup's
+        <code>cgroup.events</code>.</p>
+      <p lang="pt-BR">Não existe runtime async no PID 1. Um loop de <code>epoll</code> numa thread só
+        multiplexa tudo: o <code>signalfd</code>, o <code>timerfd</code>, o socket de notify, o socket
+        de controle, o descritor de escuta de cada socket unit, e o <code>cgroup.events</code> do
+        cgroup de cada serviço.</p>
+
+      <p lang="en">The CLI and the log writer are separate programs that talk to it over a unix socket,
+        for the reason you would expect: a bug in the log writer kills the log writer, and a bug in
+        PID 1 kills the machine. PID 1 never reads a byte of service output — it creates the pipe,
+        hands the write end to the child and the read end to <code>oxlogd</code>, so a service writing
+        a megabyte a second cannot make PID 1 do any work at all.</p>
+      <p lang="pt-BR">O CLI e o escritor de log são programas separados que falam com ele por um socket
+        unix, pelo motivo que você imagina: um bug no escritor de log mata o escritor de log, e um bug
+        no PID 1 mata a máquina. O PID 1 nunca lê um byte da saída de um serviço — ele cria o pipe,
+        entrega a ponta de escrita pro filho e a ponta de leitura pro <code>oxlogd</code>, então um
+        serviço escrevendo um megabyte por segundo não consegue fazer o PID 1 trabalhar.</p>
+
+      <h2 lang="en">"Needs it running" and "starts after it" are different sentences</h2>
+      <h2 lang="pt-BR">"Precisa dele rodando" e "inicia depois dele" são frases diferentes</h2>
+
+      <p lang="en">Units are TOML. No shell, no scripting, no runtime interpolation beyond a small
+        documented set of specifiers.</p>
+      <p lang="pt-BR">As units são TOML. Sem shell, sem scripting, sem interpolação em runtime além de
+        um conjunto pequeno e documentado de especificadores.</p>
+
+<pre># /etc/oxinit/units/sshd.toml
+
+[unit]
+description = "OpenSSH daemon"
+after       = ["network-online"]
+requires    = ["network-online"]
+
+[service]
+type        = "notify"
+exec        = "/usr/sbin/sshd -D"
+restart     = "on-failure"
+restart-sec = "5s"
+user        = "sshd"</pre>
+
+      <p lang="en">Both keys are declared, and neither implies the other. "A needs B running" and "A
+        must start after B" are different statements, and a format that conflates them makes both
+        impossible to say precisely. <code>after</code> means the unit does not start until everything
+        it names has finished activating — and for a <code>notify</code> service that means until
+        <code>READY=1</code> actually arrives, not until the process exists. Boot is a queue drained by
+        the event loop, not a loop issuing starts in order.</p>
+      <p lang="pt-BR">As duas chaves são declaradas, e nenhuma implica a outra. "A precisa de B
+        rodando" e "A tem que iniciar depois de B" são afirmações diferentes, e um formato que confunde
+        as duas torna as duas impossíveis de dizer com precisão. <code>after</code> significa que a
+        unit não inicia até tudo que ela nomeia terminar de ativar — e pra um serviço
+        <code>notify</code> isso quer dizer até o <code>READY=1</code> realmente chegar, não até o
+        processo existir. O boot é uma fila drenada pelo event loop, não um laço disparando starts em
+        ordem.</p>
+
+      <h2 lang="en">The non-goals are load-bearing</h2>
+      <h2 lang="pt-BR">Os não-objetivos sustentam o projeto</h2>
+
+      <p lang="en">oxinit does not resolve DNS, does not implement NTP, does not manage network
+        configuration or logins, does not run containers — it runs <em>inside</em> one, as PID 1 — and
+        does not boot the machine. It is what a distribution's initramfs hands over to, not a
+        bootloader.</p>
+      <p lang="pt-BR">O oxinit não resolve DNS, não implementa NTP, não gerencia configuração de rede
+        nem logins, não roda containers — ele roda <em>dentro</em> de um, como PID 1 — e não boota a
+        máquina. Ele é pra quem o initramfs de uma distribuição entrega o controle, não um
+        bootloader.</p>
+
+      <p lang="en">It also will not read systemd unit files. Supporting a subset of
+        <code>.service</code> means adopting a specification defined by another project's
+        implementation rather than by a document, and the subset you implement is never the subset your
+        distribution actually uses. It <em>does</em> implement <code>sd_notify</code> and socket
+        activation, which is a different thing entirely: those are small, stable, documented wire
+        protocols that unmodified daemons already speak. A runtime protocol is not a configuration
+        language.</p>
+      <p lang="pt-BR">Ele também não vai ler arquivos de unit do systemd. Suportar um subconjunto de
+        <code>.service</code> significa adotar uma especificação definida pela implementação de outro
+        projeto em vez de por um documento, e o subconjunto que você implementa nunca é o subconjunto
+        que a sua distribuição realmente usa. Ele <em>implementa</em> <code>sd_notify</code> e ativação
+        por socket, o que é outra coisa completamente: são protocolos de comunicação pequenos, estáveis
+        e documentados que daemons sem modificação já falam. Um protocolo de runtime não é uma linguagem
+        de configuração.</p>
+
+      <h2 lang="en">Why Rust, in this specific place</h2>
+      <h2 lang="pt-BR">Por que Rust, neste lugar específico</h2>
+
+      <p lang="en">Every init in production use is written in C: systemd, OpenRC, runit, s6, dinit. The
+        Rust attempts either stalled — rustysd is unmaintained — or explicitly declined to be PID 1, as
+        initd did.</p>
+      <p lang="pt-BR">Todo init em uso em produção é escrito em C: systemd, OpenRC, runit, s6, dinit.
+        As tentativas em Rust ou pararam — o rustysd está sem manutenção — ou recusaram explicitamente
+        ser PID 1, como o initd fez.</p>
+
+      <p lang="en">PID 1 owns the cgroup hierarchy, holds the file descriptors for socket activation,
+        and decides the order in which the machine shuts down. That is a very large blast radius for a
+        language in which a bounds error is a memory error. The properties Rust enforces at compile
+        time are worth more in PID 1 than anywhere else on the system — which is exactly the place
+        nobody had put them.</p>
+      <p lang="pt-BR">O PID 1 é dono da hierarquia de cgroups, guarda os descritores de arquivo da
+        ativação por socket, e decide a ordem em que a máquina desliga. Isso é um raio de dano muito
+        grande pra uma linguagem em que um acesso fora dos limites é um erro de memória. As propriedades que o
+        Rust garante em tempo de compilação valem mais no PID 1 do que em qualquer outro lugar do
+        sistema — que é exatamente o lugar onde ninguém as tinha colocado.</p>
+
+      <h2 lang="en">Where it is now</h2>
+      <h2 lang="pt-BR">Onde está agora</h2>
+
+      <p lang="en">Milestones M0 through M16 are done and the roadmap is closed. It boots under QEMU on
+        x86_64 and aarch64, runs a real Alpine userspace, and works as a container's PID 1: fourteen
+        crates, about 12,500 lines of Rust, 148 <code>#[test]</code> functions. Three of those crates —
+        the unit parser, the dependency graph and the restart policy — have no OS dependency at all and
+        test on any host, with no VM and no kernel. That is deliberate, because that is where the logic
+        errors actually live.</p>
+      <p lang="pt-BR">Os milestones M0 até M16 estão fechados e o roadmap está encerrado. Ele boota sob
+        QEMU em x86_64 e aarch64, roda um userspace Alpine de verdade, e funciona como PID 1 de
+        container: catorze crates, cerca de 12.500 linhas de Rust, 148 funções
+        <code>#[test]</code>. Três desses crates — o parser de unit, o grafo de dependências e a
+        política de restart — não têm dependência de sistema operacional nenhuma e testam em qualquer
+        host, sem VM e sem kernel. Isso é de propósito, porque é ali que os erros de lógica realmente
+        moram.</p>
+
+      <p lang="en">It is pre-alpha and I mean it literally: nothing is stable, and the unit format may
+        change between any two releases. If you would rather see it than take my word for it, the demo
+        is a 4.6 MB <code>FROM scratch</code> image and needs nothing but Docker:</p>
+      <p lang="pt-BR">É pre-alpha e eu digo isso literalmente: nada é estável, e o formato das units
+        pode mudar entre dois releases quaisquer. Se você prefere ver a coisa em vez de acreditar em
+        mim, a demo é uma imagem <code>FROM scratch</code> de 4,6 MB e não precisa de nada além de
+        Docker:</p>
+
+<pre>docker run --rm --name oxinit-demo -p 8080:8080 ghcr.io/youhide/oxinit:demo</pre>
+
+      <p lang="en">Then <code>docker stop</code> it. That is an ordered shutdown, not a ten-second
+        grace period ending in a <code>SIGKILL</code>: every unit is stopped in the reverse of the
+        order it was started, each one is waited for until it is actually gone, and the process exits
+        <code>0</code>. The exit code <code>137</code> you are used to seeing is the other outcome. The
+        source is at <a href="https://github.com/youhide/oxinit">github.com/youhide/oxinit</a>.</p>
+      <p lang="pt-BR">Depois dê <code>docker stop</code> nele. Isso é um desligamento ordenado, não um
+        período de graça de dez segundos terminando num <code>SIGKILL</code>: cada unit é parada na
+        ordem inversa da que foi iniciada, cada uma é esperada até realmente ter sumido, e o processo
+        sai com <code>0</code>. O código de saída <code>137</code> que você está acostumado a ver é o
+        outro desfecho. O código está em
+        <a href="https://github.com/youhide/oxinit">github.com/youhide/oxinit</a>.</p>
+
+      <p lang="en">I set out to build something for Linux and ended up in the one process on the
+        machine that has nothing above it. I would not put it under anything I cared about yet. But it
+        boots, it supervises, it shuts down in the right order — and every line of the reason it can be
+        trusted to do that is in the repository rather than in this post.</p>
+      <p lang="pt-BR">Eu queria fazer alguma coisa pro Linux e acabei no único processo da máquina que
+        não tem nada acima dele. Eu ainda não colocaria ele embaixo de nada que me importasse.
+        Mas ele boota, supervisiona, desliga na ordem certa — e cada linha do motivo pelo qual dá pra
+        confiar nisso está no repositório, não neste post.</p>
+
+    </article>
+
+    <nav class="post-nav" aria-label="Post navigation">
+      <a href="../" lang="en">← all posts</a>
+      <a href="../" lang="pt-BR">← todos os posts</a>
+      <a href="../../feed.xml" lang="en">RSS feed →</a>
+      <a href="../../feed.xml" lang="pt-BR">feed RSS →</a>
+    </nav>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__card">
+      <div class="footer__accent"></div>
+      <div class="footer__body">
+        <ul class="social">
+          <li><a href="https://github.com/youhide" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></li>
+          <li><a href="https://gitlab.com/youri" aria-label="GitLab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m23.6 9.6-.03-.086L20.3.9a.851.851 0 0 0-.336-.405.876.876 0 0 0-1 .054.876.876 0 0 0-.29.44l-2.207 6.752H7.535L5.327.99a.858.858 0 0 0-.29-.441.876.876 0 0 0-1-.054.859.859 0 0 0-.336.405L.427 9.51l-.031.085a6.055 6.055 0 0 0 2.008 6.997l.01.009.03.022 4.964 3.72 2.456 1.86 1.496 1.13a1.01 1.01 0 0 0 1.22 0l1.496-1.13 2.456-1.86 4.994-3.742.013-.01a6.057 6.057 0 0 0 2.06-6.99Z"/></svg></a></li>
+          <li><a href="https://linkedin.com/in/yourimattar" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+          <li><a href="https://x.com/_hideout" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a></li>
+          <li><a href="https://twitch.tv/youhide" aria-label="Twitch"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg></a></li>
+          <li><a href="https://postrite.app" aria-label="PostRite"><svg class="icon--stroke" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><ellipse cx="12" cy="12" rx="4" ry="9.5"/><path d="M2.5 12h19"/></svg></a></li>
+        </ul>
+
+        <p class="footer__exit"><span class="prompt__sign">$</span>exit<span class="cursor" aria-hidden="true">█</span></p>
+        <p class="footer__note">
+          <span lang="en">Connection to youhide closed. Always learning, always shipping.</span>
+          <span lang="pt-BR">Conexão com youhide encerrada. Sempre aprendendo, sempre entregando.</span>
+        </p>
+        <p class="footer__meta">Youri T. K. K. Mattar · Londrina, Brasil</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

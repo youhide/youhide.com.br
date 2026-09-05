@@ -10,6 +10,17 @@
     <webMaster>youri@youhide.com.br (Youri T. K. K. Mattar)</webMaster>
 
     <item>
+      <title>Nothing above it to restart it: writing an init for Linux in Rust</title>
+      <link>https://youhide.com.br/blog/writing-an-init/</link>
+      <guid isPermaLink="true">https://youhide.com.br/blog/writing-an-init/</guid>
+      <pubDate>Fri, 04 Sep 2026 09:30:00 -0300</pubDate>
+      <category>rust</category>
+      <category>linux</category>
+      <category>design</category>
+      <description>PID 1 is the first program the kernel starts and the only process with no supervisor above it: if it exits, the kernel panics. oxinit is a service manager and PID 1 for Linux written in Rust — no panic, unsafe quarantined in one file and enforced by the build, one epoll loop on one thread with no async runtime, TOML units where requires and after are separate statements, and a non-goals list that does most of the design work.</description>
+    </item>
+
+    <item>
       <title>The engine was not a choice: eight years in the games industry</title>
       <link>https://youhide.com.br/blog/escaping-the-engine/</link>
       <guid isPermaLink="true">https://youhide.com.br/blog/escaping-the-engine/</guid>

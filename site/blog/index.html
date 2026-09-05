@@ -76,6 +76,7 @@
         <button class="filter" type="button" data-filter="*" aria-pressed="true">all</button>
         <button class="filter" type="button" data-filter="meta" aria-pressed="false">meta</button>
         <button class="filter" type="button" data-filter="homelab" aria-pressed="false">homelab</button>
+        <button class="filter" type="button" data-filter="linux" aria-pressed="false">linux</button>
         <button class="filter" type="button" data-filter="rust" aria-pressed="false">rust</button>
         <button class="filter" type="button" data-filter="go" aria-pressed="false">go</button>
         <button class="filter" type="button" data-filter="gamedev" aria-pressed="false">gamedev</button>
@@ -84,6 +85,29 @@
       </div>
 
       <ul class="posts">
+
+        <li data-tags="rust linux design">
+          <a class="post-item" href="writing-an-init/">
+            <div class="post-item__top">
+              <time class="post-date" datetime="2026-09-04">2026-09-04</time>
+              <ul class="post-tags">
+                <li>rust</li><li>linux</li><li>design</li>
+              </ul>
+            </div>
+            <h3 class="post-item__title" lang="en">Nothing above it to restart it: writing an init for Linux in Rust</h3>
+            <h3 class="post-item__title" lang="pt-BR">Não existe nada acima dele pra reiniciar: escrevendo um init para Linux em Rust</h3>
+            <p class="post-item__excerpt" lang="en">PID 1 is the one process on the machine with no
+              supervisor above it — if it exits, the kernel panics. oxinit is a service manager and
+              PID 1 for Linux in Rust: no panic, unsafe quarantined in a single file, one epoll loop on
+              one thread, TOML units where "needs it running" and "starts after it" are different
+              sentences, and a non-goals list doing most of the work.</p>
+            <p class="post-item__excerpt" lang="pt-BR">O PID 1 é o único processo da máquina sem
+              supervisor acima dele — se ele sai, o kernel entra em panic. O oxinit é um gerenciador de
+              serviços e PID 1 para Linux em Rust: sem panic, unsafe isolado num arquivo só, um loop de
+              epoll numa thread, units TOML onde "precisa dele rodando" e "inicia depois dele" são
+              frases diferentes, e uma lista de não-objetivos fazendo a maior parte do trabalho.</p>
+          </a>
+        </li>
 
         <li data-tags="gamedev design meta rust">
           <a class="post-item" href="escaping-the-engine/">
