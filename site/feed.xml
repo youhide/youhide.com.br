@@ -10,6 +10,18 @@
     <webMaster>youri@youhide.com.br (Youri T. K. K. Mattar)</webMaster>
 
     <item>
+      <title>The same store, the same keys: a pass-compatible password manager in Rust</title>
+      <link>https://youhide.com.br/blog/same-store-same-keys/</link>
+      <guid isPermaLink="true">https://youhide.com.br/blog/same-store-same-keys/</guid>
+      <pubDate>Thu, 01 Oct 2026 09:30:00 -0300</pubDate>
+      <category>rust</category>
+      <category>security</category>
+      <category>cli</category>
+      <category>design</category>
+      <description>hidePass is a password manager in Rust that does not own its format: it reads and writes the pass store you already have, with the same gpg keys and the same git commits, and CI cross-checks it against the real pass on every push. One-time codes, EFF diceware passphrases, named fields and a store audit are built in rather than installed — and copied secrets are marked concealed and transient, so clipboard managers decline to record them.</description>
+    </item>
+
+    <item>
       <title>Nothing above it to restart it: writing an init for Linux in Rust</title>
       <link>https://youhide.com.br/blog/writing-an-init/</link>
       <guid isPermaLink="true">https://youhide.com.br/blog/writing-an-init/</guid>

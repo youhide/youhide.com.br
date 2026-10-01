@@ -81,10 +81,35 @@
         <button class="filter" type="button" data-filter="go" aria-pressed="false">go</button>
         <button class="filter" type="button" data-filter="gamedev" aria-pressed="false">gamedev</button>
         <button class="filter" type="button" data-filter="design" aria-pressed="false">design</button>
+        <button class="filter" type="button" data-filter="security" aria-pressed="false">security</button>
+        <button class="filter" type="button" data-filter="cli" aria-pressed="false">cli</button>
         <button class="filter" type="button" data-filter="kubernetes" aria-pressed="false">kubernetes</button>
       </div>
 
       <ul class="posts">
+
+        <li data-tags="rust security cli design">
+          <a class="post-item" href="same-store-same-keys/">
+            <div class="post-item__top">
+              <time class="post-date" datetime="2026-10-01">2026-10-01</time>
+              <ul class="post-tags">
+                <li>rust</li><li>security</li><li>cli</li><li>design</li>
+              </ul>
+            </div>
+            <h3 class="post-item__title" lang="en">The same store, the same keys: a pass-compatible password manager in Rust</h3>
+            <h3 class="post-item__title" lang="pt-BR">A mesma store, as mesmas chaves: um gerenciador de senhas compatível com o pass, em Rust</h3>
+            <p class="post-item__excerpt" lang="en">hidePass does not own the format — it reads and
+              writes the <code>~/.password-store</code> you already have, with the same gpg keys and the
+              same git history, and CI cross-checks that against the real pass on every push. Built-in
+              one-time codes and passphrases, and copied secrets that clipboard managers refuse to
+              record.</p>
+            <p class="post-item__excerpt" lang="pt-BR">O hidePass não é dono do formato — ele lê e
+              escreve o <code>~/.password-store</code> que você já tem, com as mesmas chaves gpg e o
+              mesmo histórico git, e o CI faz cross-check disso contra o pass de verdade a cada push.
+              Códigos de uso único e passphrases embutidos, e segredos copiados que os gerenciadores de
+              clipboard se recusam a registrar.</p>
+          </a>
+        </li>
 
         <li data-tags="rust linux design">
           <a class="post-item" href="writing-an-init/">

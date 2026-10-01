@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The same store, the same keys — youHide</title>
+<meta name="description" content="hidePass is a pass-compatible password manager written in Rust: the same password store, the same gpg keys, built-in one-time codes and passphrases, and copied secrets your clipboard manager refuses to record.">
+<meta name="author" content="Youri T. K. K. Mattar">
+<meta name="theme-color" content="#282a36">
+<link rel="canonical" href="https://youhide.com.br/blog/same-store-same-keys/">
+
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2026-10-01">
+<meta property="og:title" content="The same store, the same keys: a pass-compatible password manager in Rust">
+<meta property="og:description" content="hidePass does not own the format: it reads and writes the pass store you already have, and CI proves it against the real pass on every push. Plus the clipboard bug that started it.">
+<meta property="og:url" content="https://youhide.com.br/blog/same-store-same-keys/">
+<meta property="og:image" content="https://youhide.com.br/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@_hideout">
+
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="alternate" type="application/rss+xml" title="youHide — blog" href="../../feed.xml">
+<link rel="stylesheet" href="../../css/style.css">
+<script src="../../js/main.js"></script>
+</head>
+<body>
+
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="pt-BR">Pular para o conteúdo</span></a>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__brand" href="../../"><span>~</span>/youhide</a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="../../">./home</a>
+      <a href="../../about/">./about</a>
+      <a href="../../projects/">./projects</a>
+      <a href="../" aria-current="page">./blog</a>
+    </nav>
+    <button class="lang" id="lang-toggle" type="button" aria-label="Mudar para português">
+      <span class="lang__opt" data-lang-opt="en">EN</span>
+      <span class="lang__sep">|</span>
+      <span class="lang__opt" data-lang-opt="pt-BR">PT</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <section class="term" aria-labelledby="page-title">
+      <div class="term__bar">
+        <span class="dot dot--red"></span>
+        <span class="dot dot--yellow"></span>
+        <span class="dot dot--green"></span>
+        <span class="term__path">youhide@homelab: ~/blog</span>
+      </div>
+      <div class="term__body">
+        <div class="term__main">
+          <p class="prompt"><span class="prompt__sign">$</span>cat same-store-same-keys.md</p>
+          <h1 class="page__title" id="page-title" lang="en">The same store, the same keys</h1>
+          <h1 class="page__title" lang="pt-BR">A mesma store, as mesmas chaves</h1>
+          <div class="post__meta">
+            <time class="post-date" datetime="2026-10-01">2026-10-01</time>
+            <ul class="post-tags">
+              <li>rust</li><li>security</li><li>cli</li><li>design</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="term__accent"></div>
+    </section>
+
+    <article class="section post prose">
+
+      <p lang="en">I have used <a href="https://www.passwordstore.org">pass</a> for years. It is a
+        hundred lines of shell around <code>gpg</code> and <code>git</code>, the store is a directory
+        of <code>.gpg</code> files, and that design is why it is still here while a dozen password
+        managers with venture funding are not. What I wanted was not a replacement for it. I wanted
+        the parts it leaves to extensions, without giving up the store.</p>
+      <p lang="pt-BR">Eu uso o <a href="https://www.passwordstore.org">pass</a> há anos. São umas cem
+        linhas de shell em volta do <code>gpg</code> e do <code>git</code>, a store é um diretório de
+        arquivos <code>.gpg</code>, e é esse design que explica por que ele continua aqui enquanto uma
+        dúzia de gerenciadores de senha com capital de risco não está. O que eu queria não era um
+        substituto pra ele. Eu queria as partes que ele deixa pras extensões, sem abrir mão da
+        store.</p>
+
+      <p lang="en">So <strong>hidePass</strong> reads and writes the store you already have: the same
+        <code>~/.password-store</code>, the same gpg keys, the same git history. Rust, MIT,
+        <code>v0.2.0</code> tagged today.</p>
+      <p lang="pt-BR">Então o <strong>hidePass</strong> lê e escreve a store que você já tem: o mesmo
+        <code>~/.password-store</code>, as mesmas chaves gpg, o mesmo histórico git. Rust, MIT,
+        <code>v0.2.0</code> marcado hoje.</p>
+
+<pre>$ hidepass
+Password Store
+├── Email
+│   └── work
+└── Web
+    └── github
+
+$ hidepass -c Web/github
+Copied Web/github to clipboard. Will clear in 45 seconds.
+
+$ hidepass otp Web/github
+482915</pre>
+
+      <h2 lang="en">Compatible instead of rewritten</h2>
+      <h2 lang="pt-BR">Compatível em vez de reescrito</h2>
+
+      <p lang="en">The whole design rests on one decision: hidePass does not own the format. It writes
+        <code>.gpg</code> files, honours <code>.gpg-id</code> and <code>.gpg-id.sig</code>, respects
+        every <code>PASSWORD_STORE_*</code> variable, and makes the same git commits. pass itself keeps
+        working on the same store, and so do the iOS and Android apps and the browser extensions. You
+        can <code>alias pass=hidepass</code> and also not do that, and nothing cares either way.</p>
+      <p lang="pt-BR">O design inteiro se apoia numa decisão: o hidePass não é dono do formato. Ele
+        escreve arquivos <code>.gpg</code>, respeita o <code>.gpg-id</code> e o
+        <code>.gpg-id.sig</code>, respeita toda variável <code>PASSWORD_STORE_*</code>, e faz os mesmos
+        commits git. O próprio pass continua funcionando na mesma store, e os apps de iOS e Android e
+        as extensões de navegador também. Você pode dar <code>alias pass=hidepass</code> e também pode
+        não dar, e nada se importa com a escolha.</p>
+
+      <p lang="en">Claiming compatibility is cheap, so it is a test rather than a sentence in a README.
+        CI installs the real <code>pass</code> and the real <code>pass-extension-otp</code> on every
+        push and runs a script in which each tool has to read what the other wrote. If I break the
+        format, the build tells me — not somebody whose passwords are in there.</p>
+      <p lang="pt-BR">Afirmar compatibilidade é barato, então ela é um teste em vez de uma frase num
+        README. O CI instala o <code>pass</code> de verdade e o <code>pass-extension-otp</code> de
+        verdade a cada push e roda um script em que cada ferramenta tem que ler o que a outra escreveu.
+        Se eu quebrar o formato, o build me avisa — e não alguém cujas senhas estão lá dentro.</p>
+
+      <blockquote lang="en">A compatibility promise nothing re-runs is a compatibility promise you have
+        already broken and not noticed.</blockquote>
+      <blockquote lang="pt-BR">Uma promessa de compatibilidade que nada re-executa é uma promessa de
+        compatibilidade que você já quebrou e não percebeu.</blockquote>
+
+      <h2 lang="en">Your clipboard manager is keeping your passwords</h2>
+      <h2 lang="pt-BR">Seu gerenciador de clipboard está guardando suas senhas</h2>
+
+      <p lang="en">This is the bug that annoyed me into writing the thing. Copy a secret on macOS and
+        every clipboard manager on the machine — Maccy, Raycast, Alfred, Paste — writes it into its own
+        searchable history, where it outlives the forty-five seconds you thought you were getting. The
+        password manager cleared the pasteboard. The history did not.</p>
+      <p lang="pt-BR">Esse é o bug que me irritou o suficiente pra eu escrever a coisa. Copie um
+        segredo no macOS e todo gerenciador de clipboard da máquina — Maccy, Raycast, Alfred, Paste —
+        escreve o segredo no próprio histórico pesquisável, onde ele sobrevive aos quarenta e cinco
+        segundos que você pensou que tinha. O gerenciador de senhas limpou o pasteboard. O histórico,
+        não.</p>
+
+      <p lang="en">There is a convention for this — the <code>concealed</code> and
+        <code>transient</code> pasteboard types from nspasteboard.org — and clipboard managers do
+        honour it. hidePass marks every copied secret with both, so they decline to record it, and the
+        previous clipboard contents come back after forty-five seconds instead of being replaced by
+        nothing.</p>
+      <p lang="pt-BR">Existe uma convenção pra isso — os tipos de pasteboard <code>concealed</code> e
+        <code>transient</code> do nspasteboard.org — e os gerenciadores de clipboard respeitam. O
+        hidePass marca todo segredo copiado com os dois, então eles se recusam a registrar, e o
+        conteúdo anterior do clipboard volta depois de quarenta e cinco segundos em vez de ser
+        substituído por nada.</p>
+
+      <h2 lang="en">The things pass leaves to extensions</h2>
+      <h2 lang="pt-BR">As coisas que o pass deixa pras extensões</h2>
+
+      <p lang="en">One-time codes, passphrases, named fields, QR codes and a store audit are built in
+        rather than installed. The first line of an entry is the password; everything after it is
+        yours, <code>key: value</code> lines are readable with <code>--field</code>, and an
+        <code>otpauth://</code> URI is all <code>hidepass otp</code> needs:</p>
+      <p lang="pt-BR">Códigos de uso único, passphrases, campos nomeados, QR codes e uma auditoria da
+        store são embutidos em vez de instalados. A primeira linha de uma entrada é a senha; tudo
+        depois dela é seu, linhas <code>key: value</code> são legíveis com <code>--field</code>, e uma
+        URI <code>otpauth://</code> é tudo que o <code>hidepass otp</code> precisa:</p>
+
+<pre>correct horse battery staple
+user: alice@example.com
+url: https://example.com
+otpauth://totp/Example:alice?secret=JBSWY3DPEHPK3PXP&amp;issuer=Example</pre>
+
+      <p lang="en">It is the pass-otp format, deliberately, and HOTP is where that matters most. A HOTP
+        code is only valid once, so reading one has to advance the counter: hidePass uses counter
+        <em>N+1</em>, re-encrypts the entry with the new value and commits it, exactly as pass-otp
+        does. Two tools can therefore share a HOTP entry without ever handing out the same code
+        twice — which is the only version of "compatible" that means anything for a counter.</p>
+      <p lang="pt-BR">É o formato do pass-otp, de propósito, e o HOTP é onde isso mais importa. Um
+        código HOTP só vale uma vez, então ler um tem que avançar o contador: o hidePass usa o contador
+        <em>N+1</em>, re-encripta a entrada com o valor novo e faz o commit, exatamente como o pass-otp
+        faz. Duas ferramentas podem então compartilhar uma entrada HOTP sem nunca entregar o mesmo
+        código duas vezes — que é a única versão de "compatível" que significa algo para um
+        contador.</p>
+
+      <p lang="en">Passphrases come from the <a href="https://www.eff.org/dice">EFF long wordlist</a>,
+        which has exactly 7776 words — five rolls of a six-sided die, and 12.925 bits per word. Six words is
+        about 77 bits, which is the number I care about rather than how many symbols the thing
+        contains:</p>
+      <p lang="pt-BR">As passphrases saem da <a href="https://www.eff.org/dice">lista longa de palavras
+        da EFF</a>, que tem exatamente 7776 palavras — cinco lançamentos de um dado de seis faces, e 12,925 bits
+        por palavra. Seis palavras dão cerca de 77 bits, que é o número com que eu me importo, e não
+        quantos símbolos a coisa tem:</p>
+
+<pre>$ hidepass generate --words 6 Email/work
+cubicle-unfold-dripping-tribune-ample-reveal</pre>
+
+      <h2 lang="en">Plaintext and the disk it should never touch</h2>
+      <h2 lang="pt-BR">O texto puro e o disco em que ele não deveria encostar</h2>
+
+      <p lang="en">Editing an entry means decrypting it somewhere, and "somewhere" must not be a file
+        on a disk that keeps it after the editor exits. pass solves this with a ramdisk built by
+        <code>hdiutil</code> — and on macOS 27 I watched <code>hdiutil attach -nomount</code> print a
+        deprecation warning at me. hidePass uses <code>diskutil image</code> for
+        <code>edit</code> instead.</p>
+      <p lang="pt-BR">Editar uma entrada significa descriptografar em algum lugar, e esse "algum lugar"
+        não pode ser um arquivo num disco que o guarda depois que o editor fecha. O pass resolve isso
+        com um ramdisk construído pelo <code>hdiutil</code> — e no macOS 27 eu vi o <code>hdiutil
+        attach -nomount</code> cuspir um aviso de deprecação na minha cara. O hidePass usa o
+        <code>diskutil image</code> para o <code>edit</code>.</p>
+
+      <p lang="en">The better answer, though, was to need the ramdisk less often. <code>hidepass
+        git</code> does not use one at all, because git only ever sees encrypted files — there is no
+        plaintext in that path to protect. And when a ramdisk genuinely cannot be had, hidePass asks
+        before falling back to an ordinary temp directory rather than quietly deciding for you.</p>
+      <p lang="pt-BR">A resposta melhor, porém, foi precisar do ramdisk menos vezes. O <code>hidepass
+        git</code> não usa nenhum, porque o git só vê arquivos encriptados — não existe texto puro
+        nesse caminho pra proteger. E quando um ramdisk realmente não está disponível, o hidePass
+        pergunta antes de cair num diretório temporário comum, em vez de decidir por você em
+        silêncio.</p>
+
+      <h2 lang="en">Boring defaults, on purpose</h2>
+      <h2 lang="pt-BR">Defaults chatos, de propósito</h2>
+
+      <p lang="en">Four decisions that cost nothing to make and are miserable to retrofit:</p>
+      <p lang="pt-BR">Quatro decisões que não custam nada pra tomar e são miseráveis de colocar
+        depois:</p>
+
+      <ul lang="en">
+        <li><strong>Entries are written atomically.</strong> A gpg interrupted halfway through cannot
+          leave a truncated entry where a password used to be.</li>
+        <li><strong>Recipients are validated before anything is re-encrypted.</strong> Re-encrypting to
+          a key that turns out not to exist is how you lock yourself out of your own store.</li>
+        <li><strong>Passwords come from the OS CSPRNG, without modulo bias.</strong> Taking a random
+          byte modulo the alphabet length makes some characters likelier than others; it is a one-line
+          bug and it quietly costs entropy.</li>
+        <li><strong>Decrypted data is zeroed once it is no longer needed</strong>, rather than left in
+          a freed allocation for whatever reads it next.</li>
+      </ul>
+      <ul lang="pt-BR">
+        <li><strong>As entradas são escritas atomicamente.</strong> Um gpg interrompido no meio não
+          consegue deixar uma entrada truncada onde antes havia uma senha.</li>
+        <li><strong>Os recipients são validados antes de qualquer coisa ser re-encriptada.</strong>
+          Re-encriptar para uma chave que acaba não existindo é assim que você se tranca fora da
+          sua própria store.</li>
+        <li><strong>As senhas vêm do CSPRNG do sistema, sem viés de módulo.</strong> Pegar um byte
+          aleatório módulo o tamanho do alfabeto torna alguns caracteres mais prováveis que outros; é
+          um bug de uma linha e custa entropia em silêncio.</li>
+        <li><strong>Os dados descriptografados são zerados quando não são mais necessários</strong>, em
+          vez de ficarem numa alocação liberada à espera de quem ler depois.</li>
+      </ul>
+
+      <h2 lang="en">What it deliberately does not implement</h2>
+      <h2 lang="pt-BR">O que ele deliberadamente não implementa</h2>
+
+      <p lang="en">hidePass shells out to your <code>gpg</code> and your <code>git</code>. It does not
+        link a crypto library and it does not speak the git protocol, which means gpg-agent, pinentry,
+        smartcards and YubiKeys, SSH remotes and signed commits all work exactly as they already do —
+        because they <em>are</em> exactly what they already were. The temptation to reimplement either
+        one is the temptation to own a second, worse copy of a problem other people have been fixing
+        for decades.</p>
+      <p lang="pt-BR">O hidePass chama o seu <code>gpg</code> e o seu <code>git</code>. Ele não linka
+        uma biblioteca de criptografia e não fala o protocolo do git, o que significa que gpg-agent,
+        pinentry, smartcards e YubiKeys, remotes SSH e commits assinados funcionam exatamente como já
+        funcionavam — porque <em>são</em> exatamente o que já eram. A tentação de reimplementar
+        qualquer um dos dois é a tentação de ser dono de uma segunda cópia, pior, de um problema que
+        outras pessoas vêm consertando há décadas.</p>
+
+      <p lang="en">Three things do differ from pass, and they are in the README rather than in a
+        footnote: pass extensions in <code>.extensions</code> are not run, git's commit summaries go to
+        stderr so stdout carries only what you asked for, and listings show entries and folders rather
+        than every file in the store.</p>
+      <p lang="pt-BR">Três coisas diferem do pass, e elas estão no README em vez de numa nota de rodapé:
+        extensões do pass em <code>.extensions</code> não são executadas, os resumos de commit do git
+        vão para o stderr de modo que o stdout carrega só o que você pediu, e as listagens mostram
+        entradas e pastas em vez de todo arquivo da store.</p>
+
+      <h2 lang="en">Where it is now</h2>
+      <h2 lang="pt-BR">Onde está agora</h2>
+
+      <p lang="en">It is new — <code>v0.2.0</code> is from today. Twelve modules, about 3,100 lines of
+        Rust, 26 <code>#[test]</code> functions plus the end-to-end suite and the pass cross-check, and
+        a minimum Rust of 1.88. The release pipeline builds macOS and Linux binaries and updates the
+        formula, so installing is one line:</p>
+      <p lang="pt-BR">Ele é novo — o <code>v0.2.0</code> é de hoje. Doze módulos, cerca de 3.100 linhas
+        de Rust, 26 funções <code>#[test]</code> mais a suíte ponta a ponta e o cross-check com o pass,
+        e um Rust mínimo de 1.88. O pipeline de release compila binários de macOS e Linux e atualiza a
+        formula, então instalar é uma linha:</p>
+
+<pre>brew install youhide/youhide/hidepass</pre>
+
+      <p lang="en">The source is at <a href="https://github.com/youhide/hidePass">github.com/youhide/hidePass</a>.
+        Point it at a copy of your store before you point it at the real one — not because I expect it
+        to eat anything, but because that is the advice I would want from someone whose password
+        manager is two commits old.</p>
+      <p lang="pt-BR">O código está em <a href="https://github.com/youhide/hidePass">github.com/youhide/hidePass</a>.
+        Aponte ele para uma cópia da sua store antes de apontar para a de verdade — não porque eu
+        espere que ele coma alguma coisa, mas porque é o conselho que eu ia querer de alguém cujo
+        gerenciador de senhas tem dois commits de idade.</p>
+
+    </article>
+
+    <nav class="post-nav" aria-label="Post navigation">
+      <a href="../" lang="en">← all posts</a>
+      <a href="../" lang="pt-BR">← todos os posts</a>
+      <a href="../../feed.xml" lang="en">RSS feed →</a>
+      <a href="../../feed.xml" lang="pt-BR">feed RSS →</a>
+    </nav>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__card">
+      <div class="footer__accent"></div>
+      <div class="footer__body">
+        <ul class="social">
+          <li><a href="https://github.com/youhide" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></li>
+          <li><a href="https://gitlab.com/youri" aria-label="GitLab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m23.6 9.6-.03-.086L20.3.9a.851.851 0 0 0-.336-.405.876.876 0 0 0-1 .054.876.876 0 0 0-.29.44l-2.207 6.752H7.535L5.327.99a.858.858 0 0 0-.29-.441.876.876 0 0 0-1-.054.859.859 0 0 0-.336.405L.427 9.51l-.031.085a6.055 6.055 0 0 0 2.008 6.997l.01.009.03.022 4.964 3.72 2.456 1.86 1.496 1.13a1.01 1.01 0 0 0 1.22 0l1.496-1.13 2.456-1.86 4.994-3.742.013-.01a6.057 6.057 0 0 0 2.06-6.99Z"/></svg></a></li>
+          <li><a href="https://linkedin.com/in/yourimattar" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+          <li><a href="https://x.com/_hideout" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a></li>
+          <li><a href="https://twitch.tv/youhide" aria-label="Twitch"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg></a></li>
+          <li><a href="https://postrite.app" aria-label="PostRite"><svg class="icon--stroke" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><ellipse cx="12" cy="12" rx="4" ry="9.5"/><path d="M2.5 12h19"/></svg></a></li>
+        </ul>
+
+        <p class="footer__exit"><span class="prompt__sign">$</span>exit<span class="cursor" aria-hidden="true">█</span></p>
+        <p class="footer__note">
+          <span lang="en">Connection to youhide closed. Always learning, always shipping.</span>
+          <span lang="pt-BR">Conexão com youhide encerrada. Sempre aprendendo, sempre entregando.</span>
+        </p>
+        <p class="footer__meta">Youri T. K. K. Mattar · Londrina, Brasil</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
