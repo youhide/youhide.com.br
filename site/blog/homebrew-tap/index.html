@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A tap that pulls — youHide</title>
+<meta name="description" content="A Homebrew tap that nothing pushes to: it reads each project's latest GitHub release on a cron and regenerates its own formulas, so no project needs a write token for the thing that ships it.">
+<meta name="author" content="Youri T. K. K. Mattar">
+<meta name="theme-color" content="#282a36">
+<link rel="canonical" href="https://youhide.com.br/blog/homebrew-tap/">
+
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2026-10-02">
+<meta property="og:title" content="A tap that pulls: a Homebrew tap nothing pushes to">
+<meta property="og:description" content="Five projects used to push formulas into my tap, which meant five copies of a write token. Now the tap pulls on a cron, and there is no secret to leak because there is no secret.">
+<meta property="og:url" content="https://youhide.com.br/blog/homebrew-tap/">
+<meta property="og:image" content="https://youhide.com.br/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@_hideout">
+
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="alternate" type="application/rss+xml" title="youHide — blog" href="../../feed.xml">
+<link rel="stylesheet" href="../../css/style.css">
+<script src="../../js/main.js"></script>
+</head>
+<body>
+
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="pt-BR">Pular para o conteúdo</span></a>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__brand" href="../../"><span>~</span>/youhide</a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="../../">./home</a>
+      <a href="../../about/">./about</a>
+      <a href="../../projects/">./projects</a>
+      <a href="../" aria-current="page">./blog</a>
+    </nav>
+    <button class="lang" id="lang-toggle" type="button" aria-label="Mudar para português">
+      <span class="lang__opt" data-lang-opt="en">EN</span>
+      <span class="lang__sep">|</span>
+      <span class="lang__opt" data-lang-opt="pt-BR">PT</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <section class="term" aria-labelledby="page-title">
+      <div class="term__bar">
+        <span class="dot dot--red"></span>
+        <span class="dot dot--yellow"></span>
+        <span class="dot dot--green"></span>
+        <span class="term__path">youhide@homelab: ~/blog</span>
+      </div>
+      <div class="term__body">
+        <div class="term__main">
+          <p class="prompt"><span class="prompt__sign">$</span>cat homebrew-tap.md</p>
+          <h1 class="page__title" id="page-title" lang="en">A tap that pulls</h1>
+          <h1 class="page__title" lang="pt-BR">Um tap que puxa</h1>
+          <div class="post__meta">
+            <time class="post-date" datetime="2026-10-02">2026-10-02</time>
+            <ul class="post-tags">
+              <li>design</li><li>meta</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="term__accent"></div>
+    </section>
+
+    <article class="section post prose">
+
+      <p lang="en">My Homebrew tap is five formulas and one command. It has existed since February
+        2025, it contains no interesting code, and until yesterday it worked the way taps usually
+        work. The thing worth writing about is not the tap. It is which direction the data moves.</p>
+      <p lang="pt-BR">Meu tap do Homebrew são cinco formulas e um comando. Ele existe desde fevereiro
+        de 2025, não tem nenhum código interessante dentro, e até ontem funcionava do jeito que taps
+        normalmente funcionam. O que vale escrever não é o tap. É em que direção os dados se movem.</p>
+
+<pre>brew install youhide/tap/hidepass
+brew install youhide/tap/chainchaos
+brew install youhide/tap/hidedot
+brew install youhide/tap/hidetop
+brew install youhide/tap/oxinit     # Linux only</pre>
+
+      <h2 lang="en">What pushing costs</h2>
+      <h2 lang="pt-BR">O preço de empurrar</h2>
+
+      <p lang="en">The normal arrangement is that each project pushes. A project cuts a release, and
+        the same workflow that built the binaries then commits an updated formula into the tap. To
+        write a commit into <em>another</em> repository, that workflow needs a token with write access
+        to it — and the token Actions hands you is scoped to the repository it runs in, so this means a
+        personal access token, stored as a secret, in every project that ships through the tap.</p>
+      <p lang="pt-BR">O arranjo normal é que cada projeto empurra. O projeto corta um release, e o
+        mesmo workflow que compilou os binários faz um commit com a formula atualizada dentro do tap.
+        Para escrever um commit em <em>outro</em> repositório, esse workflow precisa de um token com
+        acesso de escrita a ele — e o token que o Actions te entrega é escopado ao repositório onde
+        roda, então isso significa um personal access token, guardado como secret, em todo projeto que
+        distribui pelo tap.</p>
+
+      <p lang="en">Five projects, five copies of one credential, and what that credential can do is
+        rewrite the thing that installs software on other people's machines. None of this is unusual —
+        it is how most taps are wired. It just stopped sitting well with me that a leaked secret in a
+        side project had "replace the binary everyone brew-installs" inside its blast radius.</p>
+      <p lang="pt-BR">Cinco projetos, cinco cópias de uma credencial, e o que essa credencial pode
+        fazer é reescrever a coisa que instala software na máquina de outras pessoas. Nada disso é
+        incomum — é como a maioria dos taps é montada. Só parou de me descer bem que um secret vazado
+        num projeto paralelo tivesse "trocar o binário que todo mundo instala pelo brew" dentro do seu
+        raio de dano.</p>
+
+      <h2 lang="en">So the tap pulls instead</h2>
+      <h2 lang="pt-BR">Então o tap puxa</h2>
+
+      <p lang="en">Now nothing pushes. The tap goes and looks: a workflow wakes up every hour, asks
+        GitHub for the latest release of each project, and regenerates the formulas from what it
+        finds.</p>
+      <p lang="pt-BR">Agora nada empurra. O tap vai olhar: um workflow acorda a cada hora, pergunta ao
+        GitHub qual é o último release de cada projeto, e regenera as formulas a partir do que
+        encontrar.</p>
+
+<pre>on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - projects.toml
+      - scripts/update.py
+      - .github/workflows/update.yml
+
+permissions:
+  contents: write</pre>
+
+      <p lang="en">That <code>permissions</code> block is the whole argument. It grants write access to
+        <em>its own</em> repository, using the token Actions already provides. There is no secret to
+        leak, because there is no secret. The projects, meanwhile, lost a step each: the commit in
+        hidePass that did it is called <em>"Let the Homebrew tap pick up releases on its own"</em>,
+        which is also an accurate description of the entire design.</p>
+      <p lang="pt-BR">Esse bloco <code>permissions</code> é o argumento inteiro. Ele dá acesso de
+        escrita ao <em>próprio</em> repositório, usando o token que o Actions já fornece. Não existe
+        secret pra vazar, porque não existe secret. Os projetos, por sua vez, perderam um passo cada:
+        o commit no hidePass que fez isso se chama <em>"Let the Homebrew tap pick up releases on its
+        own"</em>, que também é uma descrição exata do design inteiro.</p>
+
+      <blockquote lang="en">A release shows up within the hour. Nothing that builds it needs
+        permission to touch the thing that ships it.</blockquote>
+      <blockquote lang="pt-BR">Um release aparece dentro de uma hora. Nada que o compila precisa de
+        permissão para encostar na coisa que o distribui.</blockquote>
+
+      <h2 lang="en">One table per tool</h2>
+      <h2 lang="pt-BR">Uma tabela por ferramenta</h2>
+
+      <p lang="en">The entire interface is a TOML file. Adding a tool to the tap is adding a table to
+        it, and the projects themselves are not edited at all:</p>
+      <p lang="pt-BR">A interface inteira é um arquivo TOML. Adicionar uma ferramenta ao tap é
+        adicionar uma tabela nele, e os projetos em si não são editados em nada:</p>
+
+<pre>[oxinit]
+repo        = "youhide/oxinit"
+desc        = "Service manager and PID 1 for Linux"
+license     = ["MIT", "Apache-2.0"]
+binaries    = ["oxinit", "oxctl", "oxlogd"]
+docs        = ["UNIT_FORMAT.md"]
+prereleases = true
+
+[oxinit.assets]
+linux_arm   = "oxinit-{tag}-aarch64-linux-musl.tar.gz"
+linux_intel = "oxinit-{tag}-x86_64-linux-musl.tar.gz"</pre>
+
+      <p lang="en">A list in <code>license</code> means "any of", which is how a dual MIT-or-Apache
+        crate gets described honestly. The first entry in <code>binaries</code> is the one
+        <code>brew test</code> runs. Projects that use GoReleaser's default archive names skip the
+        asset table entirely and give a prefix instead, since the names are then derivable.</p>
+      <p lang="pt-BR">Uma lista em <code>license</code> significa "qualquer uma das", que é como um
+        crate com licença dupla MIT-ou-Apache é descrito honestamente. A primeira entrada de
+        <code>binaries</code> é a que o <code>brew test</code> executa. Projetos que usam os nomes de
+        arquivo padrão do GoReleaser dispensam a tabela de assets e dão um prefixo, já que os nomes
+        passam a ser deriváveis.</p>
+
+      <h2 lang="en">The gate is the absence of a key</h2>
+      <h2 lang="pt-BR">O gate é a ausência de uma chave</h2>
+
+      <p lang="en">oxinit is Linux-only, and nothing in that table says so. It is Linux-only because
+        there is no <code>darwin_arm</code> and no <code>darwin_intel</code> key — the platforms a
+        formula offers are exactly the platforms it was told where to find.</p>
+      <p lang="pt-BR">O oxinit é Linux-only, e nada naquela tabela diz isso. Ele é Linux-only porque
+        não existe chave <code>darwin_arm</code> nem <code>darwin_intel</code> — as plataformas que uma
+        formula oferece são exatamente as plataformas para as quais alguém disse onde procurar.</p>
+
+      <p lang="en">I like that more than a <code>linux_only = true</code> flag, because you cannot
+        forget to set it. The only way to offer macOS is to say where the macOS archive is, so the
+        declaration and the capability cannot drift apart. The same table also carries
+        <code>prereleases = true</code>, which oxinit needs for a dull and specific reason: its only
+        release so far is marked as a prerelease, and GitHub's "latest release" does not include
+        those.</p>
+      <p lang="pt-BR">Eu prefiro isso a uma flag <code>linux_only = true</code>, porque não tem como
+        esquecer de marcar. O único jeito de oferecer macOS é dizer onde está o arquivo de macOS, então
+        a declaração e a capacidade não conseguem se descolar. A mesma tabela também carrega
+        <code>prereleases = true</code>, de que o oxinit precisa por um motivo chato e específico: o
+        único release dele até agora está marcado como prerelease, e o "latest release" do GitHub não
+        inclui esses.</p>
+
+      <h2 lang="en"><code>Formula/</code> is build output</h2>
+      <h2 lang="pt-BR"><code>Formula/</code> é saída de build</h2>
+
+      <p lang="en">Both the formulas and the README's list of them are generated by the same 229-line
+        Python script, which is why the repository says not to edit <code>Formula/</code> by hand. A
+        formula is not source here; it is a rendering of a release that already exists.</p>
+      <p lang="pt-BR">Tanto as formulas quanto a lista delas no README são geradas pelo mesmo script
+        Python de 229 linhas, e é por isso que o repositório diz para não editar
+        <code>Formula/</code> na mão. Uma formula não é fonte aqui; ela é a renderização de um release
+        que já existe.</p>
+
+      <p lang="en">Checksums come from the release's own <code>checksums.txt</code> or
+        <code>&lt;asset&gt;.sha256</code> when the project publishes them, and the script downloads the
+        archive and hashes it only when neither exists. Preferring the published one is deliberate: it
+        was written by the workflow that built the binary, next to the binary, rather than recomputed
+        later by something that merely fetched it.</p>
+      <p lang="pt-BR">Os checksums vêm do <code>checksums.txt</code> ou dos
+        <code>&lt;asset&gt;.sha256</code> do próprio release quando o projeto os publica, e o script só
+        baixa o arquivo e calcula o hash quando nenhum dos dois existe. Preferir o publicado é de
+        propósito: ele foi escrito pelo workflow que compilou o binário, ao lado do binário, em vez de
+        recalculado depois por algo que só o baixou.</p>
+
+      <h2 lang="en">What it does when something breaks</h2>
+      <h2 lang="pt-BR">O que ele faz quando algo quebra</h2>
+
+      <p lang="en">An hourly job that rewrites a distribution channel has to be boring on its bad
+        days, so three of its decisions are about failure rather than success:</p>
+      <p lang="pt-BR">Um job que roda de hora em hora reescrevendo um canal de distribuição tem que
+        ser chato nos dias ruins, então três das suas decisões são sobre falha, não sobre sucesso:</p>
+
+      <ul lang="en">
+        <li>The commit step runs <code>if: !cancelled()</code>, on purpose — one project with a broken
+          release fails its own formula and does not hold back the four that are fine.</li>
+        <li>It checks <code>git diff --cached --quiet</code> before committing, so an hour in which
+          nothing was released produces no commit at all rather than an empty one.</li>
+        <li>A <code>concurrency</code> group means the hourly run and an impatient manual run cannot
+          both be rewriting <code>Formula/</code> at the same time.</li>
+      </ul>
+      <ul lang="pt-BR">
+        <li>O passo de commit roda com <code>if: !cancelled()</code>, de propósito — um projeto com
+          release quebrado falha a própria formula e não segura as outras quatro que estão bem.</li>
+        <li>Ele checa <code>git diff --cached --quiet</code> antes de commitar, então uma hora em que
+          nada foi lançado não produz commit nenhum, em vez de um commit vazio.</li>
+        <li>Um grupo de <code>concurrency</code> faz com que a execução de hora em hora e uma execução
+          manual impaciente não possam estar reescrevendo o <code>Formula/</code> ao mesmo tempo.</li>
+      </ul>
+
+      <p lang="en">What I gave up is immediacy: a release is installable within the hour instead of
+        within the minute. For a tap that distributes my own command-line tools, an hour is not a cost
+        I can bring myself to care about — and <code>workflow_dispatch</code> is there for the days I
+        do.</p>
+      <p lang="pt-BR">Abri mão de imediatismo: um release fica instalável dentro de uma hora em vez de
+        dentro de um minuto. Para um tap que distribui as minhas próprias ferramentas de
+        linha de comando, uma hora não é um custo com que eu consiga me importar — e o
+        <code>workflow_dispatch</code> está ali para os dias em que eu me importe.</p>
+
+      <p lang="en">The repository is at <a href="https://github.com/youhide/homebrew-tap">github.com/youhide/homebrew-tap</a>.
+        There is almost nothing in it, which after this change is the correct amount.</p>
+      <p lang="pt-BR">O repositório está em <a href="https://github.com/youhide/homebrew-tap">github.com/youhide/homebrew-tap</a>.
+        Não tem quase nada lá dentro, o que depois dessa mudança é a quantidade certa.</p>
+
+    </article>
+
+    <nav class="post-nav" aria-label="Post navigation">
+      <a href="../" lang="en">← all posts</a>
+      <a href="../" lang="pt-BR">← todos os posts</a>
+      <a href="../../feed.xml" lang="en">RSS feed →</a>
+      <a href="../../feed.xml" lang="pt-BR">feed RSS →</a>
+    </nav>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__card">
+      <div class="footer__accent"></div>
+      <div class="footer__body">
+        <ul class="social">
+          <li><a href="https://github.com/youhide" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></li>
+          <li><a href="https://gitlab.com/youri" aria-label="GitLab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m23.6 9.6-.03-.086L20.3.9a.851.851 0 0 0-.336-.405.876.876 0 0 0-1 .054.876.876 0 0 0-.29.44l-2.207 6.752H7.535L5.327.99a.858.858 0 0 0-.29-.441.876.876 0 0 0-1-.054.859.859 0 0 0-.336.405L.427 9.51l-.031.085a6.055 6.055 0 0 0 2.008 6.997l.01.009.03.022 4.964 3.72 2.456 1.86 1.496 1.13a1.01 1.01 0 0 0 1.22 0l1.496-1.13 2.456-1.86 4.994-3.742.013-.01a6.057 6.057 0 0 0 2.06-6.99Z"/></svg></a></li>
+          <li><a href="https://linkedin.com/in/yourimattar" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+          <li><a href="https://x.com/_hideout" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a></li>
+          <li><a href="https://twitch.tv/youhide" aria-label="Twitch"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg></a></li>
+          <li><a href="https://postrite.app" aria-label="PostRite"><svg class="icon--stroke" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><ellipse cx="12" cy="12" rx="4" ry="9.5"/><path d="M2.5 12h19"/></svg></a></li>
+        </ul>
+
+        <p class="footer__exit"><span class="prompt__sign">$</span>exit<span class="cursor" aria-hidden="true">█</span></p>
+        <p class="footer__note">
+          <span lang="en">Connection to youhide closed. Always learning, always shipping.</span>
+          <span lang="pt-BR">Conexão com youhide encerrada. Sempre aprendendo, sempre entregando.</span>
+        </p>
+        <p class="footer__meta">Youri T. K. K. Mattar · Londrina, Brasil</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

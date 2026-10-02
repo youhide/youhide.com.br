@@ -10,6 +10,16 @@
     <webMaster>youri@youhide.com.br (Youri T. K. K. Mattar)</webMaster>
 
     <item>
+      <title>A tap that pulls: a Homebrew tap nothing pushes to</title>
+      <link>https://youhide.com.br/blog/homebrew-tap/</link>
+      <guid isPermaLink="true">https://youhide.com.br/blog/homebrew-tap/</guid>
+      <pubDate>Fri, 02 Oct 2026 09:30:00 -0300</pubDate>
+      <category>design</category>
+      <category>meta</category>
+      <description>The usual way to maintain a Homebrew tap is for each project to commit its own formula into it, which means storing a token with write access to the tap in every project that ships through it. My tap now pulls instead: an hourly workflow reads each project's latest GitHub release and regenerates the formulas and the README from one TOML table per tool. No project knows the tap exists, no project needs a write token, and the platform a formula offers is decided by which asset keys the table has.</description>
+    </item>
+
+    <item>
       <title>The same store, the same keys: a pass-compatible password manager in Rust</title>
       <link>https://youhide.com.br/blog/same-store-same-keys/</link>
       <guid isPermaLink="true">https://youhide.com.br/blog/same-store-same-keys/</guid>
