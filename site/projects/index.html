@@ -114,6 +114,42 @@
           <p class="card__desc" lang="pt-BR">Engine de servidor de MMORPG moderna e open-source, compatível com clientes clássicos de Ultima Online.</p>
         </a>
 
+        <a class="card" href="https://youhide.github.io/hideOS/">
+          <div class="card__top">
+            <span class="card__name">hideOS</span>
+            <span class="card__lang card__lang--rust">Rust</span>
+          </div>
+          <p class="quote" lang="en">“Like macOS, on Linux: a system nothing — root included — can change, and updates that go back by themselves.”</p>
+          <p class="quote" lang="pt-BR">“Como o macOS, no Linux: um sistema que nada — nem o root — pode alterar, e updates que voltam sozinhos.”</p>
+          <p class="card__desc" lang="en">A sealed, image-based Linux workstation OS built from source —
+            a signed read-only root checked by fs-verity, whole-image updates that roll themselves back
+            when they fail, btrfs on LUKS2 unlocked by the TPM, and the COSMIC desktop. Two editions
+            from one tree: Minimal and Workstation. hideBoot boots it; oxinit is PID 1.</p>
+          <p class="card__desc" lang="pt-BR">SO de workstation Linux selado e baseado em imagem,
+            construído a partir do código — root read-only assinado e verificado por fs-verity, updates
+            da imagem inteira que fazem rollback sozinhos quando falham, btrfs sobre LUKS2 destravado
+            pelo TPM, e o desktop COSMIC. Duas edições da mesma árvore: Minimal e Workstation. O
+            hideBoot dá boot nele; o oxinit é o PID 1.</p>
+          <span class="tag">pre-alpha</span>
+        </a>
+
+        <a class="card" href="https://github.com/youhide/hideBoot">
+          <div class="card__top">
+            <span class="card__name">hideBoot</span>
+            <span class="card__lang card__lang--rust">Rust</span>
+          </div>
+          <p class="card__desc" lang="en">A UEFI boot manager with boot counting and automatic fallback
+            — an update that fails three times falls back to the previous system. Recovery entries,
+            Windows beside it, and <code>systemd-boot</code>'s on-disk convention, so either boots the
+            same ESP.</p>
+          <p class="card__desc" lang="pt-BR">Boot manager UEFI com contagem de boots e fallback
+            automático — um update que falha três vezes volta para o sistema anterior. Entradas de
+            recuperação, o Windows ao lado, e a convenção de disco do <code>systemd-boot</code>, então
+            os dois dão boot no mesmo ESP.</p>
+          <span class="tag" lang="en">works in QEMU</span>
+          <span class="tag" lang="pt-BR">funciona em QEMU</span>
+        </a>
+
         <a class="card" href="https://github.com/youhide/oxinit">
           <div class="card__top">
             <span class="card__name">oxinit</span>
