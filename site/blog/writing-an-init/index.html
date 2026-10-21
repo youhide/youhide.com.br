@@ -89,7 +89,7 @@
         deciding what it would refuse to do.</p>
       <p lang="pt-BR">Ele se chama <strong>oxinit</strong>: um gerenciador de serviços e PID 1, escrito
         em Rust, com licença dupla MIT ou Apache-2.0, e honestamente marcado como pre-alpha. Primeiro
-        commit em 8 de agosto de 2026, <code>v0.1.0</code> marcado no dia 11. Quatro dias — o que não é
+        commit em 8 de agosto de 2026, <code>v0.1.0</code> marcado no dia 11. Quatro dias, o que não é
         vaidade de velocidade. Um init é um programa pequeno com um raio de dano enorme, e a maior
         parte desses quatro dias foi decidir o que ele ia se recusar a fazer.</p>
 
@@ -269,7 +269,7 @@ user        = "sshd"</pre>
         ativação por socket, e decide a ordem em que a máquina desliga. Isso é um raio de dano muito
         grande pra uma linguagem em que um acesso fora dos limites é um erro de memória. As propriedades que o
         Rust garante em tempo de compilação valem mais no PID 1 do que em qualquer outro lugar do
-        sistema — que é exatamente o lugar onde ninguém as tinha colocado.</p>
+        sistema, que é exatamente o lugar onde ninguém as tinha colocado.</p>
 
       <h2 lang="en">Where it is now</h2>
       <h2 lang="pt-BR">Onde está agora</h2>
@@ -316,7 +316,7 @@ user        = "sshd"</pre>
         trusted to do that is in the repository rather than in this post.</p>
       <p lang="pt-BR">Eu queria fazer alguma coisa pro Linux e acabei no único processo da máquina que
         não tem nada acima dele. Eu ainda não colocaria ele embaixo de nada que me importasse.
-        Mas ele boota, supervisiona, desliga na ordem certa — e cada linha do motivo pelo qual dá pra
+        Mas ele boota, supervisiona, desliga na ordem certa, e cada linha do motivo pelo qual dá pra
         confiar nisso está no repositório, não neste post.</p>
 
     </article>

@@ -99,7 +99,7 @@ brew install youhide/tap/oxinit     # Linux only</pre>
       <p lang="pt-BR">O arranjo normal é que cada projeto empurra. O projeto corta um release, e o
         mesmo workflow que compilou os binários faz um commit com a formula atualizada dentro do tap.
         Para escrever um commit em <em>outro</em> repositório, esse workflow precisa de um token com
-        acesso de escrita a ele — e o token que o Actions te entrega é escopado ao repositório onde
+        acesso de escrita a ele, e o token que o Actions te entrega é escopado ao repositório onde
         roda, então isso significa um personal access token, guardado como secret, em todo projeto que
         distribui pelo tap.</p>
 
@@ -109,7 +109,7 @@ brew install youhide/tap/oxinit     # Linux only</pre>
         side project had "replace the binary everyone brew-installs" inside its blast radius.</p>
       <p lang="pt-BR">Cinco projetos, cinco cópias de uma credencial, e o que essa credencial pode
         fazer é reescrever a coisa que instala software na máquina de outras pessoas. Nada disso é
-        incomum — é como a maioria dos taps é montada. Só parou de me descer bem que um secret vazado
+        incomum: é como a maioria dos taps é montada. Só parou de me descer bem que um secret vazado
         num projeto paralelo tivesse "trocar o binário que todo mundo instala pelo brew" dentro do seu
         raio de dano.</p>
 
@@ -259,7 +259,7 @@ linux_intel = "oxinit-{tag}-x86_64-linux-musl.tar.gz"</pre>
         do.</p>
       <p lang="pt-BR">Abri mão de imediatismo: um release fica instalável dentro de uma hora em vez de
         dentro de um minuto. Para um tap que distribui as minhas próprias ferramentas de
-        linha de comando, uma hora não é um custo com que eu consiga me importar — e o
+        linha de comando, uma hora não é um custo com que eu consiga me importar, e o
         <code>workflow_dispatch</code> está ali para os dias em que eu me importe.</p>
 
       <p lang="en">The repository is at <a href="https://github.com/youhide/homebrew-tap">github.com/youhide/homebrew-tap</a>.

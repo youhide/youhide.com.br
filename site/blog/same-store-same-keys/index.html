@@ -129,7 +129,7 @@ $ hidepass otp Web/github
       <p lang="pt-BR">Afirmar compatibilidade é barato, então ela é um teste em vez de uma frase num
         README. O CI instala o <code>pass</code> de verdade e o <code>pass-extension-otp</code> de
         verdade a cada push e roda um script em que cada ferramenta tem que ler o que a outra escreveu.
-        Se eu quebrar o formato, o build me avisa — e não alguém cujas senhas estão lá dentro.</p>
+        Se eu quebrar o formato, o build me avisa, e não alguém cujas senhas estão lá dentro.</p>
 
       <blockquote lang="en">A compatibility promise nothing re-runs is a compatibility promise you have
         already broken and not noticed.</blockquote>
@@ -186,7 +186,7 @@ otpauth://totp/Example:alice?secret=JBSWY3DPEHPK3PXP&amp;issuer=Example</pre>
         código HOTP só vale uma vez, então ler um tem que avançar o contador: o hidePass usa o contador
         <em>N+1</em>, re-encripta a entrada com o valor novo e faz o commit, exatamente como o pass-otp
         faz. Duas ferramentas podem então compartilhar uma entrada HOTP sem nunca entregar o mesmo
-        código duas vezes — que é a única versão de "compatível" que significa algo para um
+        código duas vezes, que é a única versão de "compatível" que significa algo para um
         contador.</p>
 
       <p lang="en">Passphrases come from the <a href="https://www.eff.org/dice">EFF long wordlist</a>,
@@ -211,7 +211,7 @@ cubicle-unfold-dripping-tribune-ample-reveal</pre>
         <code>edit</code> instead.</p>
       <p lang="pt-BR">Editar uma entrada significa descriptografar em algum lugar, e esse "algum lugar"
         não pode ser um arquivo num disco que o guarda depois que o editor fecha. O pass resolve isso
-        com um ramdisk construído pelo <code>hdiutil</code> — e no macOS 27 eu vi o <code>hdiutil
+        com um ramdisk construído pelo <code>hdiutil</code>. E no macOS 27 eu vi o <code>hdiutil
         attach -nomount</code> cuspir um aviso de deprecação na minha cara. O hidePass usa o
         <code>diskutil image</code> para o <code>edit</code>.</p>
 
@@ -220,7 +220,7 @@ cubicle-unfold-dripping-tribune-ample-reveal</pre>
         plaintext in that path to protect. And when a ramdisk genuinely cannot be had, hidePass asks
         before falling back to an ordinary temp directory rather than quietly deciding for you.</p>
       <p lang="pt-BR">A resposta melhor, porém, foi precisar do ramdisk menos vezes. O <code>hidepass
-        git</code> não usa nenhum, porque o git só vê arquivos encriptados — não existe texto puro
+        git</code> não usa nenhum, porque o git só vê arquivos encriptados: não existe texto puro
         nesse caminho pra proteger. E quando um ramdisk realmente não está disponível, o hidePass
         pergunta antes de cair num diretório temporário comum, em vez de decidir por você em
         silêncio.</p>
@@ -268,7 +268,7 @@ cubicle-unfold-dripping-tribune-ample-reveal</pre>
       <p lang="pt-BR">O hidePass chama o seu <code>gpg</code> e o seu <code>git</code>. Ele não linka
         uma biblioteca de criptografia e não fala o protocolo do git, o que significa que gpg-agent,
         pinentry, smartcards e YubiKeys, remotes SSH e commits assinados funcionam exatamente como já
-        funcionavam — porque <em>são</em> exatamente o que já eram. A tentação de reimplementar
+        funcionavam, porque <em>são</em> exatamente o que já eram. A tentação de reimplementar
         qualquer um dos dois é a tentação de ser dono de uma segunda cópia, pior, de um problema que
         outras pessoas vêm consertando há décadas.</p>
 
@@ -288,7 +288,7 @@ cubicle-unfold-dripping-tribune-ample-reveal</pre>
         Rust, 26 <code>#[test]</code> functions plus the end-to-end suite and the pass cross-check, and
         a minimum Rust of 1.88. The release pipeline builds macOS and Linux binaries and updates the
         formula, so installing is one line:</p>
-      <p lang="pt-BR">Ele é novo — o <code>v0.2.0</code> é de hoje. Doze módulos, cerca de 3.100 linhas
+      <p lang="pt-BR">Ele é novo: o <code>v0.2.0</code> é de hoje. Doze módulos, cerca de 3.100 linhas
         de Rust, 26 funções <code>#[test]</code> mais a suíte ponta a ponta e o cross-check com o pass,
         e um Rust mínimo de 1.88. O pipeline de release compila binários de macOS e Linux e atualiza a
         formula, então instalar é uma linha:</p>
