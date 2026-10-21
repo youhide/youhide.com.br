@@ -10,6 +10,17 @@
     <webMaster>youri@youhide.com.br (Youri T. K. K. Mattar)</webMaster>
 
     <item>
+      <title>Weather is a function, not a table: building Weed Neighborhood</title>
+      <link>https://youhide.com.br/blog/weed-neighborhood/</link>
+      <guid isPermaLink="true">https://youhide.com.br/blog/weed-neighborhood/</guid>
+      <pubDate>Wed, 21 Oct 2026 09:30:00 -0300</pubDate>
+      <category>rust</category>
+      <category>gamedev</category>
+      <category>design</category>
+      <description>Weed Neighborhood is a cozy multiplayer game about growing plants, breeding strains and living in a shared neighborhood, and its plants keep growing while players are away. They do it without being simulated: the weather is derived from a seed and a moment rather than stored, a plant nobody is near is just a snapshot and the time it was taken, and the server schedules the single future moment that plant will need attention. One binary and one database file, on a machine at home.</description>
+    </item>
+
+    <item>
       <title>A tap that pulls: a Homebrew tap nothing pushes to</title>
       <link>https://youhide.com.br/blog/homebrew-tap/</link>
       <guid isPermaLink="true">https://youhide.com.br/blog/homebrew-tap/</guid>

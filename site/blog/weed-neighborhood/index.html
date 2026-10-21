@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weather is a function, not a table — youHide</title>
+<meta name="description" content="Weed Neighborhood is a cozy multiplayer growing game whose plants keep growing while nobody watches — because the weather is never stored and a plant nobody is near is not being simulated at all.">
+<meta name="author" content="Youri T. K. K. Mattar">
+<meta name="theme-color" content="#282a36">
+<link rel="canonical" href="https://youhide.com.br/blog/weed-neighborhood/">
+
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2026-10-21">
+<meta property="og:title" content="Weather is a function, not a table: building Weed Neighborhood">
+<meta property="og:description" content="Nothing is stored that can be computed, and nothing is computed until somebody asks — the one rule behind a multiplayer growing game that runs on a machine in my house.">
+<meta property="og:url" content="https://youhide.com.br/blog/weed-neighborhood/">
+<meta property="og:image" content="https://youhide.com.br/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@_hideout">
+
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="alternate" type="application/rss+xml" title="youHide — blog" href="../../feed.xml">
+<link rel="stylesheet" href="../../css/style.css">
+<script src="../../js/main.js"></script>
+</head>
+<body>
+
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="pt-BR">Pular para o conteúdo</span></a>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__brand" href="../../"><span>~</span>/youhide</a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="../../">./home</a>
+      <a href="../../about/">./about</a>
+      <a href="../../projects/">./projects</a>
+      <a href="../" aria-current="page">./blog</a>
+    </nav>
+    <button class="lang" id="lang-toggle" type="button" aria-label="Mudar para português">
+      <span class="lang__opt" data-lang-opt="en">EN</span>
+      <span class="lang__sep">|</span>
+      <span class="lang__opt" data-lang-opt="pt-BR">PT</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <section class="term" aria-labelledby="page-title">
+      <div class="term__bar">
+        <span class="dot dot--red"></span>
+        <span class="dot dot--yellow"></span>
+        <span class="dot dot--green"></span>
+        <span class="term__path">youhide@homelab: ~/blog</span>
+      </div>
+      <div class="term__body">
+        <div class="term__main">
+          <p class="prompt"><span class="prompt__sign">$</span>cat weed-neighborhood.md</p>
+          <h1 class="page__title" id="page-title" lang="en">Weather is a function, not a table</h1>
+          <h1 class="page__title" lang="pt-BR">O clima é uma função, não uma tabela</h1>
+          <div class="post__meta">
+            <time class="post-date" datetime="2026-10-21">2026-10-21</time>
+            <ul class="post-tags">
+              <li>rust</li><li>gamedev</li><li>design</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="term__accent"></div>
+    </section>
+
+    <article class="section post prose">
+
+      <p lang="en">I have been building a game called <strong>Weed Neighborhood</strong>. It is a cozy
+        multiplayer game where you grow plants, breed strains, enter them in seasonal cups, and live in
+        a shared neighborhood with other people's houses, parties and arguments. It runs in a browser,
+        it speaks Portuguese and English, and it is fiction for adults — a stylized little world, not a
+        guide to anything.</p>
+      <p lang="pt-BR">Ando construindo um jogo chamado <strong>Weed Neighborhood</strong>. É um jogo
+        multiplayer tranquilo onde você cultiva plantas, cruza variedades, inscreve elas em campeonatos
+        sazonais e mora num bairro compartilhado com as casas, as festas e as discussões das outras
+        pessoas. Roda no navegador, fala português e inglês, e é ficção para adultos — um mundinho
+        estilizado, não um guia de nada.</p>
+
+      <p lang="en">The part I want to write about is not the game. It is one rule that decided most of
+        its architecture, and that I keep reaching for in things that have nothing to do with plants.</p>
+      <p lang="pt-BR">A parte sobre a qual eu quero escrever não é o jogo. É uma regra que decidiu a
+        maior parte da arquitetura dele, e que eu fico puxando pra coisas que não têm nada a ver com
+        plantas.</p>
+
+      <h2 lang="en">A garden nobody is looking at</h2>
+      <h2 lang="pt-BR">Um jardim que ninguém está olhando</h2>
+
+      <p lang="en">Plants grow in real time, which means they grow while you are asleep, at work, or
+        have not opened the game in a week. Multiply that by every player, every grow space and every
+        plant in each one, and you have a very large number of things that are quietly getting thirsty
+        at three in the morning.</p>
+      <p lang="pt-BR">As plantas crescem em tempo real, o que significa que elas crescem enquanto você
+        dorme, trabalha, ou não abre o jogo há uma semana. Multiplique isso por cada jogador, cada
+        espaço de cultivo e cada planta dentro dele, e você tem um número muito grande de coisas ficando
+        discretamente sedentas às três da manhã.</p>
+
+      <p lang="en">The obvious approach is to tick all of them, all the time. It is also the one that
+        decides your hosting bill before you have a single player, and I am running this on my own
+        hardware at home.</p>
+      <p lang="pt-BR">A abordagem óbvia é atualizar todas elas, o tempo todo. Também é a que decide a
+        sua conta de hospedagem antes de você ter um único jogador, e eu rodo isso no meu próprio
+        hardware, em casa.</p>
+
+      <blockquote lang="en">Nothing is stored that can be computed, and nothing is computed until
+        somebody asks.</blockquote>
+      <blockquote lang="pt-BR">Nada é guardado se pode ser calculado, e nada é calculado até alguém
+        perguntar.</blockquote>
+
+      <h2 lang="en">Weather is a function, not a table</h2>
+      <h2 lang="pt-BR">O clima é uma função, não uma tabela</h2>
+
+      <p lang="en">Start with the weather, because it is the clearest case. The neighborhood has
+        seasons, rain, heat and cold, and all of it matters to an outdoor plant. The instinct is to
+        simulate weather forward and write it down somewhere.</p>
+      <p lang="pt-BR">Comece pelo clima, porque é o caso mais claro. O bairro tem estações, chuva, calor
+        e frio, e tudo isso importa pra uma planta ao ar livre. O instinto é simular o clima pra frente
+        e anotar isso em algum lugar.</p>
+
+      <p lang="en">It is never written down. The weather is derived from the neighborhood's seed and
+        the moment you are asking about — give it a time and it gives you that day's conditions, the
+        same answer every time, for a day last month or a day next year. There is no weather table, no
+        weather job, and no weather to back up.</p>
+      <p lang="pt-BR">Ele nunca é anotado. O clima é derivado da semente do bairro e do momento sobre o
+        qual você está perguntando — dê um horário e ele devolve as condições daquele dia, a mesma
+        resposta toda vez, para um dia do mês passado ou um dia do ano que vem. Não existe tabela de
+        clima, nem rotina de clima, nem clima pra fazer backup.</p>
+
+      <p lang="en">That is the whole trick, and the benefit is not really the disk space. State you do
+        not store is state that cannot drift, cannot be half-written when the process dies, and cannot
+        disagree with itself between two parts of the system. The cheapest data to keep consistent is
+        the data that does not exist.</p>
+      <p lang="pt-BR">Esse é o truque inteiro, e o benefício não é bem o espaço em disco. Estado que
+        você não guarda é estado que não tem como divergir, não tem como ficar escrito pela metade
+        quando o processo morre, e não tem como discordar de si mesmo entre duas partes do sistema. O
+        dado mais barato de manter consistente é o dado que não existe.</p>
+
+      <h2 lang="en">A plant nobody is near is not being simulated</h2>
+      <h2 lang="pt-BR">Uma planta de quem ninguém está perto não está sendo simulada</h2>
+
+      <p lang="en">The same rule, applied to the plants themselves. A plant that nobody is standing
+        next to is not running. It is a saved snapshot and the time that snapshot was taken, sitting in
+        the database doing nothing at all.</p>
+      <p lang="pt-BR">A mesma regra, aplicada às próprias plantas. Uma planta de quem ninguém está do
+        lado não está rodando. Ela é um retrato salvo e o horário em que esse retrato foi tirado,
+        parada no banco de dados sem fazer absolutamente nada.</p>
+
+      <p lang="en">When you walk into your tent after four days away, the server takes that snapshot
+        and advances it four days in one go: the growth, the water it did not get, the weather it
+        stood through, the pests that found it. Then it saves a new snapshot and goes back to doing
+        nothing. A plant somebody <em>is</em> standing next to runs step by step instead, so you can
+        watch it change.</p>
+      <p lang="pt-BR">Quando você entra na sua tenda depois de quatro dias fora, o servidor pega aquele
+        retrato e avança ele quatro dias de uma vez: o crescimento, a água que não veio, o clima que ela
+        aguentou, as pragas que acharam ela. Depois salva um retrato novo e volta a não fazer nada. Uma
+        planta de quem alguém <em>está</em> do lado roda passo a passo, pra você ver mudando.</p>
+
+      <p lang="en">Both paths have to end in the same plant, or the game lies to you. That is the part
+        that costs discipline: the steps are pinned to the game's own clock rather than to when the
+        code happened to run, and the randomness each plant sees is derived from which plant it is and
+        which step this is — so four days computed at once and four days computed one at a time give
+        the same result. It is a property the test suite checks, not a thing I hope is true.</p>
+      <p lang="pt-BR">Os dois caminhos têm que terminar na mesma planta, ou o jogo mente pra você. Essa
+        é a parte que custa disciplina: os passos são presos ao relógio do próprio jogo, e não a quando
+        o código por acaso rodou, e o acaso que cada planta vê é derivado de qual planta ela é e de qual
+        passo é esse — então quatro dias calculados de uma vez e quatro dias calculados um a um dão o
+        mesmo resultado. É uma propriedade que a suíte de testes verifica, não uma coisa que eu torço
+        pra ser verdade.</p>
+
+      <h2 lang="en">The server knows when something interesting happens</h2>
+      <h2 lang="pt-BR">O servidor sabe quando algo interessante acontece</h2>
+
+      <p lang="en">If nothing is running, nothing notices that a plant got thirsty — which is a problem,
+        because being told your plants need you is most of what brings someone back to a game like
+        this.</p>
+      <p lang="pt-BR">Se nada está rodando, nada percebe que uma planta ficou sedenta — o que é um
+        problema, porque ser avisado de que as suas plantas precisam de você é boa parte do que traz
+        alguém de volta pra um jogo desses.</p>
+
+      <p lang="en">So every time a plant is saved, the server also works out the next moment that plant
+        will want something — thirsty, ready to harvest, in trouble — and puts a single reminder in the
+        calendar for exactly then. Nothing polls, nothing scans the database looking for sad plants.
+        The simulation that can tell you the state at any future time can also tell you which future
+        time is worth waking up for.</p>
+      <p lang="pt-BR">Então toda vez que uma planta é salva, o servidor também calcula o próximo momento
+        em que ela vai querer alguma coisa — sede, ponto de colheita, encrenca — e põe um único lembrete
+        na agenda exatamente pra ali. Nada fica varrendo, nada fica vasculhando o banco atrás de plantas
+        tristes. A simulação que sabe te dizer o estado em qualquer momento futuro também sabe dizer
+        qual momento futuro vale a pena acordar.</p>
+
+      <h2 lang="en">The server is the one telling the truth</h2>
+      <h2 lang="pt-BR">Quem diz a verdade é o servidor</h2>
+
+      <p lang="en">The browser never decides anything that matters. It sends what you are trying to do
+        and draws what it is told; the growth, the genetics, the cup scores and the contents of your
+        pockets are all the server's opinion. In a game with competitive seasons, that is not an
+        architectural preference — it is the difference between a championship and a formality.</p>
+      <p lang="pt-BR">O navegador nunca decide nada que importe. Ele manda o que você está tentando
+        fazer e desenha o que mandarem desenhar; o crescimento, a genética, as notas dos campeonatos e o
+        conteúdo dos seus bolsos são todos opinião do servidor. Num jogo com temporadas competitivas,
+        isso não é preferência de arquitetura — é a diferença entre um campeonato e uma formalidade.</p>
+
+      <p lang="en">The rules themselves are written once, in Rust, and the browser runs that same
+        compiled code when it needs to show you a prediction. Not a second implementation in another
+        language that agrees with the first one until the day it quietly does not.</p>
+      <p lang="pt-BR">As regras em si são escritas uma vez, em Rust, e o navegador roda esse mesmo
+        código compilado quando precisa te mostrar uma previsão. Não uma segunda implementação em outra
+        linguagem que concorda com a primeira até o dia em que, caladamente, não concorda mais.</p>
+
+      <h2 lang="en">Where it runs</h2>
+      <h2 lang="pt-BR">Onde ele roda</h2>
+
+      <p lang="en">On my homelab. One server binary and one database file, on a machine in my house,
+        reachable through a tunnel rather than through a port I opened on my router. A hobby project
+        that cannot justify a cloud bill is a useful constraint: it rejects every design where the
+        answer to "what if there are a lot of them" is "rent more machines".</p>
+      <p lang="pt-BR">No meu homelab. Um binário de servidor e um arquivo de banco, numa máquina dentro
+        de casa, acessível por um túnel em vez de por uma porta que eu abri no roteador. Um projeto de
+        hobby que não pode justificar uma conta de nuvem é uma restrição útil: ela rejeita todo desenho
+        em que a resposta pra "e se tiver muitos" é "aluga mais máquinas".</p>
+
+      <p lang="en">You can play it in a browser at <a href="https://weedneighborhood.com">weedneighborhood.com</a>,
+        and there are desktop installers in their
+        <a href="https://github.com/youhide/weed-neighborhood-app/releases">own repository</a> — a thin
+        shell around the same thing, for people who would rather it had an icon. The game's source is
+        private; the idea in this post is the part worth taking anyway.</p>
+      <p lang="pt-BR">Dá pra jogar no navegador em <a href="https://weedneighborhood.com">weedneighborhood.com</a>,
+        e tem instaladores de desktop num <a href="https://github.com/youhide/weed-neighborhood-app/releases">repositório
+        só deles</a> — uma casca fina em volta da mesma coisa, pra quem prefere que tenha um ícone. O
+        código do jogo é privado; a ideia deste post é a parte que vale levar, de qualquer forma.</p>
+
+    </article>
+
+    <nav class="post-nav" aria-label="Post navigation">
+      <a href="../" lang="en">← all posts</a>
+      <a href="../" lang="pt-BR">← todos os posts</a>
+      <a href="../../feed.xml" lang="en">RSS feed →</a>
+      <a href="../../feed.xml" lang="pt-BR">feed RSS →</a>
+    </nav>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__card">
+      <div class="footer__accent"></div>
+      <div class="footer__body">
+        <ul class="social">
+          <li><a href="https://github.com/youhide" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></li>
+          <li><a href="https://gitlab.com/youri" aria-label="GitLab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m23.6 9.6-.03-.086L20.3.9a.851.851 0 0 0-.336-.405.876.876 0 0 0-1 .054.876.876 0 0 0-.29.44l-2.207 6.752H7.535L5.327.99a.858.858 0 0 0-.29-.441.876.876 0 0 0-1-.054.859.859 0 0 0-.336.405L.427 9.51l-.031.085a6.055 6.055 0 0 0 2.008 6.997l.01.009.03.022 4.964 3.72 2.456 1.86 1.496 1.13a1.01 1.01 0 0 0 1.22 0l1.496-1.13 2.456-1.86 4.994-3.742.013-.01a6.057 6.057 0 0 0 2.06-6.99Z"/></svg></a></li>
+          <li><a href="https://linkedin.com/in/yourimattar" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+          <li><a href="https://x.com/_hideout" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a></li>
+          <li><a href="https://twitch.tv/youhide" aria-label="Twitch"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg></a></li>
+          <li><a href="https://postrite.app" aria-label="PostRite"><svg class="icon--stroke" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><ellipse cx="12" cy="12" rx="4" ry="9.5"/><path d="M2.5 12h19"/></svg></a></li>
+        </ul>
+
+        <p class="footer__exit"><span class="prompt__sign">$</span>exit<span class="cursor" aria-hidden="true">█</span></p>
+        <p class="footer__note">
+          <span lang="en">Connection to youhide closed. Always learning, always shipping.</span>
+          <span lang="pt-BR">Conexão com youhide encerrada. Sempre aprendendo, sempre entregando.</span>
+        </p>
+        <p class="footer__meta">Youri T. K. K. Mattar · Londrina, Brasil</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
