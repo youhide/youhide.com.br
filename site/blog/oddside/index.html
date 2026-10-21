@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I never really left Britannia — youHide</title>
+<meta name="description" content="Oddside is a persistent online sandbox inspired by Ultima Online, where a peaceful producer should prosper without ever fighting a player, and where every picture in the design pack says whether it is a concept or the running client.">
+<meta name="author" content="Youri T. K. K. Mattar">
+<meta name="theme-color" content="#282a36">
+<link rel="canonical" href="https://youhide.com.br/blog/oddside/">
+
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2026-10-21">
+<meta property="og:title" content="I never really left Britannia: building Oddside">
+<meta property="og:description" content="A medieval sandbox where skills come from practice, the rules live on the server, and the design document keeps established direction and untested hypothesis in separate columns.">
+<meta property="og:url" content="https://youhide.com.br/blog/oddside/">
+<meta property="og:image" content="https://youhide.com.br/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@_hideout">
+
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="alternate" type="application/rss+xml" title="youHide — blog" href="../../feed.xml">
+<link rel="stylesheet" href="../../css/style.css">
+<script src="../../js/main.js"></script>
+</head>
+<body>
+
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="pt-BR">Pular para o conteúdo</span></a>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__brand" href="../../"><span>~</span>/youhide</a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="../../">./home</a>
+      <a href="../../about/">./about</a>
+      <a href="../../projects/">./projects</a>
+      <a href="../" aria-current="page">./blog</a>
+    </nav>
+    <button class="lang" id="lang-toggle" type="button" aria-label="Mudar para português">
+      <span class="lang__opt" data-lang-opt="en">EN</span>
+      <span class="lang__sep">|</span>
+      <span class="lang__opt" data-lang-opt="pt-BR">PT</span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <section class="term" aria-labelledby="page-title">
+      <div class="term__bar">
+        <span class="dot dot--red"></span>
+        <span class="dot dot--yellow"></span>
+        <span class="dot dot--green"></span>
+        <span class="term__path">youhide@homelab: ~/blog</span>
+      </div>
+      <div class="term__body">
+        <div class="term__main">
+          <p class="prompt"><span class="prompt__sign">$</span>cat oddside.md</p>
+          <h1 class="page__title" id="page-title" lang="en">I never really left Britannia</h1>
+          <h1 class="page__title" lang="pt-BR">Eu nunca saí de Britannia de verdade</h1>
+          <div class="post__meta">
+            <time class="post-date" datetime="2026-10-21">2026-10-21</time>
+            <ul class="post-tags">
+              <li>rust</li><li>gamedev</li><li>design</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="term__accent"></div>
+    </section>
+
+    <article class="section post prose">
+
+      <p lang="en">There is a line in my own timeline that I wrote without noticing what it was
+        confessing: <em>2000, Ultima Online, five years inside it</em>, and then <em>2005, UO stops
+        being a game and becomes a server, I move to the other side</em>. Twenty-one years later I am
+        still on that side of it, and I have stopped pretending that is a coincidence.</p>
+      <p lang="pt-BR">Tem uma linha na minha própria timeline que eu escrevi sem perceber o que ela
+        estava confessando: <em>2000, Ultima Online, cinco anos dentro dele</em>, e depois <em>2005, UO
+        deixa de ser jogo e vira servidor, passo para o outro lado</em>. Vinte e um anos depois eu
+        continuo desse lado, e parei de fingir que isso é coincidência.</p>
+
+      <p lang="en">I am building <strong>Oddside</strong>. It is a persistent online sandbox: a
+        medieval world you live in, work in and make your own, with skills you get by practising them
+        rather than levels and classes, crafting, gathering, trade, housing, exploration, and PvP that
+        has consequences. The design rule I care most about is that a peaceful producer should be able
+        to prosper without ever fighting another player.</p>
+      <p lang="pt-BR">Estou construindo o <strong>Oddside</strong>. É um sandbox online persistente: um
+        mundo medieval para morar, trabalhar e tornar seu, com habilidades que se ganham praticando em
+        vez de níveis e classes, crafting, coleta, comércio, moradia, exploração, e PvP com
+        consequência. A regra de design com que eu mais me importo é que um produtor pacífico consiga
+        prosperar sem nunca brigar com outro jogador.</p>
+
+      <p lang="en">That last sentence is the whole reason the project exists. It is what Ultima Online
+        let you be, and almost nothing since has let you be it again.</p>
+      <p lang="pt-BR">Essa última frase é a razão inteira de o projeto existir. É o que o Ultima Online
+        deixava você ser, e quase nada depois dele deixou de novo.</p>
+
+      <h2 lang="en">The rules live on the server</h2>
+      <h2 lang="pt-BR">As regras moram no servidor</h2>
+
+      <p lang="en">The server is Rust. The client is Godot, and the piece that connects them is also
+        Rust: an extension the client loads, carrying the session and the shared rules. Maps,
+        collision, walking, reach, stamina, items and names are written once, in a crate that knows
+        nothing about rendering, and both sides run that same code.</p>
+      <p lang="pt-BR">O servidor é Rust. O cliente é Godot, e a peça que liga os dois também é Rust:
+        uma extensão que o cliente carrega, levando a sessão e as regras compartilhadas. Mapas,
+        colisão, caminhada, alcance, stamina, itens e nomes são escritos uma vez, num crate que não
+        sabe nada sobre renderização, e os dois lados rodam esse mesmo código.</p>
+
+      <p lang="en">Movement is validated by the server, equipment is the server's opinion, and the
+        global cooldown and the one-action queue belong to the server too. The client is allowed to
+        predict and to draw. It is not allowed to decide.</p>
+      <p lang="pt-BR">A movimentação é validada pelo servidor, o equipamento é opinião do servidor, e o
+        cooldown global e a fila de uma ação só também são do servidor. O cliente pode prever e pode
+        desenhar. Decidir, não pode.</p>
+
+      <p lang="en">If that sounds familiar, it is the same boundary I described for a game about
+        plants a few posts ago. I did not plan to arrive at it twice. It turns out that once you have
+        operated something where the client was trusted, you stop wanting to find out again.</p>
+      <p lang="pt-BR">Se isso soa familiar, é a mesma fronteira que eu descrevi para um jogo sobre
+        plantas alguns posts atrás. Eu não planejei chegar nela duas vezes. Acontece que depois de
+        operar uma coisa em que o cliente era confiável, você perde a vontade de descobrir de novo.</p>
+
+      <p lang="en">For the part that cannot be reasoned about, there are headless bots: a command that
+        walks thirty fake players into town, because a market square is a different problem with
+        thirty people in it than with one.</p>
+      <p lang="pt-BR">Para a parte que não dá para resolver no raciocínio existem bots headless: um
+        comando que põe trinta jogadores falsos andando pela cidade, porque uma praça de mercado é um
+        problema diferente com trinta pessoas dentro dela do que com uma.</p>
+
+      <h2 lang="en">Concept, or actual</h2>
+      <h2 lang="pt-BR">Conceito, ou real</h2>
+
+      <p lang="en">Here is the habit I am most glad I started, and it costs nothing. Every image in the
+        project's documentation is labelled as one of two things: a <em>concept</em>, which is art
+        showing where it is going, or an <em>actual client</em> capture, which is a photograph of the
+        thing running and connected. Never a caption that lets you guess.</p>
+      <p lang="pt-BR">Aqui está o hábito que eu mais me alegro de ter começado, e ele não custa nada.
+        Toda imagem na documentação do projeto é rotulada como uma de duas coisas: um
+        <em>conceito</em>, que é arte mostrando para onde a coisa vai, ou uma captura do
+        <em>cliente real</em>, que é a fotografia daquilo rodando e conectado. Nunca uma legenda que
+        deixe você adivinhar.</p>
+
+      <blockquote lang="en">Concept images illustrate direction. They do not establish shipped
+        features.</blockquote>
+      <blockquote lang="pt-BR">Imagens de conceito ilustram direção. Elas não estabelecem
+        funcionalidades entregues.</blockquote>
+
+      <p lang="en">Alongside them there is a decisions document whose only job is to keep established
+        direction and untested hypothesis in separate columns. A design document that does not do this
+        becomes a sales pitch to its own author within about three months: you read your own plan,
+        your brain files it under "done", and you start building on top of something that was never
+        built.</p>
+      <p lang="pt-BR">Ao lado delas existe um documento de decisões cujo único trabalho é manter
+        direção estabelecida e hipótese não testada em colunas separadas. Um documento de design que
+        não faz isso vira um folheto de vendas para o próprio autor em uns três meses: você lê o seu
+        plano, seu cérebro arquiva aquilo como "pronto", e você começa a construir em cima de uma coisa
+        que nunca foi construída.</p>
+
+      <p lang="en">This is the same instinct as the one that makes me want a postmortem to name a
+        cause. It is cheap to write down what you know versus what you hope, and expensive to find out
+        later which was which.</p>
+      <p lang="pt-BR">É o mesmo instinto que me faz querer que um postmortem aponte uma causa. É barato
+        anotar o que você sabe contra o que você espera, e caro descobrir depois qual era qual.</p>
+
+      <h2 lang="en">What you can actually walk through today</h2>
+      <h2 lang="pt-BR">O que dá para percorrer hoje de verdade</h2>
+
+      <p lang="en">Since I just spent a section praising honesty, here is the status without any.</p>
+      <p lang="pt-BR">Já que eu acabei de gastar uma seção elogiando honestidade, aqui está o status
+        sem nenhuma.</p>
+
+      <ul lang="en">
+        <li><strong>One town.</strong> Brindlecross, the market town, with its residents, wildlife and
+          the approach trail. It is the only map you can stand in.</li>
+        <li><strong>The city the game is named after does not exist yet.</strong> Vila Antena, the
+          contemporary dimension on the other side of the gates, was removed as a playable map;
+          characters who were saved there now log in at Brindlecross carrying everything they had. It
+          is a design for later.</li>
+        <li><strong>The kit is a placeholder wearing a costume.</strong> Sixteen item kinds, four
+          skills and the first two special actions are the prototype's, renamed in medieval language
+          until the real medieval items, trades and weapons replace them.</li>
+        <li><strong>Balance is not balance yet.</strong> The combat pilot is in the client and
+          playable; the numbers behind it, the wider economy and most of the action interface are
+          proposals waiting to be implemented and tested.</li>
+      </ul>
+      <ul lang="pt-BR">
+        <li><strong>Uma cidade.</strong> Brindlecross, a cidade-mercado, com os moradores, os bichos e
+          a trilha de chegada. É o único mapa em que dá para pisar.</li>
+        <li><strong>A cidade que dá nome ao jogo ainda não existe.</strong> Vila Antena, a dimensão
+          contemporânea do outro lado dos portais, foi removida como mapa jogável; personagens que
+          estavam salvos lá agora entram em Brindlecross carregando tudo o que tinham. É um desenho
+          para depois.</li>
+        <li><strong>O kit é um provisório fantasiado.</strong> Dezesseis tipos de item, quatro
+          habilidades e as duas primeiras ações especiais são as do protótipo, renomeadas em linguagem
+          medieval até os itens, ofícios e armas medievais de verdade substituírem elas.</li>
+        <li><strong>Balanceamento ainda não é balanceamento.</strong> O piloto de combate está no
+          cliente e dá para jogar; os números por trás dele, a economia maior e boa parte da interface
+          de ações são propostas esperando implementação e teste.</li>
+      </ul>
+
+      <p lang="en">The world map window is the part I keep opening for no reason. It draws Brindlecross
+        from the game's own data onto parchment, in your language, with your arrow on it and the ground
+        you have not walked yet faded out, and a padlock on every place that is still only a plan. The
+        map is honest too.</p>
+      <p lang="pt-BR">A janela do mapa-múndi é a parte que eu fico abrindo sem motivo. Ela desenha
+        Brindlecross a partir dos dados do próprio jogo sobre pergaminho, no seu idioma, com a sua seta
+        em cima e o chão que você ainda não andou apagado, e um cadeado em todo lugar que ainda é só
+        plano. O mapa também é honesto.</p>
+
+      <h2 lang="en">Why this one, after all the others</h2>
+      <h2 lang="pt-BR">Por que esse, depois de todos os outros</h2>
+
+      <p lang="en">I have written a UO-compatible server engine before. I have spent most of that time making
+        other people's systems stay up. Oddside is the first time I am building the world instead of
+        the thing underneath the world, and it is strange to be the one deciding what a stamina bar
+        means rather than why the node holding it ran out of memory.</p>
+      <p lang="pt-BR">Eu já escrevi uma engine de servidor compatível com UO. Passei a maior parte desse tempo
+        fazendo os sistemas dos outros ficarem de pé. O Oddside é a primeira vez que eu construo o
+        mundo em vez da coisa embaixo do mundo, e é estranho ser quem decide o que uma barra de stamina
+        significa em vez de por que o nó que a segurava ficou sem memória.</p>
+
+      <p lang="en">It is in active development and it is not open for you to play yet. What there is
+        lives at <a href="https://oddside.youhide.com.br">oddside.youhide.com.br</a>; the source is
+        private. When Brindlecross has a second town to trade with, that will be worth its own
+        post.</p>
+      <p lang="pt-BR">Ele está em desenvolvimento ativo e ainda não está aberto para você jogar. O que
+        existe mora em <a href="https://oddside.youhide.com.br">oddside.youhide.com.br</a>; o código é
+        privado. Quando Brindlecross tiver uma segunda cidade com quem comerciar, isso vai merecer um
+        post próprio.</p>
+
+    </article>
+
+    <nav class="post-nav" aria-label="Post navigation">
+      <a href="../" lang="en">← all posts</a>
+      <a href="../" lang="pt-BR">← todos os posts</a>
+      <a href="../../feed.xml" lang="en">RSS feed →</a>
+      <a href="../../feed.xml" lang="pt-BR">feed RSS →</a>
+    </nav>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__card">
+      <div class="footer__accent"></div>
+      <div class="footer__body">
+        <ul class="social">
+          <li><a href="https://github.com/youhide" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></li>
+          <li><a href="https://gitlab.com/youri" aria-label="GitLab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m23.6 9.6-.03-.086L20.3.9a.851.851 0 0 0-.336-.405.876.876 0 0 0-1 .054.876.876 0 0 0-.29.44l-2.207 6.752H7.535L5.327.99a.858.858 0 0 0-.29-.441.876.876 0 0 0-1-.054.859.859 0 0 0-.336.405L.427 9.51l-.031.085a6.055 6.055 0 0 0 2.008 6.997l.01.009.03.022 4.964 3.72 2.456 1.86 1.496 1.13a1.01 1.01 0 0 0 1.22 0l1.496-1.13 2.456-1.86 4.994-3.742.013-.01a6.057 6.057 0 0 0 2.06-6.99Z"/></svg></a></li>
+          <li><a href="https://linkedin.com/in/yourimattar" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+          <li><a href="https://x.com/_hideout" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a></li>
+          <li><a href="https://twitch.tv/youhide" aria-label="Twitch"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg></a></li>
+          <li><a href="https://postrite.app" aria-label="PostRite"><svg class="icon--stroke" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><ellipse cx="12" cy="12" rx="4" ry="9.5"/><path d="M2.5 12h19"/></svg></a></li>
+        </ul>
+
+        <p class="footer__exit"><span class="prompt__sign">$</span>exit<span class="cursor" aria-hidden="true">█</span></p>
+        <p class="footer__note">
+          <span lang="en">Connection to youhide closed. Always learning, always shipping.</span>
+          <span lang="pt-BR">Conexão com youhide encerrada. Sempre aprendendo, sempre entregando.</span>
+        </p>
+        <p class="footer__meta">Youri T. K. K. Mattar · Londrina, Brasil</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

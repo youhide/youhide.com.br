@@ -10,10 +10,21 @@
     <webMaster>youri@youhide.com.br (Youri T. K. K. Mattar)</webMaster>
 
     <item>
+      <title>I never really left Britannia: building Oddside</title>
+      <link>https://youhide.com.br/blog/oddside/</link>
+      <guid isPermaLink="true">https://youhide.com.br/blog/oddside/</guid>
+      <pubDate>Wed, 21 Oct 2026 09:30:00 -0300</pubDate>
+      <category>rust</category>
+      <category>gamedev</category>
+      <category>design</category>
+      <description>Oddside is a persistent online sandbox inspired by Ultima Online: a medieval world with skills you get by practising them rather than levels and classes, crafting, trade, housing and consequential PvP, built so that a peaceful producer can prosper without ever fighting another player. A Rust server, a Godot client that loads the shared rules as a Rust extension, movement and equipment the server decides, and a design pack in which every image is labelled either a concept or a capture of the running client.</description>
+    </item>
+
+    <item>
       <title>Weather is a function, not a table: building Weed Neighborhood</title>
       <link>https://youhide.com.br/blog/weed-neighborhood/</link>
       <guid isPermaLink="true">https://youhide.com.br/blog/weed-neighborhood/</guid>
-      <pubDate>Wed, 21 Oct 2026 09:30:00 -0300</pubDate>
+      <pubDate>Sun, 11 Oct 2026 09:30:00 -0300</pubDate>
       <category>rust</category>
       <category>gamedev</category>
       <category>design</category>
