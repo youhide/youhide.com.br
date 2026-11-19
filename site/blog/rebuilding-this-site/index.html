@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Deleting the build step — youHide</title>
+<title>Deleting the build step: this site is hand-written HTML again — youHide</title>
 <meta name="description" content="Two pages of content were served by Hugo, a theme pinned to a 2019 commit and an FTP deploy action pinned to @master. Why I replaced all of it with hand-written HTML.">
 <meta name="author" content="Youri T. K. K. Mattar">
 <meta name="theme-color" content="#282a36">
@@ -12,7 +12,7 @@
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2026-08-17">
 <meta property="og:title" content="Deleting the build step: this site is hand-written HTML again">
-<meta property="og:description" content="A static site generator, a vendored theme and an FTP deploy — for two pages. Here is what came out and what went in.">
+<meta property="og:description" content="A static site generator, a vendored theme and an FTP deploy, for two pages. Here is what came out and what went in.">
 <meta property="og:url" content="https://youhide.com.br/blog/rebuilding-this-site/">
 <meta property="og:image" content="https://youhide.com.br/img/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -85,10 +85,10 @@
         usando uma action de terceiro travada numa ref mutável <code>@master</code>.</p>
 
       <p lang="en">None of that was a problem, exactly. It worked. It had worked for years. But I kept
-        opening the repo, remembering how it was wired, and closing it again — which is a slow way of
+        opening the repo, remembering how it was wired, and closing it again, which is a slow way of
         saying I had stopped writing anything.</p>
       <p lang="pt-BR">Nada disso era exatamente um problema. Funcionava. Funcionou por anos. Mas eu
-        abria o repositório, lembrava como aquilo era ligado, e fechava de novo — que é um jeito lento
+        abria o repositório, lembrava como aquilo era ligado, e fechava de novo, o que é um jeito comprido
         de dizer que eu tinha parado de escrever.</p>
 
       <h2 lang="en">What the overhead actually was</h2>
@@ -136,10 +136,10 @@
 assets/        source files, NOT published</code></pre>
 
       <p lang="en">Preview is <code>python3 -m http.server 8000 --directory site</code>. The URL
-        structure is identical to production because there is no transformation between them — what
-        is in the folder is what is on the domain.</p>
+        structure is identical to production because there is no transformation between them: what is
+        in the folder is what is on the domain.</p>
       <p lang="pt-BR">O preview é <code>python3 -m http.server 8000 --directory site</code>. A estrutura
-        de URL é idêntica à de produção porque não existe transformação entre as duas — o que está na
+        de URL é idêntica à de produção porque não existe transformação entre as duas: o que está na
         pasta é o que está no domínio.</p>
 
       <h2 lang="en">Bilingual without a pipeline</h2>
@@ -155,12 +155,12 @@ html[data-lang="pt-BR"] [lang="en"] { display: none !important; }</code></pre>
 
       <p lang="en">A short script flips <code>data-lang</code> on <code>&lt;html&gt;</code> and stores
         the choice. It is loaded synchronously in <code>&lt;head&gt;</code>, so the right language is
-        set before the body paints — no flash of the wrong one. With JavaScript disabled the page keeps
+        set before the body paints, with no flash of the wrong one. With JavaScript disabled the page keeps
         the language hardcoded in the file and still renders correctly. The cost is real: every
         paragraph is written twice, and this post is no exception.</p>
       <p lang="pt-BR">Um script curto troca o <code>data-lang</code> no <code>&lt;html&gt;</code> e
         guarda a escolha. Ele é carregado de forma síncrona no <code>&lt;head&gt;</code>, então o idioma
-        certo é definido antes do body pintar — sem flash do idioma errado. Com JavaScript desligado a
+        certo é definido antes do body pintar, sem flash do idioma errado. Com JavaScript desligado a
         página mantém o idioma fixo no arquivo e renderiza normalmente. O custo é real: cada parágrafo
         é escrito duas vezes, e este post não é exceção.</p>
 
@@ -170,21 +170,21 @@ html[data-lang="pt-BR"] [lang="en"] { display: none !important; }</code></pre>
       <p lang="en">System monospace stack, inline SVG icons, no CDN, no analytics, no font service. The
         page loads from one origin and asks nobody else for permission to finish rendering. This is the
         part I would keep even if I went back to a generator.</p>
-      <p lang="pt-BR">Stack de monoespaçada do sistema, ícones SVG inline, sem CDN, sem analytics, sem
+      <p lang="pt-BR">Fonte monoespaçada do sistema, ícones SVG inline, sem CDN, sem analytics, sem
         serviço de fontes. A página carrega de uma origem só e não pede permissão pra mais ninguém pra
         terminar de renderizar. Essa é a parte que eu manteria mesmo se voltasse pra um gerador.</p>
 
       <h2 lang="en">What I gave up</h2>
-      <h2 lang="pt-BR">O que eu abri mão</h2>
+      <h2 lang="pt-BR">Do que eu abri mão</h2>
 
       <p lang="en">Honestly: this does not scale, and I know exactly where the wall is. Every new post
         is a new folder with a full HTML document in it, and the index, the sitemap and the RSS feed
         are updated by hand. At twenty or thirty posts that becomes the kind of repetitive work I write
-        tools to avoid — and when it does, I will write the tool, and it will be mine.</p>
-      <p lang="pt-BR">Sinceramente: isso não escala, e eu sei exatamente onde está a parede. Cada post
+        tools to avoid, and when it does, I will write the tool, and it will be mine.</p>
+      <p lang="pt-BR">Sinceramente: isso não escala, e eu sei exatamente onde fica o limite. Cada post
         novo é uma pasta nova com um documento HTML inteiro dentro, e o índice, o sitemap e o feed RSS
         são atualizados na mão. Em vinte ou trinta posts isso vira o tipo de trabalho repetitivo que eu
-        escrevo ferramentas pra evitar — e quando virar, eu escrevo a ferramenta, e ela vai ser minha.</p>
+        escrevo ferramentas pra evitar, e quando virar, eu escrevo a ferramenta, e ela vai ser minha.</p>
 
       <p lang="en">Until then, the whole site is something I can read top to bottom in one sitting. For
         a personal site that is worth more than any feature I removed.</p>

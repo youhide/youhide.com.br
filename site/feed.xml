@@ -4,7 +4,7 @@
     <title>youHide — blog</title>
     <link>https://youhide.com.br/blog/</link>
     <atom:link href="https://youhide.com.br/feed.xml" rel="self" type="application/rss+xml"/>
-    <description>Notes from the homelab and from production — infrastructure, Go and Rust, and the things that broke on the way. Posts are bilingual EN / PT-BR; feed summaries are in English.</description>
+    <description>Notes from the homelab and from production: infrastructure, Go and Rust, and the things that broke on the way. Posts are bilingual EN / PT-BR; feed summaries are in English.</description>
     <language>en</language>
     <managingEditor>youri@youhide.com.br (Youri T. K. K. Mattar)</managingEditor>
     <webMaster>youri@youhide.com.br (Youri T. K. K. Mattar)</webMaster>
@@ -18,17 +18,6 @@
       <category>gamedev</category>
       <category>design</category>
       <description>Oddside is a persistent online sandbox inspired by Ultima Online: a medieval world with skills you get by practising them rather than levels and classes, crafting, trade, housing and consequential PvP, built so that a peaceful producer can prosper without ever fighting another player. A Rust server, a Godot client that loads the shared rules as a Rust extension, movement and equipment the server decides, and a design pack in which every image is labelled either a concept or a capture of the running client.</description>
-    </item>
-
-    <item>
-      <title>Weather is a function, not a table: building Weed Neighborhood</title>
-      <link>https://youhide.com.br/blog/weed-neighborhood/</link>
-      <guid isPermaLink="true">https://youhide.com.br/blog/weed-neighborhood/</guid>
-      <pubDate>Sun, 11 Oct 2026 09:30:00 -0300</pubDate>
-      <category>rust</category>
-      <category>gamedev</category>
-      <category>design</category>
-      <description>Weed Neighborhood is a cozy multiplayer game about growing plants, breeding strains and living in a shared neighborhood, and its plants keep growing while players are away. They do it without being simulated: the weather is derived from a seed and a moment rather than stored, a plant nobody is near is just a snapshot and the time it was taken, and the server schedules the single future moment that plant will need attention. One binary and one database file, on a machine at home.</description>
     </item>
 
     <item>
@@ -50,7 +39,7 @@
       <category>security</category>
       <category>cli</category>
       <category>design</category>
-      <description>hidePass is a password manager in Rust that does not own its format: it reads and writes the pass store you already have, with the same gpg keys and the same git commits, and CI cross-checks it against the real pass on every push. One-time codes, EFF diceware passphrases, named fields and a store audit are built in rather than installed — and copied secrets are marked concealed and transient, so clipboard managers decline to record them.</description>
+      <description>hidePass is a password manager in Rust that does not own its format: it reads and writes the pass store you already have, with the same gpg keys and the same git commits, and CI cross-checks it against the real pass on every push. One-time codes, EFF diceware passphrases, named fields and a store audit are built in rather than installed, and copied secrets are marked concealed and transient, so clipboard managers decline to record them.</description>
     </item>
 
     <item>
@@ -61,7 +50,7 @@
       <category>rust</category>
       <category>linux</category>
       <category>design</category>
-      <description>PID 1 is the first program the kernel starts and the only process with no supervisor above it: if it exits, the kernel panics. oxinit is a service manager and PID 1 for Linux written in Rust — no panic, unsafe quarantined in one file and enforced by the build, one epoll loop on one thread with no async runtime, TOML units where requires and after are separate statements, and a non-goals list that does most of the design work.</description>
+      <description>PID 1 is the first program the kernel starts and the only process with no supervisor above it: if it exits, the kernel panics. oxinit is a service manager and PID 1 for Linux written in Rust: no panic, unsafe quarantined in one file and enforced by the build, one epoll loop on one thread with no async runtime, TOML units where requires and after are separate statements, and a non-goals list that does most of the design work.</description>
     </item>
 
     <item>
@@ -73,7 +62,7 @@
       <category>design</category>
       <category>meta</category>
       <category>rust</category>
-      <description>Eight years in the games industry, 2017 to 2025, spent on the infrastructure side of studios where the engine was Unity and nobody in the room had chosen it. The version nobody upgrades, logic that cannot be tested outside the editor, an iteration loop set by the tool, and a licence that was never mine to control — and what I ask of a tool now.</description>
+      <description>Eight years in the games industry, 2017 to 2025, spent on the infrastructure side of studios where the engine was Unity and nobody in the room had chosen it. The version nobody upgrades, logic that cannot be tested outside the editor, an iteration loop set by the tool, and a licence that was never mine to control, and what I ask of a tool now.</description>
     </item>
 
     <item>
@@ -84,7 +73,7 @@
       <category>rust</category>
       <category>gamedev</category>
       <category>design</category>
-      <description>Greenvale is a real-time farming simulation in Rust where soil depletes, metal rusts and pests evolve — and every loss is traceable to a cause. What happens when a platform engineer designs a game: map overlays as dashboards, the post-harvest report as a postmortem, and determinism as test infrastructure.</description>
+      <description>Greenvale is a real-time farming simulation in Rust where soil depletes, metal rusts and pests evolve, and every loss is traceable to a cause. What happens when a platform engineer designs a game: map overlays as dashboards, the post-harvest report as a postmortem, and determinism as test infrastructure.</description>
     </item>
 
     <item>

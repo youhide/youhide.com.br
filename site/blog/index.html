@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>blog — youHide</title>
-<meta name="description" content="Notes from the homelab and from production — infrastructure, Go and Rust, and the things that broke on the way. Youri Mattar.">
+<title>Blog: infrastructure, Linux and Rust notes by Youri Mattar — youHide</title>
+<meta name="description" content="Notes by Youri Mattar from the homelab and from production: infrastructure, Linux, Go and Rust, and the things that broke on the way.">
 <meta name="author" content="Youri T. K. K. Mattar">
 <meta name="theme-color" content="#282a36">
 <link rel="canonical" href="https://youhide.com.br/blog/">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="blog — youHide">
+<meta property="og:title" content="Blog: infrastructure, Linux and Rust notes by Youri Mattar — youHide">
 <meta property="og:description" content="Notes from the homelab and from production. Infrastructure, Go and Rust.">
 <meta property="og:url" content="https://youhide.com.br/blog/">
 <meta property="og:image" content="https://youhide.com.br/img/og.png">
@@ -61,8 +61,8 @@
           <p class="prompt"><span class="prompt__sign">$</span>ls -lt ~/blog</p>
           <h1 class="page__title" id="page-title">blog</h1>
           <p class="hero__note">
-            <span lang="en"># notes from the homelab and from production — mostly what broke first</span>
-            <span lang="pt-BR"># anotações do homelab e da produção — quase sempre o que quebrou primeiro</span>
+            <span lang="en"># notes from the homelab and from production, mostly what broke first</span>
+            <span lang="pt-BR"># anotações do homelab e da produção, quase sempre o que quebrou primeiro</span>
           </p>
         </div>
       </div>
@@ -84,6 +84,9 @@
         <button class="filter" type="button" data-filter="security" aria-pressed="false">security</button>
         <button class="filter" type="button" data-filter="cli" aria-pressed="false">cli</button>
         <button class="filter" type="button" data-filter="kubernetes" aria-pressed="false">kubernetes</button>
+
+       <button class="filter" type="button" data-filter="html" aria-pressed="false">html</button>
+        <button class="filter" type="button" data-filter="github-actions" aria-pressed="false">github-actions</button>
       </div>
 
       <ul class="posts">
@@ -109,27 +112,6 @@
           </a>
         </li>
 
-        <li data-tags="rust gamedev design">
-          <a class="post-item" href="weed-neighborhood/">
-            <div class="post-item__top">
-              <time class="post-date" datetime="2026-10-11">2026-10-11</time>
-              <ul class="post-tags">
-                <li>rust</li><li>gamedev</li><li>design</li>
-              </ul>
-            </div>
-            <h3 class="post-item__title" lang="en">Weather is a function, not a table: building Weed Neighborhood</h3>
-            <h3 class="post-item__title" lang="pt-BR">O clima é uma função, não uma tabela: construindo o Weed Neighborhood</h3>
-            <p class="post-item__excerpt" lang="en">A multiplayer growing game whose plants keep growing
-              while you are asleep — without a server that simulates them. The weather is never written
-              down, a plant nobody stands near is only a snapshot and a timestamp, and the server knows
-              in advance the one moment it is worth waking up for.</p>
-            <p class="post-item__excerpt" lang="pt-BR">Um jogo multiplayer de cultivo cujas plantas
-              continuam crescendo enquanto você dorme — sem um servidor que as simule. O clima nunca é
-              anotado, uma planta de quem ninguém está perto é só um retrato e um horário, e o servidor
-              sabe de antemão o único momento que vale a pena acordar.</p>
-          </a>
-        </li>
-
         <li data-tags="design meta">
           <a class="post-item" href="homebrew-tap/">
             <div class="post-item__top">
@@ -143,12 +125,12 @@
             <p class="post-item__excerpt" lang="en">Five projects used to commit their formulas into my
               tap, which meant five copies of a token that could rewrite the thing installing software
               on other people's machines. Now the tap reads each project's latest release on a cron and
-              regenerates its own formulas — one table per tool, and no secret to leak because there is
+              regenerates its own formulas. One table per tool, and no secret to leak because there is
               no secret.</p>
             <p class="post-item__excerpt" lang="pt-BR">Cinco projetos commitavam as próprias formulas
               no meu tap, o que significava cinco cópias de um token capaz de reescrever a coisa que
               instala software na máquina de outras pessoas. Agora o tap lê o último release de cada
-              projeto num cron e regenera as próprias formulas — uma tabela por ferramenta, e nenhum
+              projeto num cron e regenera as próprias formulas. Uma tabela por ferramenta, e nenhum
               secret pra vazar porque não existe secret.</p>
           </a>
         </li>
@@ -163,12 +145,12 @@
             </div>
             <h3 class="post-item__title" lang="en">The same store, the same keys: a pass-compatible password manager in Rust</h3>
             <h3 class="post-item__title" lang="pt-BR">A mesma store, as mesmas chaves: um gerenciador de senhas compatível com o pass, em Rust</h3>
-            <p class="post-item__excerpt" lang="en">hidePass does not own the format — it reads and
+            <p class="post-item__excerpt" lang="en">hidePass does not own the format: it reads and
               writes the <code>~/.password-store</code> you already have, with the same gpg keys and the
               same git history, and CI cross-checks that against the real pass on every push. Built-in
               one-time codes and passphrases, and copied secrets that clipboard managers refuse to
               record.</p>
-            <p class="post-item__excerpt" lang="pt-BR">O hidePass não é dono do formato — ele lê e
+            <p class="post-item__excerpt" lang="pt-BR">O hidePass não é dono do formato: ele lê e
               escreve o <code>~/.password-store</code> que você já tem, com as mesmas chaves gpg e o
               mesmo histórico git, e o CI faz cross-check disso contra o pass de verdade a cada push.
               Códigos de uso único e passphrases embutidos, e segredos copiados que os gerenciadores de
@@ -187,12 +169,12 @@
             <h3 class="post-item__title" lang="en">Nothing above it to restart it: writing an init for Linux in Rust</h3>
             <h3 class="post-item__title" lang="pt-BR">Não existe nada acima dele pra reiniciar: escrevendo um init para Linux em Rust</h3>
             <p class="post-item__excerpt" lang="en">PID 1 is the one process on the machine with no
-              supervisor above it — if it exits, the kernel panics. oxinit is a service manager and
+              supervisor above it: if it exits, the kernel panics. oxinit is a service manager and
               PID 1 for Linux in Rust: no panic, unsafe quarantined in a single file, one epoll loop on
               one thread, TOML units where "needs it running" and "starts after it" are different
               sentences, and a non-goals list doing most of the work.</p>
             <p class="post-item__excerpt" lang="pt-BR">O PID 1 é o único processo da máquina sem
-              supervisor acima dele — se ele sai, o kernel entra em panic. O oxinit é um gerenciador de
+              supervisor acima dele: se ele sai, o kernel entra em panic. O oxinit é um gerenciador de
               serviços e PID 1 para Linux em Rust: sem panic, unsafe isolado num arquivo só, um loop de
               epoll numa thread, units TOML onde "precisa dele rodando" e "inicia depois dele" são
               frases diferentes, e uma lista de não-objetivos fazendo a maior parte do trabalho.</p>
@@ -212,11 +194,11 @@
             <p class="post-item__excerpt" lang="en">Eight years, 2017 to 2025, from the infrastructure
               side of studios: build pipelines, CI, and the technical decisions a team then lives with
               for years. The engine was always Unity, and nobody in the room had chosen it. The four
-              ways that reached my side of the wall — and the criteria I pick tools by now.</p>
+              ways that reached my side of the wall, and the criteria I pick tools by now.</p>
             <p class="post-item__excerpt" lang="pt-BR">Oito anos, de 2017 a 2025, pelo lado da
               infraestrutura dos estúdios: pipeline de build, CI e as decisões técnicas com as quais um
               time depois convive por anos. A engine era sempre Unity, e ninguém na sala tinha
-              escolhido. As quatro maneiras pelas quais isso chegava do meu lado do muro — e os
+              escolhido. As quatro maneiras pelas quais isso chegava do meu lado do muro, e os
               critérios pelos quais eu escolho ferramenta hoje.</p>
           </a>
         </li>
@@ -232,11 +214,11 @@
             <h3 class="post-item__title" lang="en">Nothing decays in secret: building Greenvale</h3>
             <h3 class="post-item__title" lang="pt-BR">Nada apodrece em segredo: construindo o Greenvale</h3>
             <p class="post-item__excerpt" lang="en">A farming simulation in Rust where soil depletes, metal
-              rusts and pests evolve — and every loss is traceable to a cause. What happens when you design
+              rusts and pests evolve, and every loss is traceable to a cause. What happens when you design
               a game with the instincts of a platform engineer: overlays as dashboards, the harvest report
               as a postmortem, and determinism as test infrastructure.</p>
             <p class="post-item__excerpt" lang="pt-BR">Um simulador de fazenda em Rust onde o solo se esgota,
-              o metal enferruja e as pragas evoluem — e toda perda é rastreável até uma causa. O que acontece
+              o metal enferruja e as pragas evoluem, e toda perda tem causa rastreável. O que acontece
               quando você projeta um jogo com os instintos de um platform engineer: overlays como dashboards,
               o relatório de colheita como postmortem, e determinismo como infraestrutura de teste.</p>
           </a>
@@ -263,8 +245,8 @@
         </li>
 
         <li class="posts__empty" id="posts-empty" hidden>
-          <span lang="en"># no posts with that tag — yet</span>
-          <span lang="pt-BR"># nenhum post com essa tag — ainda</span>
+          <span lang="en"># no posts with that tag yet</span>
+          <span lang="pt-BR"># nenhum post com essa tag ainda</span>
         </li>
 
       </ul>

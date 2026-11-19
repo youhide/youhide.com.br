@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A tap that pulls — youHide</title>
+<title>A tap that pulls: a Homebrew tap nothing pushes to — youHide</title>
 <meta name="description" content="A Homebrew tap that nothing pushes to: it reads each project's latest GitHub release on a cron and regenerates its own formulas, so no project needs a write token for the thing that ships it.">
 <meta name="author" content="Youri T. K. K. Mattar">
 <meta name="theme-color" content="#282a36">
@@ -94,9 +94,9 @@ brew install youhide/tap/oxinit     # Linux only</pre>
       <p lang="en">The normal arrangement is that each project pushes. A project cuts a release, and
         the same workflow that built the binaries then commits an updated formula into the tap. To
         write a commit into <em>another</em> repository, that workflow needs a token with write access
-        to it — and the token Actions hands you is scoped to the repository it runs in, so this means a
+        to it, and the token Actions hands you is scoped to the repository it runs in, so this means a
         personal access token, stored as a secret, in every project that ships through the tap.</p>
-      <p lang="pt-BR">O arranjo normal é que cada projeto empurra. O projeto corta um release, e o
+      <p lang="pt-BR">O arranjo normal é que cada projeto empurra. O projeto solta um release, e o
         mesmo workflow que compilou os binários faz um commit com a formula atualizada dentro do tap.
         Para escrever um commit em <em>outro</em> repositório, esse workflow precisa de um token com
         acesso de escrita a ele, e o token que o Actions te entrega é escopado ao repositório onde
@@ -104,8 +104,8 @@ brew install youhide/tap/oxinit     # Linux only</pre>
         distribui pelo tap.</p>
 
       <p lang="en">Five projects, five copies of one credential, and what that credential can do is
-        rewrite the thing that installs software on other people's machines. None of this is unusual —
-        it is how most taps are wired. It just stopped sitting well with me that a leaked secret in a
+        rewrite the thing that installs software on other people's machines. None of this is unusual. It
+        is how most taps are wired. It just stopped sitting well with me that a leaked secret in a
         side project had "replace the binary everyone brew-installs" inside its blast radius.</p>
       <p lang="pt-BR">Cinco projetos, cinco cópias de uma credencial, e o que essa credencial pode
         fazer é reescrever a coisa que instala software na máquina de outras pessoas. Nada disso é
@@ -187,10 +187,10 @@ linux_intel = "oxinit-{tag}-x86_64-linux-musl.tar.gz"</pre>
       <h2 lang="pt-BR">O gate é a ausência de uma chave</h2>
 
       <p lang="en">oxinit is Linux-only, and nothing in that table says so. It is Linux-only because
-        there is no <code>darwin_arm</code> and no <code>darwin_intel</code> key — the platforms a
+        there is no <code>darwin_arm</code> and no <code>darwin_intel</code> key: the platforms a
         formula offers are exactly the platforms it was told where to find.</p>
       <p lang="pt-BR">O oxinit é Linux-only, e nada naquela tabela diz isso. Ele é Linux-only porque
-        não existe chave <code>darwin_arm</code> nem <code>darwin_intel</code> — as plataformas que uma
+        não existe chave <code>darwin_arm</code> nem <code>darwin_intel</code>: as plataformas que uma
         formula oferece são exatamente as plataformas para as quais alguém disse onde procurar.</p>
 
       <p lang="en">I like that more than a <code>linux_only = true</code> flag, because you cannot
@@ -237,7 +237,7 @@ linux_intel = "oxinit-{tag}-x86_64-linux-musl.tar.gz"</pre>
         ser chato nos dias ruins, então três das suas decisões são sobre falha, não sobre sucesso:</p>
 
       <ul lang="en">
-        <li>The commit step runs <code>if: !cancelled()</code>, on purpose — one project with a broken
+        <li>The commit step runs <code>if: !cancelled()</code>, on purpose: one project with a broken
           release fails its own formula and does not hold back the four that are fine.</li>
         <li>It checks <code>git diff --cached --quiet</code> before committing, so an hour in which
           nothing was released produces no commit at all rather than an empty one.</li>
@@ -245,7 +245,7 @@ linux_intel = "oxinit-{tag}-x86_64-linux-musl.tar.gz"</pre>
           both be rewriting <code>Formula/</code> at the same time.</li>
       </ul>
       <ul lang="pt-BR">
-        <li>O passo de commit roda com <code>if: !cancelled()</code>, de propósito — um projeto com
+        <li>O passo de commit roda com <code>if: !cancelled()</code>, de propósito: um projeto com
           release quebrado falha a própria formula e não segura as outras quatro que estão bem.</li>
         <li>Ele checa <code>git diff --cached --quiet</code> antes de commitar, então uma hora em que
           nada foi lançado não produz commit nenhum, em vez de um commit vazio.</li>
@@ -255,7 +255,7 @@ linux_intel = "oxinit-{tag}-x86_64-linux-musl.tar.gz"</pre>
 
       <p lang="en">What I gave up is immediacy: a release is installable within the hour instead of
         within the minute. For a tap that distributes my own command-line tools, an hour is not a cost
-        I can bring myself to care about — and <code>workflow_dispatch</code> is there for the days I
+        I can bring myself to care about, and <code>workflow_dispatch</code> is there for the days I
         do.</p>
       <p lang="pt-BR">Abri mão de imediatismo: um release fica instalável dentro de uma hora em vez de
         dentro de um minuto. Para um tap que distribui as minhas próprias ferramentas de

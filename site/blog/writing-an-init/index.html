@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nothing above it to restart it — youHide</title>
+<title>Nothing above it to restart it: writing an init for Linux in Rust — youHide</title>
 <meta name="description" content="oxinit is a service manager and PID 1 for Linux written in Rust: no panic, unsafe quarantined in one file, one epoll loop on one thread, and TOML units that say what they mean.">
 <meta name="author" content="Youri T. K. K. Mattar">
 <meta name="theme-color" content="#282a36">
@@ -12,7 +12,7 @@
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2026-09-04">
 <meta property="og:title" content="Nothing above it to restart it: writing an init for Linux in Rust">
-<meta property="og:description" content="PID 1 is the one process with no supervisor above it. oxinit is a service manager and PID 1 for Linux in Rust — what it refuses to do, and why the compiler is the one enforcing it.">
+<meta property="og:description" content="PID 1 is the one process with no supervisor above it. oxinit is a service manager and PID 1 for Linux in Rust: what it refuses to do, and why the compiler is the one enforcing it.">
 <meta property="og:url" content="https://youhide.com.br/blog/writing-an-init/">
 <meta property="og:image" content="https://youhide.com.br/img/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -75,20 +75,20 @@
 
     <article class="section post prose">
 
-      <p lang="en">This one started as an itch. I wanted to build something for Linux — not for a
-        cluster, not for work, just for Linux — so I went looking for the smallest piece of the system
+      <p lang="en">This one started as an itch. I wanted to build something for Linux. Not for a cluster,
+        not for work, just for Linux. So I went looking for the smallest piece of the system
         I did not understand all the way down. I ended up writing an init.</p>
-      <p lang="pt-BR">Este aqui começou como uma coceira. Eu queria construir alguma coisa pro Linux —
-        não pra um cluster, não pro trabalho, só pro Linux — então fui procurar a menor peça do sistema
+      <p lang="pt-BR">Este aqui começou de uma cisma. Eu queria construir alguma coisa pro Linux. Não
+        pra um cluster, não pro trabalho, só pro Linux. Então fui procurar a menor peça do sistema
         que eu não entendia até o fundo. Acabei escrevendo um init.</p>
 
       <p lang="en">It is called <strong>oxinit</strong>: a service manager and PID 1, written in Rust,
         dual-licensed MIT or Apache-2.0, and honestly labelled pre-alpha. First commit on 8 August
-        2026, <code>v0.1.0</code> tagged on the 11th. Four days — which is not a boast about speed. An
+        2026, <code>v0.1.0</code> tagged on the 11th. Four days, which is not a boast about speed. An
         init is a small program with an enormous blast radius, and most of those four days went into
         deciding what it would refuse to do.</p>
       <p lang="pt-BR">Ele se chama <strong>oxinit</strong>: um gerenciador de serviços e PID 1, escrito
-        em Rust, com licença dupla MIT ou Apache-2.0, e honestamente marcado como pre-alpha. Primeiro
+        em Rust, com licença dupla MIT ou Apache-2.0, e marcado como pre-alpha, que é o que ele é. Primeiro
         commit em 8 de agosto de 2026, <code>v0.1.0</code> marcado no dia 11. Quatro dias, o que não é
         vaidade de velocidade. Um init é um programa pequeno com um raio de dano enorme, e a maior
         parte desses quatro dias foi decidir o que ele ia se recusar a fazer.</p>
@@ -125,13 +125,13 @@
         machinery. The binary is built with <code>panic = "unwind"</code> and never <code>abort</code>,
         because an abort in PID 1 <em>is</em> a kernel panic. Every handler in the event loop runs
         inside <code>catch_unwind</code>. The <code>oxinit</code> crate denies <code>unwrap</code>,
-        <code>expect</code>, <code>panic</code> and slice indexing outright — the compiler refuses the
+        <code>expect</code>, <code>panic</code> and slice indexing outright: the compiler refuses the
         shortcut rather than trusting me not to take it at 2am.</p>
-      <p lang="pt-BR">A primeira regra é que o PID 1 não dá panic. Dizer é fácil; precisou de
-        maquinário de verdade. O binário é compilado com <code>panic = "unwind"</code> e nunca
+      <p lang="pt-BR">A primeira regra é que o PID 1 não dá panic. Dizer é fácil; garantir deu
+        trabalho. O binário é compilado com <code>panic = "unwind"</code> e nunca
         <code>abort</code>, porque um abort no PID 1 <em>é</em> um kernel panic. Todo handler do event
         loop roda dentro de <code>catch_unwind</code>. O crate <code>oxinit</code> proíbe
-        <code>unwrap</code>, <code>expect</code>, <code>panic</code> e indexação de slice — o
+        <code>unwrap</code>, <code>expect</code>, <code>panic</code> e indexação de slice: o
         compilador recusa o atalho em vez de confiar que eu não vou tomá-lo às 2 da manhã.</p>
 
       <p lang="en">And when the loop genuinely cannot continue, it still does not exit. It spawns
@@ -178,12 +178,12 @@
 
       <p lang="en">The CLI and the log writer are separate programs that talk to it over a unix socket,
         for the reason you would expect: a bug in the log writer kills the log writer, and a bug in
-        PID 1 kills the machine. PID 1 never reads a byte of service output — it creates the pipe,
+        PID 1 kills the machine. PID 1 never reads a byte of service output: it creates the pipe,
         hands the write end to the child and the read end to <code>oxlogd</code>, so a service writing
         a megabyte a second cannot make PID 1 do any work at all.</p>
       <p lang="pt-BR">O CLI e o escritor de log são programas separados que falam com ele por um socket
         unix, pelo motivo que você imagina: um bug no escritor de log mata o escritor de log, e um bug
-        no PID 1 mata a máquina. O PID 1 nunca lê um byte da saída de um serviço — ele cria o pipe,
+        no PID 1 mata a máquina. O PID 1 nunca lê um byte da saída de um serviço: ele cria o pipe,
         entrega a ponta de escrita pro filho e a ponta de leitura pro <code>oxlogd</code>, então um
         serviço escrevendo um megabyte por segundo não consegue fazer o PID 1 trabalhar.</p>
 
@@ -212,13 +212,13 @@ user        = "sshd"</pre>
       <p lang="en">Both keys are declared, and neither implies the other. "A needs B running" and "A
         must start after B" are different statements, and a format that conflates them makes both
         impossible to say precisely. <code>after</code> means the unit does not start until everything
-        it names has finished activating — and for a <code>notify</code> service that means until
+        it names has finished activating, and for a <code>notify</code> service that means until
         <code>READY=1</code> actually arrives, not until the process exists. Boot is a queue drained by
         the event loop, not a loop issuing starts in order.</p>
       <p lang="pt-BR">As duas chaves são declaradas, e nenhuma implica a outra. "A precisa de B
         rodando" e "A tem que iniciar depois de B" são afirmações diferentes, e um formato que confunde
         as duas torna as duas impossíveis de dizer com precisão. <code>after</code> significa que a
-        unit não inicia até tudo que ela nomeia terminar de ativar — e pra um serviço
+        unit não inicia até tudo que ela nomeia terminar de ativar, e pra um serviço
         <code>notify</code> isso quer dizer até o <code>READY=1</code> realmente chegar, não até o
         processo existir. O boot é uma fila drenada pelo event loop, não um laço disparando starts em
         ordem.</p>
@@ -227,11 +227,11 @@ user        = "sshd"</pre>
       <h2 lang="pt-BR">Os não-objetivos sustentam o projeto</h2>
 
       <p lang="en">oxinit does not resolve DNS, does not implement NTP, does not manage network
-        configuration or logins, does not run containers — it runs <em>inside</em> one, as PID 1 — and
+        configuration or logins, does not run containers (it runs <em>inside</em> one, as PID 1) and
         does not boot the machine. It is what a distribution's initramfs hands over to, not a
         bootloader.</p>
       <p lang="pt-BR">O oxinit não resolve DNS, não implementa NTP, não gerencia configuração de rede
-        nem logins, não roda containers — ele roda <em>dentro</em> de um, como PID 1 — e não boota a
+        nem logins, não roda containers (ele roda <em>dentro</em> de um, como PID 1) e não boota a
         máquina. Ele é pra quem o initramfs de uma distribuição entrega o controle, não um
         bootloader.</p>
 
@@ -253,17 +253,17 @@ user        = "sshd"</pre>
       <h2 lang="en">Why Rust, in this specific place</h2>
       <h2 lang="pt-BR">Por que Rust, neste lugar específico</h2>
 
-      <p lang="en">Every init in production use is written in C: systemd, OpenRC, runit, s6, dinit. The
-        Rust attempts either stalled — rustysd is unmaintained — or explicitly declined to be PID 1, as
+      <p lang="en">The inits most distributions ship are written in C: systemd, OpenRC, runit, s6. The
+        Rust attempts either stalled (rustysd is unmaintained) or explicitly declined to be PID 1, as
         initd did.</p>
-      <p lang="pt-BR">Todo init em uso em produção é escrito em C: systemd, OpenRC, runit, s6, dinit.
-        As tentativas em Rust ou pararam — o rustysd está sem manutenção — ou recusaram explicitamente
+      <p lang="pt-BR">Os inits que a maioria das distribuições usa são escritos em C: systemd, OpenRC, runit, s6.
+        As tentativas em Rust ou pararam (o rustysd está sem manutenção) ou recusaram explicitamente
         ser PID 1, como o initd fez.</p>
 
       <p lang="en">PID 1 owns the cgroup hierarchy, holds the file descriptors for socket activation,
         and decides the order in which the machine shuts down. That is a very large blast radius for a
         language in which a bounds error is a memory error. The properties Rust enforces at compile
-        time are worth more in PID 1 than anywhere else on the system — which is exactly the place
+        time are worth more in PID 1 than anywhere else on the system, which is exactly the place
         nobody had put them.</p>
       <p lang="pt-BR">O PID 1 é dono da hierarquia de cgroups, guarda os descritores de arquivo da
         ativação por socket, e decide a ordem em que a máquina desliga. Isso é um raio de dano muito
@@ -276,15 +276,15 @@ user        = "sshd"</pre>
 
       <p lang="en">Milestones M0 through M16 are done and the roadmap is closed. It boots under QEMU on
         x86_64 and aarch64, runs a real Alpine userspace, and works as a container's PID 1: fourteen
-        crates, about 12,500 lines of Rust, 148 <code>#[test]</code> functions. Three of those crates —
-        the unit parser, the dependency graph and the restart policy — have no OS dependency at all and
+        crates, about 12,500 lines of Rust, 148 <code>#[test]</code> functions. Three of those crates (the
+        unit parser, the dependency graph and the restart policy) have no OS dependency at all and
         test on any host, with no VM and no kernel. That is deliberate, because that is where the logic
         errors actually live.</p>
       <p lang="pt-BR">Os milestones M0 até M16 estão fechados e o roadmap está encerrado. Ele boota sob
         QEMU em x86_64 e aarch64, roda um userspace Alpine de verdade, e funciona como PID 1 de
         container: catorze crates, cerca de 12.500 linhas de Rust, 148 funções
-        <code>#[test]</code>. Três desses crates — o parser de unit, o grafo de dependências e a
-        política de restart — não têm dependência de sistema operacional nenhuma e testam em qualquer
+        <code>#[test]</code>. Três desses crates (o parser de unit, o grafo de dependências e a política
+        de restart) não têm dependência de sistema operacional nenhuma e testam em qualquer
         host, sem VM e sem kernel. Isso é de propósito, porque é ali que os erros de lógica realmente
         moram.</p>
 
@@ -312,7 +312,7 @@ user        = "sshd"</pre>
 
       <p lang="en">I set out to build something for Linux and ended up in the one process on the
         machine that has nothing above it. I would not put it under anything I cared about yet. But it
-        boots, it supervises, it shuts down in the right order — and every line of the reason it can be
+        boots, it supervises, it shuts down in the right order, and every line of the reason it can be
         trusted to do that is in the repository rather than in this post.</p>
       <p lang="pt-BR">Eu queria fazer alguma coisa pro Linux e acabei no único processo da máquina que
         não tem nada acima dele. Eu ainda não colocaria ele embaixo de nada que me importasse.

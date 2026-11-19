@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The same store, the same keys — youHide</title>
+<title>The same store, the same keys: a pass-compatible password manager in Rust — youHide</title>
 <meta name="description" content="hidePass is a pass-compatible password manager written in Rust: the same password store, the same gpg keys, built-in one-time codes and passphrases, and copied secrets your clipboard manager refuses to record.">
 <meta name="author" content="Youri T. K. K. Mattar">
 <meta name="theme-color" content="#282a36">
@@ -76,12 +76,12 @@
     <article class="section post prose">
 
       <p lang="en">I have used <a href="https://www.passwordstore.org">pass</a> for years. It is a
-        hundred lines of shell around <code>gpg</code> and <code>git</code>, the store is a directory
+        shell script around <code>gpg</code> and <code>git</code>, the store is a directory
         of <code>.gpg</code> files, and that design is why it is still here while a dozen password
         managers with venture funding are not. What I wanted was not a replacement for it. I wanted
         the parts it leaves to extensions, without giving up the store.</p>
-      <p lang="pt-BR">Eu uso o <a href="https://www.passwordstore.org">pass</a> há anos. São umas cem
-        linhas de shell em volta do <code>gpg</code> e do <code>git</code>, a store é um diretório de
+      <p lang="pt-BR">Eu uso o <a href="https://www.passwordstore.org">pass</a> há anos. É um script
+        de shell em volta do <code>gpg</code> e do <code>git</code>, a store é um diretório de
         arquivos <code>.gpg</code>, e é esse design que explica por que ele continua aqui enquanto uma
         dúzia de gerenciadores de senha com capital de risco não está. O que eu queria não era um
         substituto pra ele. Eu queria as partes que ele deixa pras extensões, sem abrir mão da
@@ -120,12 +120,12 @@ $ hidepass otp Web/github
         <code>.gpg-id.sig</code>, respeita toda variável <code>PASSWORD_STORE_*</code>, e faz os mesmos
         commits git. O próprio pass continua funcionando na mesma store, e os apps de iOS e Android e
         as extensões de navegador também. Você pode dar <code>alias pass=hidepass</code> e também pode
-        não dar, e nada se importa com a escolha.</p>
+        não dar, e tanto faz.</p>
 
       <p lang="en">Claiming compatibility is cheap, so it is a test rather than a sentence in a README.
         CI installs the real <code>pass</code> and the real <code>pass-extension-otp</code> on every
         push and runs a script in which each tool has to read what the other wrote. If I break the
-        format, the build tells me — not somebody whose passwords are in there.</p>
+        format, the build tells me, not somebody whose passwords are in there.</p>
       <p lang="pt-BR">Afirmar compatibilidade é barato, então ela é um teste em vez de uma frase num
         README. O CI instala o <code>pass</code> de verdade e o <code>pass-extension-otp</code> de
         verdade a cada push e roda um script em que cada ferramenta tem que ler o que a outra escreveu.
@@ -140,22 +140,22 @@ $ hidepass otp Web/github
       <h2 lang="pt-BR">Seu gerenciador de clipboard está guardando suas senhas</h2>
 
       <p lang="en">This is the bug that annoyed me into writing the thing. Copy a secret on macOS and
-        every clipboard manager on the machine — Maccy, Raycast, Alfred, Paste — writes it into its own
+        every clipboard manager on the machine (Maccy, Raycast, Alfred, Paste) writes it into its own
         searchable history, where it outlives the forty-five seconds you thought you were getting. The
         password manager cleared the pasteboard. The history did not.</p>
       <p lang="pt-BR">Esse é o bug que me irritou o suficiente pra eu escrever a coisa. Copie um
-        segredo no macOS e todo gerenciador de clipboard da máquina — Maccy, Raycast, Alfred, Paste —
+        segredo no macOS e todo gerenciador de clipboard da máquina (Maccy, Raycast, Alfred, Paste)
         escreve o segredo no próprio histórico pesquisável, onde ele sobrevive aos quarenta e cinco
         segundos que você pensou que tinha. O gerenciador de senhas limpou o pasteboard. O histórico,
         não.</p>
 
-      <p lang="en">There is a convention for this — the <code>concealed</code> and
-        <code>transient</code> pasteboard types from nspasteboard.org — and clipboard managers do
+      <p lang="en">There is a convention for this, the <code>concealed</code> and
+        <code>transient</code> pasteboard types from nspasteboard.org, and clipboard managers do
         honour it. hidePass marks every copied secret with both, so they decline to record it, and the
         previous clipboard contents come back after forty-five seconds instead of being replaced by
         nothing.</p>
-      <p lang="pt-BR">Existe uma convenção pra isso — os tipos de pasteboard <code>concealed</code> e
-        <code>transient</code> do nspasteboard.org — e os gerenciadores de clipboard respeitam. O
+      <p lang="pt-BR">Existe uma convenção pra isso, os tipos de pasteboard <code>concealed</code> e
+        <code>transient</code> do nspasteboard.org, e os gerenciadores de clipboard respeitam. O
         hidePass marca todo segredo copiado com os dois, então eles se recusam a registrar, e o
         conteúdo anterior do clipboard volta depois de quarenta e cinco segundos em vez de ser
         substituído por nada.</p>
@@ -181,7 +181,7 @@ otpauth://totp/Example:alice?secret=JBSWY3DPEHPK3PXP&amp;issuer=Example</pre>
         code is only valid once, so reading one has to advance the counter: hidePass uses counter
         <em>N+1</em>, re-encrypts the entry with the new value and commits it, exactly as pass-otp
         does. Two tools can therefore share a HOTP entry without ever handing out the same code
-        twice — which is the only version of "compatible" that means anything for a counter.</p>
+        twice, which is the only version of "compatible" that means anything for a counter.</p>
       <p lang="pt-BR">É o formato do pass-otp, de propósito, e o HOTP é onde isso mais importa. Um
         código HOTP só vale uma vez, então ler um tem que avançar o contador: o hidePass usa o contador
         <em>N+1</em>, re-encripta a entrada com o valor novo e faz o commit, exatamente como o pass-otp
@@ -190,11 +190,11 @@ otpauth://totp/Example:alice?secret=JBSWY3DPEHPK3PXP&amp;issuer=Example</pre>
         contador.</p>
 
       <p lang="en">Passphrases come from the <a href="https://www.eff.org/dice">EFF long wordlist</a>,
-        which has exactly 7776 words — five rolls of a six-sided die, and 12.925 bits per word. Six words is
+        which has exactly 7776 words: five rolls of a six-sided die, and 12.925 bits per word. Six words is
         about 77 bits, which is the number I care about rather than how many symbols the thing
         contains:</p>
       <p lang="pt-BR">As passphrases saem da <a href="https://www.eff.org/dice">lista longa de palavras
-        da EFF</a>, que tem exatamente 7776 palavras — cinco lançamentos de um dado de seis faces, e 12,925 bits
+        da EFF</a>, que tem exatamente 7776 palavras: cinco lançamentos de um dado de seis faces, e 12,925 bits
         por palavra. Seis palavras dão cerca de 77 bits, que é o número com que eu me importo, e não
         quantos símbolos a coisa tem:</p>
 
@@ -206,7 +206,7 @@ cubicle-unfold-dripping-tribune-ample-reveal</pre>
 
       <p lang="en">Editing an entry means decrypting it somewhere, and "somewhere" must not be a file
         on a disk that keeps it after the editor exits. pass solves this with a ramdisk built by
-        <code>hdiutil</code> — and on macOS 27 I watched <code>hdiutil attach -nomount</code> print a
+        <code>hdiutil</code>, and on macOS 27 I watched <code>hdiutil attach -nomount</code> print a
         deprecation warning at me. hidePass uses <code>diskutil image</code> for
         <code>edit</code> instead.</p>
       <p lang="pt-BR">Editar uma entrada significa descriptografar em algum lugar, e esse "algum lugar"
@@ -216,7 +216,7 @@ cubicle-unfold-dripping-tribune-ample-reveal</pre>
         <code>diskutil image</code> para o <code>edit</code>.</p>
 
       <p lang="en">The better answer, though, was to need the ramdisk less often. <code>hidepass
-        git</code> does not use one at all, because git only ever sees encrypted files — there is no
+        git</code> does not use one at all, because git only ever sees encrypted files: there is no
         plaintext in that path to protect. And when a ramdisk genuinely cannot be had, hidePass asks
         before falling back to an ordinary temp directory rather than quietly deciding for you.</p>
       <p lang="pt-BR">A resposta melhor, porém, foi precisar do ramdisk menos vezes. O <code>hidepass
@@ -229,8 +229,8 @@ cubicle-unfold-dripping-tribune-ample-reveal</pre>
       <h2 lang="pt-BR">Defaults chatos, de propósito</h2>
 
       <p lang="en">Four decisions that cost nothing to make and are miserable to retrofit:</p>
-      <p lang="pt-BR">Quatro decisões que não custam nada pra tomar e são miseráveis de colocar
-        depois:</p>
+      <p lang="pt-BR">Quatro decisões que não custam nada pra tomar e dão um trabalho miserável
+        pra encaixar depois:</p>
 
       <ul lang="en">
         <li><strong>Entries are written atomically.</strong> A gpg interrupted halfway through cannot
@@ -247,8 +247,8 @@ cubicle-unfold-dripping-tribune-ample-reveal</pre>
         <li><strong>As entradas são escritas atomicamente.</strong> Um gpg interrompido no meio não
           consegue deixar uma entrada truncada onde antes havia uma senha.</li>
         <li><strong>Os recipients são validados antes de qualquer coisa ser re-encriptada.</strong>
-          Re-encriptar para uma chave que acaba não existindo é assim que você se tranca fora da
-          sua própria store.</li>
+          Re-encriptar para uma chave que no fim não existe é como você se tranca pra fora
+          da própria store.</li>
         <li><strong>As senhas vêm do CSPRNG do sistema, sem viés de módulo.</strong> Pegar um byte
           aleatório módulo o tamanho do alfabeto torna alguns caracteres mais prováveis que outros; é
           um bug de uma linha e custa entropia em silêncio.</li>
@@ -261,8 +261,8 @@ cubicle-unfold-dripping-tribune-ample-reveal</pre>
 
       <p lang="en">hidePass shells out to your <code>gpg</code> and your <code>git</code>. It does not
         link a crypto library and it does not speak the git protocol, which means gpg-agent, pinentry,
-        smartcards and YubiKeys, SSH remotes and signed commits all work exactly as they already do —
-        because they <em>are</em> exactly what they already were. The temptation to reimplement either
+        smartcards and YubiKeys, SSH remotes and signed commits all work exactly as they already do, because
+        they <em>are</em> exactly what they already were. The temptation to reimplement either
         one is the temptation to own a second, worse copy of a problem other people have been fixing
         for decades.</p>
       <p lang="pt-BR">O hidePass chama o seu <code>gpg</code> e o seu <code>git</code>. Ele não linka
@@ -284,7 +284,7 @@ cubicle-unfold-dripping-tribune-ample-reveal</pre>
       <h2 lang="en">Where it is now</h2>
       <h2 lang="pt-BR">Onde está agora</h2>
 
-      <p lang="en">It is new — <code>v0.2.0</code> is from today. Twelve modules, about 3,100 lines of
+      <p lang="en">It is new: <code>v0.2.0</code> is from today. Twelve modules, about 3,100 lines of
         Rust, 26 <code>#[test]</code> functions plus the end-to-end suite and the pass cross-check, and
         a minimum Rust of 1.88. The release pipeline builds macOS and Linux binaries and updates the
         formula, so installing is one line:</p>
@@ -296,11 +296,11 @@ cubicle-unfold-dripping-tribune-ample-reveal</pre>
 <pre>brew install youhide/tap/hidepass</pre>
 
       <p lang="en">The source is at <a href="https://github.com/youhide/hidePass">github.com/youhide/hidePass</a>.
-        Point it at a copy of your store before you point it at the real one — not because I expect it
+        Point it at a copy of your store before you point it at the real one, not because I expect it
         to eat anything, but because that is the advice I would want from someone whose password
         manager is two commits old.</p>
       <p lang="pt-BR">O código está em <a href="https://github.com/youhide/hidePass">github.com/youhide/hidePass</a>.
-        Aponte ele para uma cópia da sua store antes de apontar para a de verdade — não porque eu
+        Aponte ele para uma cópia da sua store antes de apontar para a de verdade, não porque eu
         espere que ele coma alguma coisa, mas porque é o conselho que eu ia querer de alguém cujo
         gerenciador de senhas tem dois commits de idade.</p>
 

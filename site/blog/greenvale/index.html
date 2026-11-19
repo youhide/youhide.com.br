@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nothing decays in secret — youHide</title>
-<meta name="description" content="Greenvale is a farming simulation in Rust where soil depletes, metal rusts and pests evolve — and every loss is traceable to a cause. Building a game with the instincts of a platform engineer.">
+<title>Nothing decays in secret: building Greenvale — youHide</title>
+<meta name="description" content="Greenvale is a farming simulation in Rust where soil depletes, metal rusts and pests evolve, and every loss is traceable to a cause. Building a game with the instincts of a platform engineer.">
 <meta name="author" content="Youri T. K. K. Mattar">
 <meta name="theme-color" content="#282a36">
 <link rel="canonical" href="https://youhide.com.br/blog/greenvale/">
 
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2026-08-18">
-<meta property="og:title" content="Nothing decays in secret: Greenvale">
-<meta property="og:description" content="A farming simulation in Rust where every loss is traceable to a cause. Observability, deferred maintenance and determinism — applied to soil.">
+<meta property="og:title" content="Nothing decays in secret: building Greenvale">
+<meta property="og:description" content="A farming simulation in Rust where every loss is traceable to a cause. Observability, deferred maintenance and determinism, applied to soil.">
 <meta property="og:url" content="https://youhide.com.br/blog/greenvale/">
 <meta property="og:image" content="https://youhide.com.br/img/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -79,32 +79,32 @@
       <blockquote lang="pt-BR">Uma fazenda é um sistema que quer voltar ao caos. Seu trabalho é adiar isso.</blockquote>
 
       <p lang="en">I am building a game. It is called <strong>Greenvale</strong>, it is written in Rust, and
-        it is a real-time farming simulation — a reinterpretation of <em>SimFarm</em> (Maxis, 1993) with
+        it is a real-time farming simulation, a reinterpretation of <em>SimFarm</em> (Maxis, 1993) with
         the systemic depth of RimWorld and Dwarf Fortress. Soil depletes, metal rusts, pests evolve,
         markets betray you, and people wear out. You do not build a perfect farm. You negotiate with
         decay.</p>
       <p lang="pt-BR">Estou construindo um jogo. Ele se chama <strong>Greenvale</strong>, é escrito em
-        Rust, e é um simulador de fazenda em tempo real — uma releitura de <em>SimFarm</em> (Maxis, 1993)
+        Rust, e é um simulador de fazenda em tempo real, uma releitura de <em>SimFarm</em> (Maxis, 1993)
         com a profundidade sistêmica de RimWorld e Dwarf Fortress. O solo se esgota, o metal enferruja,
         as pragas evoluem, o mercado te trai e as pessoas se desgastam. Você não constrói uma fazenda
         perfeita. Você negocia com a decadência.</p>
 
       <p lang="en">What I did not expect is how much of it turned out to be my day job wearing a hat.</p>
-      <p lang="pt-BR">O que eu não esperava é o quanto disso acabou sendo o meu trabalho de todo dia
-        usando um chapéu.</p>
+      <p lang="pt-BR">O que eu não esperava é o quanto disso acabou sendo o meu trabalho de todo dia,
+        só que fantasiado.</p>
 
       <h2 lang="en">The rule that shaped everything</h2>
       <h2 lang="pt-BR">A regra que moldou tudo</h2>
 
       <p lang="en">The first design pillar is <strong>legible entropy</strong>: everything decays,
-        nothing decays in secret. If the yield drops 18%, the player has to be able to trace it —
-        nitrogen below threshold at flowering, compaction from a tractor that entered a wet field, a
-        pest population that grew because they planted the same crop three years running. Difficulty
+        nothing decays in secret. If the yield drops 18%, the player has to be able to trace it to
+        nitrogen below threshold at flowering, to compaction from a tractor that entered a wet field, or
+        to a pest population that grew because they planted the same crop three years running. Difficulty
         comes from managing decline, never from hiding information.</p>
       <p lang="pt-BR">O primeiro pilar de design é <strong>entropia legível</strong>: tudo se degrada,
         nada se degrada em segredo. Se a colheita cai 18%, o jogador precisa conseguir rastrear o
-        porquê — nitrogênio abaixo do limite na floração, compactação de um trator que entrou em campo
-        molhado, uma população de pragas que cresceu porque ele plantou a mesma cultura três anos
+        porquê, seja nitrogênio abaixo do limite na floração, compactação de um trator que entrou em campo
+        molhado ou uma população de pragas que cresceu porque ele plantou a mesma cultura três anos
         seguidos. A dificuldade vem de administrar o declínio, nunca de esconder informação.</p>
 
       <p lang="en">That pillar has a hard consequence written next to it in the design doc:</p>
@@ -133,18 +133,18 @@
         two or three seasons from now. Tilling releases nitrogen now and burns organic matter for the
         next decade. Pesticide saves this crop and kills the natural predators that would have saved the
         next one. Deferring maintenance saves money until the day it doesn't.</p>
-      <p lang="pt-BR">O segundo pilar é <strong>consequência adiada</strong>: a decisão de hoje paga
-        daqui a duas ou três safras. Arar libera nitrogênio agora e queima matéria orgânica pela próxima
+      <p lang="pt-BR">O segundo pilar é <strong>consequência adiada</strong>: a decisão de hoje só
+        dá resultado daqui a duas ou três safras. Arar libera nitrogênio agora e queima matéria orgânica pela próxima
         década. O agrotóxico salva esta safra e mata os predadores naturais que teriam salvado a próxima.
         Adiar manutenção economiza dinheiro até o dia em que não economiza.</p>
 
       <p lang="en">Nobody who has run production infrastructure needs that explained. The rule I wrote
-        for myself is that no significant system may resolve within the same season — if it resolves
+        for myself is that no significant system may resolve within the same season. If it resolves
         that fast, it is noise, not a decision. Which is another way of saying that the interesting part
         of any system is the part with a lag.</p>
       <p lang="pt-BR">Ninguém que já operou infraestrutura em produção precisa que isso seja explicado.
         A regra que escrevi pra mim mesmo é que nenhum sistema relevante pode se resolver dentro da mesma
-        estação — se resolve tão rápido, é ruído, não é decisão. O que é outro jeito de dizer que a parte
+        estação. Se resolve tão rápido, é ruído, não é decisão. O que é outro jeito de dizer que a parte
         interessante de qualquer sistema é a parte que tem atraso.</p>
 
       <h2 lang="en">Determinism is test infrastructure</h2>
@@ -175,36 +175,36 @@
       </ul>
 
       <p lang="en">Getting there costs discipline. Per-domain RNG streams, so adding a roll to the pest
-        model does not shift the weather. No <code>HashMap</code> iteration may influence state — enforced
-        by an invariant test, not by good intentions. The RNG state lives in the save file, so
+        model does not shift the weather. No <code>HashMap</code> iteration may influence state, which is
+        enforced by an invariant test, not by good intentions. The RNG state lives in the save file, so
         save → quit → load produces the same future as never quitting. And every mutation goes through a
         command, which means the command log <em>is</em> the replay.</p>
       <p lang="pt-BR">Chegar lá custa disciplina. Streams de RNG por domínio, pra que adicionar um sorteio
         no modelo de pragas não desloque o clima. Nenhuma iteração de <code>HashMap</code> pode influenciar
-        o estado — garantido por um teste de invariante, não por boa intenção. O estado do RNG mora no save,
+        o estado, e quem garante é um teste de invariante, não a boa intenção. O estado do RNG mora no save,
         então salvar → sair → carregar produz o mesmo futuro que nunca ter saído. E toda mutação passa por
         um comando, o que significa que o log de comandos <em>é</em> o replay.</p>
 
       <p lang="en">The explicit non-goal is bit-identical replay across platforms. Floating point across
         operating systems and compiler versions is not identical without soft-float or fixed-point
         everywhere, and Greenvale is single-player with no leaderboards and no lockstep networking. The
-        cost buys nothing. Same build, same platform, same result — that is enough for balance runs, CI
+        cost buys nothing. Same build, same platform, same result. That is enough for balance runs, CI
         and reproducing a player's bug.</p>
       <p lang="pt-BR">O não-objetivo explícito é replay bit a bit idêntico entre plataformas. Ponto
         flutuante entre sistemas operacionais e versões de compilador não é idêntico sem soft-float ou
         ponto fixo em tudo, e Greenvale é single-player, sem placar e sem rede em lockstep. O custo não
-        compra nada. Mesmo build, mesma plataforma, mesmo resultado — isso basta pra rodadas de
+        compra nada. Mesmo build, mesma plataforma, mesmo resultado. Isso basta pra rodadas de
         balanceamento, CI e reproduzir o bug de um jogador.</p>
 
       <h2 lang="en">The renderer is a detail</h2>
       <h2 lang="pt-BR">O renderizador é um detalhe</h2>
 
       <p lang="en">The simulation never depends on the renderer. It is its own crate, it depends only on
-        an ECS library, and it runs headless. That boundary is not architectural vanity — it is what makes
+        an ECS library, and it runs headless. That boundary is not architectural vanity. It is what makes
         a balance sweep possible: a hundred seeds, thirty simulated years, one strategy, straight to a CSV,
         with no GPU and no window anywhere in the process.</p>
       <p lang="pt-BR">A simulação nunca depende do renderizador. Ela é um crate próprio, depende só de uma
-        biblioteca de ECS, e roda headless. Essa fronteira não é vaidade arquitetural — é o que torna
+        biblioteca de ECS, e roda headless. Essa fronteira não é vaidade de arquitetura. É o que torna
         possível uma varredura de balanceamento: cem seeds, trinta anos simulados, uma estratégia, direto
         pra um CSV, sem GPU e sem janela em lugar nenhum do processo.</p>
 
@@ -212,13 +212,13 @@
       <h2 lang="pt-BR">Onde está agora</h2>
 
       <p lang="en">The first vertical slice is feature-complete and waiting at its decision gate. The farm
-        runs end to end: order work, wait for the soil to carry a tractor — or force it and pay in
-        compaction — grow, harvest, sell, and read a report that says <em>why</em> the yield was what it
+        runs end to end: order work, wait for the soil to carry a tractor (or force it and pay in
+        compaction), grow, harvest, sell, and read a report that says <em>why</em> the yield was what it
         was. Tests pass, lints are clean, headless sweeps are deterministic, and a committed replay corpus
         guards against semantic drift.</p>
-      <p lang="pt-BR">A primeira fatia vertical está completa e esperando no seu portão de decisão. A
-        fazenda roda de ponta a ponta: ordenar o trabalho, esperar o solo aguentar um trator — ou forçar e
-        pagar em compactação — crescer, colher, vender, e ler um relatório que diz <em>por que</em> a
+      <p lang="pt-BR">A primeira fatia vertical está completa e parada no ponto de decisão. A
+        fazenda roda de ponta a ponta: ordenar o trabalho, esperar o solo aguentar um trator (ou forçar e
+        pagar em compactação), crescer, colher, vender, e ler um relatório que diz <em>por que</em> a
         colheita foi o que foi. Os testes passam, os lints estão limpos, as varreduras headless são
         determinísticas, e um corpus de replay commitado protege contra desvio semântico.</p>
 
@@ -227,13 +227,13 @@
         or merely tiring. I do not know the answer yet. That is the honest status.</p>
       <p lang="pt-BR">O que falta não é uma tarefa. É um julgamento, e ele pertence a um humano sentado na
         frente do jogo: jogar oito anos de jogo em uma fazenda e decidir se o declínio é interessante ou só
-        cansativo. Eu ainda não sei a resposta. Esse é o status honesto.</p>
+        cansativo. Eu ainda não sei a resposta. O status, sem enfeite, é esse.</p>
 
       <p lang="en">The repository is private for now. When there is something worth showing, it shows up
-        here first — and probably on <a href="https://twitch.tv/youhide">Twitch</a> while it is still
+        here first, and probably on <a href="https://twitch.tv/youhide">Twitch</a> while it is still
         broken.</p>
       <p lang="pt-BR">O repositório está privado por enquanto. Quando tiver alguma coisa que valha a pena
-        mostrar, aparece aqui primeiro — e provavelmente na <a href="https://twitch.tv/youhide">Twitch</a>
+        mostrar, aparece aqui primeiro, e provavelmente na <a href="https://twitch.tv/youhide">Twitch</a>
         enquanto ainda estiver quebrado.</p>
 
     </article>
